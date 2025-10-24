@@ -1,0 +1,20 @@
+[[redirects]]
+  from = "/women"
+  to = "/?audience=women"
+  status = 302
+
+[[redirects]]
+  from = "/men"
+  to = "/?audience=men"
+  status = 302
+
+[[redirects]]
+  from = "/youth"
+  to = "/?audience=youth"
+  status = 302
+
+[[redirects]]
+  from = "/buy"
+  to = "https://square.link/u/REPLACE_ME"
+  status = 302
+  force = true

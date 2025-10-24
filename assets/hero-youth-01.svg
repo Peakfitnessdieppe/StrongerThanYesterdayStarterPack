@@ -1,0 +1,12 @@
+<svg width="960" height="1080" viewBox="0 0 960 1080" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Youth athlete sprint start">
+  <defs>
+    <linearGradient id="bg-youth" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1C1C1C"/>
+      <stop offset="100%" stop-color="#0F0F10"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="1080" fill="url(#bg-youth)"/>
+  <circle cx="280" cy="260" r="180" fill="rgba(63,174,82,0.24)"/>
+  <path d="M200 900 C360 780 620 940 800 860" stroke="#3FAE52" stroke-width="46" stroke-linecap="round" stroke-opacity="0.22" fill="none"/>
+  <rect x="700" y="920" width="220" height="32" rx="16" fill="#3FAE52" opacity="0.36"/>
+</svg>

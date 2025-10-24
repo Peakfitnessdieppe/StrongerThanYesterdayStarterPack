@@ -1,0 +1,12 @@
+<svg width="960" height="1080" viewBox="0 0 960 1080" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Athlete preparing to lift">
+  <defs>
+    <linearGradient id="bg-men" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#181818"/>
+      <stop offset="100%" stop-color="#0F0F10"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="1080" fill="url(#bg-men)"/>
+  <circle cx="720" cy="300" r="180" fill="rgba(63,174,82,0.2)"/>
+  <path d="M240 880 C420 800 600 920 780 860" stroke="#3FAE52" stroke-width="44" stroke-linecap="round" stroke-opacity="0.22" fill="none"/>
+  <rect x="520" y="940" width="300" height="34" rx="17" fill="#3FAE52" opacity="0.32"/>
+</svg>

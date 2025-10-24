@@ -1,0 +1,7 @@
+<svg width="160" height="32" viewBox="0 0 160 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Peak Fitness Dieppe">
+  <rect width="160" height="32" rx="6" fill="#0F0F10"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', Inter, sans-serif" font-weight="800" font-size="16" fill="#F2F2F2">
+    <text x="12" y="21">PEAK</text>
+    <text x="70" y="21" fill="#3FAE52">FITNESS</text>
+  </g>
+</svg>

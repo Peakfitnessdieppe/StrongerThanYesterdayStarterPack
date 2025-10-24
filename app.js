@@ -19,14 +19,41 @@ const toMoney = (cents, currency = CURRENCY, locale = "en-CA") =>
   new Intl.NumberFormat(locale, { style: "currency", currency }).format(cents / 100);
 
 const AUDIENCES = ["women", "men", "youth"];
+const LANGS = ["en", "fr"];
 const YOUTH_VARIANTS = ["committed", "parent", "identity", "female"];
+
+const ROUTE_MAP = {
+  "/women": { audience: "women" },
+  "/men": { audience: "men" },
+  "/youth": { audience: "youth" },
+  "/en-women": { audience: "women", lang: "en" },
+  "/en-men": { audience: "men", lang: "en" },
+  "/en-youth": { audience: "youth", lang: "en" },
+  "/fr-women": { audience: "women", lang: "fr" },
+  "/fr-men": { audience: "men", lang: "fr" },
+  "/fr-youth": { audience: "youth", lang: "fr" }
+};
 
 function parseSearch() {
   const params = new URLSearchParams(window.location.search);
   return Object.fromEntries(params.entries());
 }
 
+function normalizePath(path) {
+  if (!path) return "/";
+  if (path !== "/" && path.endsWith("/")) return path.slice(0, -1);
+  return path;
+}
+
+function getRouteDefaults() {
+  const raw = window.location.pathname.replace(/\/index\.html$/, "");
+  const path = normalizePath(raw);
+  return ROUTE_MAP[path] || {};
+}
+
 function getAudience(defaultAudience = "women") {
+  const routeData = getRouteDefaults();
+  if (routeData.audience && AUDIENCES.includes(routeData.audience)) return routeData.audience;
   const { audience } = parseSearch();
   return AUDIENCES.includes((audience || "").toLowerCase()) ? audience.toLowerCase() : defaultAudience;
 }
@@ -38,11 +65,25 @@ function getVariant() {
 }
 
 function getLangStored() {
-  return localStorage.getItem("pf_lang") || "en";
+  const { lang } = parseSearch();
+  if (lang && LANGS.includes(lang.toLowerCase())) {
+    const resolved = lang.toLowerCase();
+    setLangStored(resolved);
+    return resolved;
+  }
+  const routeData = getRouteDefaults();
+  if (routeData.lang && LANGS.includes(routeData.lang)) {
+    setLangStored(routeData.lang);
+    return routeData.lang;
+  }
+  const stored = localStorage.getItem("pf_lang");
+  return LANGS.includes(stored) ? stored : "en";
 }
 
 function setLangStored(lang) {
-  localStorage.setItem("pf_lang", lang);
+  if (LANGS.includes(lang)) {
+    localStorage.setItem("pf_lang", lang);
+  }
 }
 
 function getUTMs() {
@@ -1087,6 +1128,7 @@ function openModal() {
     const nodes = focusables(modal);
     if (nodes[0]) nodes[0].focus();
   }
+  document.body.classList.add('modal-open');
   pfTrack('cta_click', { action: 'open_modal' });
 }
 
@@ -1096,6 +1138,7 @@ function closeModal() {
     modal.hidden = true;
     modal.removeEventListener('keydown', trapKeydown);
   }
+  document.body.classList.remove('modal-open');
   if (modalFocusReturn && typeof modalFocusReturn.focus === 'function') modalFocusReturn.focus();
   modalFocusReturn = null;
 }

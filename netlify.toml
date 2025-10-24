@@ -14,7 +14,42 @@
   status = 302
 
 [[redirects]]
+  from = "/en-women"
+  to = "/?audience=women&lang=en"
+  status = 302
+
+[[redirects]]
+  from = "/en-men"
+  to = "/?audience=men&lang=en"
+  status = 302
+
+[[redirects]]
+  from = "/en-youth"
+  to = "/?audience=youth&lang=en"
+  status = 302
+
+[[redirects]]
+  from = "/fr-women"
+  to = "/?audience=women&lang=fr"
+  status = 302
+
+[[redirects]]
+  from = "/fr-men"
+  to = "/?audience=men&lang=fr"
+  status = 302
+
+[[redirects]]
+  from = "/fr-youth"
+  to = "/?audience=youth&lang=fr"
+  status = 302
+
+[[redirects]]
   from = "/buy"
   to = "https://square.link/u/REPLACE_ME"
   status = 302
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

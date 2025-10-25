@@ -28,6 +28,7 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 }
+body.modal-open{overflow:hidden}
 img{max-width:100%;display:block}
 
 .container{max-width:1120px;margin-inline:auto;padding:0 16px}
@@ -133,17 +134,33 @@ img{max-width:100%;display:block}
 }
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(2px)}
-.modal{position:fixed;inset:0;display:grid;place-items:center;padding:16px}
-.modal-inner{width:min(880px,100%);background:var(--ink-2);border:1px solid rgba(255,255,255,.08);border-radius:20px;box-shadow:var(--shadow)}
+.modal{position:fixed;inset:0;display:grid;place-items:center;padding:16px;overflow:auto}
+.modal-inner{width:min(880px,100%);background:var(--ink-2);border:1px solid rgba(255,255,255,.08);border-radius:20px;box-shadow:var(--shadow);max-height:90vh;display:flex;flex-direction:column}
 .modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
-.modal-body{padding:16px}
+.modal-body{padding:16px;flex:1;overflow:auto}
 .modal-split{display:grid;gap:16px}
 .mini-card{background:var(--ink-3);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:12px}
-.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:14px 16px;border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
 .icon-btn{all:unset;cursor:pointer;padding:6px;border-radius:10px}
 .icon-btn:focus-visible{box-shadow:var(--focus)}
 .mini-list{list-style:disc;margin:0;padding-left:18px}
 .tiny{font-size:12px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0 10px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:14px;color:#E7E7E7;font-weight:600}
+.field input{border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:var(--text);padding:10px 12px;font-size:15px}
+.field input:focus{box-shadow:var(--focus)}
+.field-full{grid-column:1/-1}
+.consent{display:flex;align-items:center;gap:8px;font-size:14px;color:#D9D9D9}
+.consent input{width:18px;height:18px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+.card-wrapper{margin-top:16px;padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25)}
+#card-container{min-height:120px}
+.form-error{color:#ff9080;font-size:14px;margin-top:10px}
+.success-panel{border-radius:16px;padding:18px;background:rgba(63,174,82,.15);border:1px solid rgba(63,174,82,.35);display:grid;gap:10px;margin-top:20px}
+.calendly-inner{width:min(760px,100%)}
+.calendly-body{padding:0;overflow:auto}
+.calendly-container{position:relative;width:100%;min-height:640px;height:clamp(540px,78vh,780px)}
+.calendly-container iframe{width:100% !important;height:100% !important;min-height:inherit;border:0}
 
 .noscript{background:#2a2a2a;border-top:2px solid var(--pf-green);padding:10px 16px;text-align:center}
 

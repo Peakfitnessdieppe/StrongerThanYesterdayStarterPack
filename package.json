@@ -1,0 +1,15 @@
+{
+  "name": "peakfitnessdieppe-landing",
+  "version": "1.0.0",
+  "description": "Peak Fitness Dieppe Starter Pack landing page with Netlify Functions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"Static build handled manually\"",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.43.1",
+    "square": "^42.0.0"
+  }
+}

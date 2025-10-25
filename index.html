@@ -195,20 +195,51 @@
         </header>
         <div class="modal-body">
           <p id="modal-desc" class="muted" data-copy="modal.subtitle">Review what’s included and confirm your purchase.</p>
-          <div class="modal-split">
-            <div>
-              <div class="price-badge tight">
-                <img class="price-arrow" src="assets/arrow-brush-yellow.svg" alt="" role="presentation">
-                <span class="label" data-copy="hero.priceLabel">YOUR PRICE:</span>
-                <span class="price" data-copy="hero.value.price">$139.99</span>
-              </div>
-              <ul class="checklist" id="modal-includes" aria-label="Included"></ul>
+          <div class="price-badge tight">
+            <img class="price-arrow" src="assets/arrow-brush-yellow.svg" alt="" role="presentation">
+            <span class="label" data-copy="hero.priceLabel">YOUR PRICE:</span>
+            <span class="price" data-copy="hero.value.price">$139.99</span>
+          </div>
+          <form id="checkout-form" novalidate>
+            <div class="form-grid">
+              <label class="field">
+                <span class="field-label">First name</span>
+                <input type="text" id="first-name" name="firstName" autocomplete="given-name" required>
+              </label>
+              <label class="field">
+                <span class="field-label">Last name</span>
+                <input type="text" id="last-name" name="lastName" autocomplete="family-name">
+              </label>
+              <label class="field">
+                <span class="field-label">Email</span>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+              </label>
+              <label class="field">
+                <span class="field-label">Mobile</span>
+                <input type="tel" id="phone" name="phone" autocomplete="tel">
+              </label>
+              <label class="field field-full">
+                <span class="field-label">Primary goal</span>
+                <input type="text" id="goal" name="goals" placeholder="Ex: Consistency, strength, weight loss">
+              </label>
+              <label class="consent">
+                <input type="checkbox" id="consent-email" name="consentEmail" checked>
+                <span>Email me updates</span>
+              </label>
+              <label class="consent">
+                <input type="checkbox" id="consent-sms" name="consentSms">
+                <span>Text me reminders</span>
+              </label>
             </div>
-            <aside class="mini-card">
-              <h4 class="h4" data-copy="modal.includesTitle">You’re getting:</h4>
-              <ul class="mini-list" id="modal-bullets"></ul>
-              <p class="tiny muted" data-copy="modal.note">Secure payment via Square. Taxes where applicable.</p>
-            </aside>
+            <div class="card-wrapper">
+              <div id="card-container" aria-label="Credit card input"></div>
+              <div id="card-errors" class="form-error" role="alert" aria-live="polite"></div>
+            </div>
+          </form>
+          <div id="checkout-success" class="success-panel" hidden>
+            <h4 class="h4">Payment received!</h4>
+            <p class="muted">Check your inbox for the receipt and onboarding steps.</p>
+            <a id="receipt-link" class="btn btn-primary" target="_blank" rel="noopener">View receipt</a>
           </div>
         </div>
         <footer class="modal-foot">
@@ -219,6 +250,18 @@
             <span data-copy="modal.cancel">Cancel</span>
           </button>
         </footer>
+      </div>
+    </div>
+
+    <div id="calendly-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="calendly-title" hidden>
+      <div class="modal-inner calendly-inner">
+        <header class="modal-head">
+          <h3 id="calendly-title" class="h3">Schedule your call</h3>
+          <button id="calendly-close" class="icon-btn" aria-label="Close dialog">✕</button>
+        </header>
+        <div class="modal-body calendly-body">
+          <div id="calendly-container" class="calendly-container" aria-live="polite"></div>
+        </div>
       </div>
     </div>
 

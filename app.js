@@ -2,13 +2,29 @@
    Peak Fitness Starter Pack App
    ============================= */
 
-const SQUARE_PAYMENT_LINK = "https://square.link/u/REPLACE_ME";     // TODO one-time checkout
-const CALENDLY_URL        = "https://calendly.com/REPLACE_ME/intro-call"; // TODO Calendly booking
+let SQUARE_APPLICATION_ID = null;
+let SQUARE_LOCATION_ID = null;
+let CALENDLY_URL = "https://calendly.com/REPLACE_ME/intro-call";
+let SQUARE_ENVIRONMENT = "production";
 const PIXEL_ID            = "REPLACE_ME";                           // TODO Meta Pixel ID
 const GA_MEASUREMENT_ID   = "G-REPLACE";                            // TODO GA4 Measurement ID
 const OFFER_SLUG          = "offer-139-one-time";
-const CURRENCY            = "CAD";
-const PRICE_CENTS         = 13999;
+let CURRENCY              = "CAD";
+let PRICE_CENTS           = 13999;
+const API_BASE = '/.netlify/functions';
+
+let squarePayments = null;
+let squareCard = null;
+let configLoaded = false;
+let calendlyLoaded = false;
+let calendlyVisible = false;
+let squareSdkEnvironment = null;
+
+const leadState = {
+  leadId: null,
+  isSubmitting: false,
+  lastError: null
+};
 
 window.PF_PIXEL_ID = PIXEL_ID;
 window.PF_GA_ID = GA_MEASUREMENT_ID;
@@ -104,6 +120,293 @@ function appendUTMs(url, utm) {
     const query = new URLSearchParams(utm || {}).toString();
     if (!query) return url;
     return url.includes("?") ? `${url}&${query}` : `${url}?${query}`;
+  }
+}
+
+let configPromise = null;
+let squareSdkPromise = null;
+let squareCardAttached = false;
+const dialogRegistry = new WeakMap();
+let dialogFocusReturn = null;
+
+function handleDialogKeydown(event, dialog, closeFn) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    if (typeof closeFn === "function") closeFn();
+    return;
+  }
+  if (event.key !== "Tab") return;
+  const nodes = focusables(dialog);
+  if (!nodes.length) return;
+  const [first, last] = [nodes[0], nodes[nodes.length - 1]];
+  if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  } else if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  }
+}
+
+function showDialog(dialog, closeFn) {
+  if (!dialog) return;
+  dialogFocusReturn = document.activeElement;
+  if (modalOverlay) modalOverlay.hidden = false;
+  dialog.hidden = false;
+  const trap = (event) => handleDialogKeydown(event, dialog, closeFn);
+  dialogRegistry.set(dialog, { trap, closeFn });
+  dialog.addEventListener("keydown", trap);
+  const nodes = focusables(dialog);
+  if (nodes[0]) nodes[0].focus();
+  document.body.classList.add("modal-open");
+}
+
+function hideDialog(dialog) {
+  if (!dialog) return;
+  const entry = dialogRegistry.get(dialog);
+  if (entry?.trap) dialog.removeEventListener("keydown", entry.trap);
+  dialogRegistry.delete(dialog);
+  dialog.hidden = true;
+  const anyOpen = [modal, calendlyModal].some((node) => node && !node.hidden);
+  if (modalOverlay) modalOverlay.hidden = !anyOpen;
+  if (!anyOpen) {
+    document.body.classList.remove("modal-open");
+    if (dialogFocusReturn && typeof dialogFocusReturn.focus === "function") dialogFocusReturn.focus();
+    dialogFocusReturn = null;
+  }
+}
+
+function showCardError(message = "") {
+  if (cardErrors) {
+    cardErrors.textContent = message;
+    cardErrors.hidden = !message;
+  }
+}
+
+function resetCheckoutForm() {
+  if (checkoutForm) checkoutForm.reset();
+  leadState.leadId = null;
+  leadState.isSubmitting = false;
+  leadState.lastError = null;
+  showCardError("");
+  if (successPanel) successPanel.hidden = true;
+  if (receiptLink) {
+    receiptLink.href = "#";
+    receiptLink.hidden = true;
+  }
+  if (squareCard && typeof squareCard.clear === "function") {
+    try { squareCard.clear(); } catch (_) {}
+  }
+  setPayButtonLoading(false);
+}
+
+function getPayLabel() {
+  const locale = state.lang === "fr" ? "fr-CA" : "en-CA";
+  const verb = state.lang === "fr" ? "Payer" : "Pay";
+  return `${verb} ${toMoney(PRICE_CENTS, CURRENCY, locale)}`;
+}
+
+async function loadRemoteConfig() {
+  if (configLoaded) return;
+  if (!configPromise) {
+    configPromise = (async () => {
+      try {
+        const response = await fetch(`${API_BASE}/get-config`, { headers: { Accept: "application/json" } });
+        if (response.ok) {
+          const json = await response.json();
+          if (json.squareApplicationId) SQUARE_APPLICATION_ID = json.squareApplicationId;
+          if (json.squareLocationId) SQUARE_LOCATION_ID = json.squareLocationId;
+          if (json.calendlyUrl) CALENDLY_URL = json.calendlyUrl;
+          if (json.squareEnvironment) SQUARE_ENVIRONMENT = json.squareEnvironment;
+          if (Number.isFinite(json.priceCents)) PRICE_CENTS = json.priceCents;
+          if (json.currency) CURRENCY = json.currency;
+        } else {
+          console.warn("get-config failed", response.status);
+        }
+      } catch (error) {
+        console.error("Unable to load config", error);
+      }
+      configLoaded = true;
+    })();
+  }
+  await configPromise;
+}
+
+async function loadSquareSdk() {
+  const desiredEnv = SQUARE_ENVIRONMENT === 'sandbox' ? 'sandbox' : 'production';
+
+  if (squareSdkEnvironment && squareSdkEnvironment !== desiredEnv) {
+    const existing = document.querySelector('script[data-square-sdk="true"]');
+    if (existing) existing.remove();
+    try { delete window.Square; } catch (_) { window.Square = undefined; }
+    squareSdkPromise = null;
+    squareCardAttached = false;
+    squareCard = null;
+    squarePayments = null;
+  }
+
+  if (!squareSdkPromise) {
+    const scriptSrc = desiredEnv === 'sandbox'
+      ? 'https://sandbox.web.squarecdn.com/v1/square.js'
+      : 'https://web.squarecdn.com/v1/square.js';
+
+    squareSdkPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = scriptSrc;
+      script.async = true;
+      script.dataset.squareSdk = 'true';
+      script.onload = () => resolve(window.Square);
+      script.onerror = () => reject(new Error('Square SDK failed to load'));
+      document.head.appendChild(script);
+    });
+    squareSdkEnvironment = desiredEnv;
+  }
+
+  await squareSdkPromise;
+  if (!window.Square?.payments) {
+    throw new Error("Square Payments SDK unavailable");
+  }
+  return window.Square;
+}
+
+async function ensureSquareCard() {
+  if (squareCard && squareCardAttached) return;
+  if (!cardContainer) throw new Error("Payment form not ready");
+  if (!SQUARE_APPLICATION_ID || !SQUARE_LOCATION_ID) {
+    throw new Error(state.lang === "fr" ? "Configuration de paiement manquante. Réessayez." : "Payment configuration unavailable. Please try again.");
+  }
+  await loadSquareSdk();
+  const envOption = { environment: SQUARE_ENVIRONMENT === 'sandbox' ? 'sandbox' : 'production' };
+  squarePayments = window.Square.payments(SQUARE_APPLICATION_ID, SQUARE_LOCATION_ID, envOption);
+  if (!squarePayments) {
+    throw new Error("Square payments unavailable");
+  }
+  squareCard = await squarePayments.card();
+  await squareCard.attach(cardContainer);
+  squareCardAttached = true;
+}
+
+function getLeadFormValues() {
+  if (!checkoutForm) return {};
+  const form = new FormData(checkoutForm);
+  const normalise = (value) => (value || "").toString().trim();
+  return {
+    firstName: normalise(form.get("firstName")),
+    lastName: normalise(form.get("lastName")),
+    email: normalise(form.get("email")),
+    phone: normalise(form.get("phone")),
+    goals: normalise(form.get("goals")),
+    consentEmail: form.has("consentEmail"),
+    consentSms: form.has("consentSms")
+  };
+}
+
+async function captureLead(values) {
+  const payload = {
+    email: values.email,
+    firstName: values.firstName,
+    lastName: values.lastName,
+    phone: values.phone,
+    goals: values.goals,
+    audience: state.audience,
+    language: state.lang,
+    utm: state.utm,
+    consentEmail: values.consentEmail,
+    consentSms: values.consentSms
+  };
+
+  const response = await fetch(`${API_BASE}/capture-lead`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const json = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(json.error || (state.lang === "fr" ? "Impossible d’enregistrer vos informations." : "Unable to save your info."));
+  }
+  return json.leadId;
+}
+
+async function submitPayment(values, leadId, sourceId) {
+  const payload = {
+    leadId,
+    sourceId,
+    buyerEmail: values.email,
+    buyerName: `${values.firstName} ${values.lastName}`.trim() || values.firstName || values.email,
+    buyerPhone: values.phone,
+    audience: state.audience,
+    language: state.lang,
+    utm: state.utm,
+    amountCents: PRICE_CENTS
+  };
+
+  const response = await fetch(`${API_BASE}/create-payment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const json = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(json.error || (state.lang === "fr" ? "Le paiement a échoué." : "Payment failed."));
+  }
+  return json;
+}
+
+function setPayButtonLoading(isLoading) {
+  if (!modalPay) return;
+  modalPay.disabled = Boolean(isLoading);
+  modalPay.classList.toggle("is-loading", Boolean(isLoading));
+  const label = modalPay.querySelector("span");
+  if (!label) return;
+  if (isLoading) {
+    label.textContent = state.lang === "fr" ? "Traitement…" : "Processing…";
+  } else if (successPanel?.hidden !== false) {
+    label.textContent = getPayLabel();
+  }
+}
+
+async function handleCheckoutSubmit() {
+  if (!squareCard || leadState.isSubmitting) return;
+  const values = getLeadFormValues();
+  if (!values.email) {
+    showCardError(state.lang === "fr" ? "Courriel requis." : "Email is required.");
+    return;
+  }
+  showCardError("");
+  leadState.isSubmitting = true;
+  setPayButtonLoading(true);
+
+  try {
+    if (!leadState.leadId) {
+      leadState.leadId = await captureLead(values);
+    }
+    const tokenResult = await squareCard.tokenize();
+    if (tokenResult.status !== "OK") {
+      throw new Error(tokenResult.errors?.[0]?.message || "Card tokenization failed");
+    }
+    const payment = await submitPayment(values, leadState.leadId, tokenResult.token);
+    successPanel.hidden = false;
+    if (receiptLink) {
+      if (payment.receiptUrl) {
+        receiptLink.href = payment.receiptUrl;
+        receiptLink.hidden = false;
+      } else {
+        receiptLink.hidden = true;
+      }
+    }
+    const label = modalPay.querySelector("span");
+    if (label) label.textContent = state.lang === "fr" ? "Complété" : "Completed";
+    modalPay.disabled = true;
+    pfTrack("purchase", { lead_id: leadState.leadId, payment_id: payment.paymentId });
+  } catch (error) {
+    console.error("checkout error", error);
+    leadState.lastError = error;
+    showCardError(error.message || "Payment failed");
+    setPayButtonLoading(false);
+  } finally {
+    leadState.isSubmitting = false;
   }
 }
 
@@ -1029,7 +1332,11 @@ function updateUI() {
   setText($('[data-copy="footer.privacy"]'), ui.footer.privacy);
   setText($('#modal-title'), ui.modal.title);
   setText($('#modal-desc'), ui.modal.subtitle);
-  setText($('#modal-pay')?.querySelector('span'), state.lang === 'fr' ? `Payer ${toMoney(PRICE_CENTS, CURRENCY, 'fr-CA')}` : `Pay ${toMoney(PRICE_CENTS)}`);
+  const payButton = $('#modal-pay');
+  const payLabel = payButton?.querySelector('span');
+  if (payLabel && (typeof successPanel === 'undefined' || successPanel?.hidden !== false)) {
+    setText(payLabel, getPayLabel());
+  }
   setText($('#modal-cancel')?.querySelector('span'), ui.modal.cancel);
   setText($('#checkout-modal .mini-card .h4'), ui.modal.includesTitle);
   setText($('#checkout-modal .tiny'), ui.modal.note);
@@ -1092,85 +1399,113 @@ const modal = $('#checkout-modal');
 const modalClose = $('#modal-close');
 const modalCancel = $('#modal-cancel');
 const modalPay = $('#modal-pay');
-let modalFocusReturn = null;
+
+const checkoutForm = $('#checkout-form');
+const cardContainer = $('#card-container');
+const cardErrors = $('#card-errors');
+const successPanel = $('#checkout-success');
+const receiptLink = $('#receipt-link');
+
+const calendlyModal = $('#calendly-modal');
+const calendlyClose = $('#calendly-close');
+const calendlyContainer = $('#calendly-container');
 
 function focusables(root) {
   return $$('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])', root)
     .filter((el) => !el.hasAttribute('disabled') && (el.offsetParent !== null || el === root));
 }
 
-function trapKeydown(event) {
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    closeModal();
-    return;
-  }
-  if (event.key !== 'Tab') return;
-  const nodes = focusables(modal);
-  if (!nodes.length) return;
-  const first = nodes[0];
-  const last = nodes[nodes.length - 1];
-  if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  } else if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  }
-}
-
-function openModal() {
-  modalFocusReturn = document.activeElement;
-  if (modalOverlay) modalOverlay.hidden = false;
-  if (modal) {
-    modal.hidden = false;
-    modal.addEventListener('keydown', trapKeydown);
-    const nodes = focusables(modal);
-    if (nodes[0]) nodes[0].focus();
-  }
-  document.body.classList.add('modal-open');
+async function openModal(event) {
+  if (event) event.preventDefault();
   pfTrack('cta_click', { action: 'open_modal' });
+  resetCheckoutForm();
+  showDialog(modal, closeModal);
+  try {
+    await loadRemoteConfig();
+    updateUI();
+    if (modalPay) {
+      modalPay.disabled = false;
+      const label = modalPay.querySelector('span');
+      if (label) label.textContent = getPayLabel();
+    }
+    await ensureSquareCard();
+    showCardError('');
+  } catch (error) {
+    console.error('modal init error', error);
+    showCardError(error.message || 'Unable to initialize payment form.');
+  }
 }
 
 function closeModal() {
-  if (modalOverlay) modalOverlay.hidden = true;
-  if (modal) {
-    modal.hidden = true;
-    modal.removeEventListener('keydown', trapKeydown);
-  }
-  document.body.classList.remove('modal-open');
-  if (modalFocusReturn && typeof modalFocusReturn.focus === 'function') modalFocusReturn.focus();
-  modalFocusReturn = null;
+  hideDialog(modal);
+  resetCheckoutForm();
 }
 
 function bindModal() {
-  if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', () => {
+      if (calendlyModal && !calendlyModal.hidden) closeCalendly();
+      if (modal && !modal.hidden) closeModal();
+    });
+  }
   if (modalClose) modalClose.addEventListener('click', closeModal);
   if (modalCancel) modalCancel.addEventListener('click', closeModal);
-  if (modalPay) modalPay.addEventListener('click', () => {
-    pfTrack('cta_click', { action: 'pay' });
-    const target = appendUTMs(SQUARE_PAYMENT_LINK, state.utm);
-    window.location.assign(target);
-  });
-  $$('[data-cta="open-modal"]').forEach((node) => node.addEventListener('click', openModal));
+  if (checkoutForm) {
+    checkoutForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      handleCheckoutSubmit();
+    });
+  }
+  if (modalPay) {
+    modalPay.addEventListener('click', (event) => {
+      event.preventDefault();
+      handleCheckoutSubmit();
+    });
+  }
+  $$('[data-cta="open-modal"], [data-cta="buy-top"]').forEach((node) => node.addEventListener('click', openModal));
 }
 
-function openCalendly() {
+function closeCalendly() {
+  hideDialog(calendlyModal);
+  calendlyVisible = false;
+  if (calendlyContainer) {
+    calendlyContainer.innerHTML = '';
+  }
+}
+
+async function openCalendly(event) {
+  if (event) event.preventDefault();
   pfTrack('calendly_click');
+  await loadRemoteConfig();
   const url = appendUTMs(CALENDLY_URL, state.utm);
-  if (window.Calendly && typeof window.Calendly.initPopupWidget === 'function') {
-    window.Calendly.initPopupWidget({ url });
+  if (!calendlyModal || !calendlyContainer) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  showDialog(calendlyModal, closeCalendly);
+  calendlyVisible = true;
+  const values = getLeadFormValues();
+  if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
+    calendlyContainer.innerHTML = '';
+    window.Calendly.initInlineWidget({
+      url,
+      parentElement: calendlyContainer,
+      prefill: {
+        name: [values.firstName, values.lastName].filter(Boolean).join(' ') || undefined,
+        email: values.email || undefined
+      },
+      utm: state.utm
+    });
+    calendlyLoaded = true;
   } else {
     window.open(url, '_blank', 'noopener,noreferrer');
+    closeCalendly();
   }
 }
 
 function bindCalendly() {
+  if (calendlyClose) calendlyClose.addEventListener('click', closeCalendly);
   $$('[data-cta="calendly"]').forEach((node) => node.addEventListener('click', openCalendly));
-  $$('[data-cta="buy-top"]').forEach((node) => node.addEventListener('click', (event) => {
-    event.preventDefault();
-    openModal();
-  }));
 }
 
 function bindLangToggle() {
@@ -1190,4 +1525,16 @@ document.addEventListener('DOMContentLoaded', () => {
   bindModal();
   bindCalendly();
   updateUI();
+  resetCheckoutForm();
+
+  (async () => {
+    try {
+      await loadRemoteConfig();
+    } catch (error) {
+      console.error('init config error', error);
+    } finally {
+      updateUI();
+      resetCheckoutForm();
+    }
+  })();
 });

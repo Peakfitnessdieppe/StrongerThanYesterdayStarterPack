@@ -42,12 +42,18 @@ const ROUTE_MAP = {
   "/women": { audience: "women" },
   "/men": { audience: "men" },
   "/youth": { audience: "youth" },
+  "/womens": { audience: "women" },
+  "/mens": { audience: "men" },
   "/en-women": { audience: "women", lang: "en" },
   "/en-men": { audience: "men", lang: "en" },
   "/en-youth": { audience: "youth", lang: "en" },
+  "/en-womens": { audience: "women", lang: "en" },
+  "/en-mens": { audience: "men", lang: "en" },
   "/fr-women": { audience: "women", lang: "fr" },
   "/fr-men": { audience: "men", lang: "fr" },
-  "/fr-youth": { audience: "youth", lang: "fr" }
+  "/fr-youth": { audience: "youth", lang: "fr" },
+  "/fr-womens": { audience: "women", lang: "fr" },
+  "/fr-mens": { audience: "men", lang: "fr" }
 };
 
 function parseSearch() {
@@ -93,7 +99,29 @@ function getLangStored() {
     return routeData.lang;
   }
   const stored = localStorage.getItem("pf_lang");
-  return LANGS.includes(stored) ? stored : "en";
+  if (LANGS.includes(stored)) return stored;
+  const detected = detectBrowserLang();
+  if (detected) {
+    setLangStored(detected);
+    return detected;
+  }
+  return "en";
+}
+
+function detectBrowserLang() {
+  if (typeof navigator === "undefined") return null;
+  const raw = [];
+  if (Array.isArray(navigator.languages)) raw.push(...navigator.languages);
+  if (navigator.language) raw.push(navigator.language);
+  if (navigator.userLanguage) raw.push(navigator.userLanguage);
+  const normalized = raw
+    .map((entry) => (entry || "").toLowerCase())
+    .filter(Boolean);
+  const match = normalized.find((code) => code.startsWith("fr"))
+    || normalized.find((code) => code.startsWith("en"));
+  if (match?.startsWith("fr")) return "fr";
+  if (match?.startsWith("en")) return "en";
+  return null;
 }
 
 function setLangStored(lang) {
@@ -206,6 +234,38 @@ function getPayLabel() {
   return `${verb} ${toMoney(PRICE_CENTS, CURRENCY, locale)}`;
 }
 
+// --- Summary totals (NB HST 15%) ---
+function getTaxRate() {
+  return 0.15; // NB HST 15%
+}
+
+function updateSummaryTotals() {
+  const locale = state.lang === 'fr' ? 'fr-CA' : 'en-CA';
+  const subtotalCents = PRICE_CENTS || 0;
+  const rate = getTaxRate();
+  const taxCents = Math.round(subtotalCents * rate);
+  const totalCents = subtotalCents + taxCents;
+
+  const elSubtotal = document.getElementById('summary-subtotal');
+  const elTax = document.getElementById('summary-tax');
+  const elTotal = document.getElementById('summary-total');
+  if (elSubtotal) elSubtotal.textContent = toMoney(subtotalCents, CURRENCY, locale);
+  if (elTax) elTax.textContent = toMoney(taxCents, CURRENCY, locale);
+  if (elTotal) elTotal.textContent = toMoney(totalCents, CURRENCY, locale);
+}
+
+function attachSummaryListeners() {
+  const country = document.getElementById('country');
+  const state = document.getElementById('state');
+  [country, state].forEach((el) => {
+    if (!el || el.dataset.summaryBound === 'true') return;
+    const handler = () => updateSummaryTotals();
+    el.addEventListener('change', handler);
+    el.addEventListener('input', handler);
+    el.dataset.summaryBound = 'true';
+  });
+}
+
 async function loadRemoteConfig() {
   if (configLoaded) return;
   if (!configPromise) {
@@ -294,10 +354,7 @@ function getLeadFormValues() {
     firstName: normalise(form.get("firstName")),
     lastName: normalise(form.get("lastName")),
     email: normalise(form.get("email")),
-    phone: normalise(form.get("phone")),
-    goals: normalise(form.get("goals")),
-    consentEmail: form.has("consentEmail"),
-    consentSms: form.has("consentSms")
+    phone: normalise(form.get("phone"))
   };
 }
 
@@ -307,12 +364,11 @@ async function captureLead(values) {
     firstName: values.firstName,
     lastName: values.lastName,
     phone: values.phone,
-    goals: values.goals,
     audience: state.audience,
     language: state.lang,
     utm: state.utm,
-    consentEmail: values.consentEmail,
-    consentSms: values.consentSms
+    consentEmail: Boolean(values.consentEmail),
+    consentSms: Boolean(values.consentSms)
   };
 
   const response = await fetch(`${API_BASE}/capture-lead`, {
@@ -439,9 +495,14 @@ const uiCopy = {
     nav: { scheduleCall: "Schedule a call", buyNow: "Buy now" },
     modal: {
       title: "Starter Pack — Pre‑Checkout",
-      subtitle: "Review what’s included and confirm your purchase.",
-      includesTitle: "You’re getting:",
-      note: "Secure payment via Square. Taxes where applicable.",
+      subtitle: "Secure checkout — confirm your Starter Pack details.",
+      paymentTitle: "Payment info",
+      billingTitle: "Contact info",
+      cardNumber: "Card number",
+      cardExpiry: "Expiration date",
+      cardCvv: "CVV",
+      priceCaption: "One-time payment, taxes where applicable.",
+      secureCopy: "Payments processed securely via Square.",
       cancel: "Cancel"
     },
     footer: { terms: "Terms", privacy: "Privacy" },
@@ -451,9 +512,14 @@ const uiCopy = {
     nav: { scheduleCall: "Planifier un appel", buyNow: "Acheter maintenant" },
     modal: {
       title: "Forfait de départ — Pré‑paiement",
-      subtitle: "Vérifiez l’inclusion et confirmez l’achat.",
-      includesTitle: "Vous obtenez :",
-      note: "Paiement sécurisé via Square. Taxes si applicable.",
+      subtitle: "Paiement sécurisé — confirmez votre Starter Pack.",
+      paymentTitle: "Informations de paiement",
+      billingTitle: "Coordonnées",
+      cardNumber: "Numéro de carte",
+      cardExpiry: "Date d’expiration",
+      cardCvv: "CVV",
+      priceCaption: "Paiement unique, taxes en sus.",
+      secureCopy: "Paiements traités en toute sécurité via Square.",
       cancel: "Annuler"
     },
     footer: { terms: "Conditions", privacy: "Confidentialité" },
@@ -464,76 +530,79 @@ const uiCopy = {
 const copy = {
   en: {
     women: {
-      meta: { offerName: "30-Day Starter Pack", heroImg: "assets/hero-women-01.svg" },
+      meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-women-stronger2.png" },
       hero: {
-        headline: "Get 65% OFF Your First Month — Structure that sticks",
-        subhead: "Coached classes, real support, and a plan that won’t let you fall off.",
-        totalLabel: "Total Value",
-        priceLabel: "YOUR PRICE:",
-        saveLabel: "You Save",
-        value: { total: "$407.94", price: "$139.99", save: "$267.95" },
-        includesTitle: "Starter Pack Includes",
+        headline: "Strength that fuels your calendar, your commitments, and your confidence.",
+        subhead: "Guided classes and supportive coaches help you feel strong on day one, and by week four you’ll glow with smoother mornings, stronger reps, and energy that feels five years younger. **100% Money-Back Guarantee.**",
         includes: [
-          "30-day trial to 40+ coached classes per week",
-          "1-on-1 60-min onboarding",
-          "InBody scan & nutrition checklist",
-          "Open gym & kids zone access"
+          "1-on-1 welcome session to kick off with confidence",
+          "Coach-led Glutes & Abs, Muscle Building, and recovery yoga",
+          "2 Buddy Class Passes — bring a friend for motivation"
         ],
-        primaryCTA: "Join Now — $139.99",
-        secondaryCTA: "Still undecided? Schedule a call"
+        primaryCTA: "Feel Strong Today—Join Us",
+        secondaryCTA: "Connect with Rick, Peak Fitness Owner"
       },
       problemFit: {
         title: "Why most workouts don’t stick:",
         tiles: [
-          "Busy days → workouts get skipped.",
-          "Too many options → decision fatigue.",
-          "Big-box gyms feel intimidating.",
-          "Apps don’t coach you → no real results."
+          "Meetings run late, dinners pop up, kids need rides → workouts skipped.",
+          "Too many options (Pilates, YouTube workouts, Spin) → decision fatigue.",
+          "Big-box crowds → intimidating, zero accountability.",
+          "Swipe-through workouts, no feedback → results stall out."
         ]
       },
       valueSplit: {
         coreTitle: "Core Offer",
         coreValue: "$407.94 Value",
         core: [
-          "Unlimited coached classes for 30 days",
-          "Personalized plan after your 1-on-1 onboarding",
-          "InBody scan + progress review",
-          "Coach accountability check-ins each week"
+          "Unlimited access to 40+ coached classes/week",
+          "7 formats — Glutes & Abs, Muscle Building, Bootcamp, Yoga and more",
+          "Purposeful 60-minute sessions — warm-up, strength, finisher, done",
+          "No overcrowding — space to move, equipment always ready",
+          "Kid Zone access — bring the kids, lose the excuse. We got free WiFi."
         ],
         bonusTitle: "Built-In Bonuses (Included Free)",
         bonuses: [
-          "Nutrition kickstart checklist",
-          "Movement tune-ups + progressions",
-          "Access to recovery tools & mobility sessions",
-          "Goal setting touchpoint at Day 21"
+          "1 Personal Training Onboarding (60 min) — perfect your form & create your plan",
+          "2 Buddy Class Passes — bring a friend for motivation",
+          "2 InBody scans — one at onboarding, another at Day 30"
         ],
-        dealBubble: "65.7% Off!",
-        dealCTA: "Claim the deal"
+        dealBubble: "",
+        dealCTA: ""
       },
       guarantee: {
         title: "Try it completely risk-free",
         bullets: [
           "Cancel anytime within the first 30 days for a full refund.",
-          "Keep your plan and progress notes even if you cancel.",
-          "Friendly staff meets you where you’re at."
+          "Friendly staff meets you where you’re at.",
+          "Attend at least 10 classes during the 30 days to stay eligible."
         ],
         promise: "Show up, lean on our coaches, and you’ll feel stronger and more confident in 30 days.",
-        quote: "“You bring the effort. We bring the structure.”"
+        quote: "“Stronger than Day 1 or your money back.”",
+        media: {
+          src: "assets/riskfree-womens.png",
+          alt: "Women celebrating risk-free guarantee"
+        }
       },
       testimonials: {
         title: "What members say",
-        items: [
-          { quote: "Finally a gym that fits my life. I feel strong again.", name: "Mélanie D." },
-          { quote: "Kids zone = no excuses. Coaches are incredible.", name: "Amanda P." },
-          { quote: "The accountability was the difference-maker.", name: "Julie S." }
-        ]
+        video: {
+          mobile: "assets/Testimonial-With-Subs.mp4",
+          desktop: "assets/Testimonial-Desktop.mp4"
+        },
+        items: []
       },
       timeline: {
-        title: "Your first 30 days",
+        title: "Your first 12 weeks",
         rows: [
-          { title: "Day 1–7", text: "Onboarding, foundations, and first wins. We lock in a schedule that fits your life." },
-          { title: "Day 14", text: "Confidence rises, technique dialed. You’ll feel stronger + have real momentum." },
-          { title: "Day 30", text: "Habits locked in, clarity on what’s next, and a plan that sticks." }
+          { title: "Day 1–3", text: "First welcome lift + InBody reveal your exact starting point; relief hits as the plan fits your calendar." },
+          { title: "Day 4–7", text: "You wake with more energy, soreness stays manageable, and your workout time is blocked without guilt." },
+          { title: "Week 2", text: "Strength cues click—push-ups, rows, and carries feel smoother, mood stays steady through stacked days." },
+          { title: "Week 4", text: "Morning routine shortens, jeans glide on easier, family notices you’re calmer and more present." },
+          { title: "Week 6", text: "Waistline trims, chronic stiffness eases, and InBody shows lean muscle climbing." },
+          { title: "Week 8", text: "Down a size, shoulders and glutes look defined, compliments land at school drop-off and meetings." },
+          { title: "Week 10", text: "Longest days feel doable—lifts climb ~15% and you still have evening energy." },
+          { title: "Week 12", text: "Before/after pics prove the glow; confidence sticks while your coach maps the next goal." }
         ]
       },
       faq: {
@@ -549,23 +618,17 @@ const copy = {
       }
     },
     men: {
-      meta: { offerName: "30-Day Starter Pack", heroImg: "assets/hero-men-01.svg" },
+      meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-men-stronger.png" },
       hero: {
-        headline: "Dial back the ego. Build strength that lasts — 65% OFF Month One",
-        subhead: "Coaching, structure, and a plan that respects your joints (and your schedule).",
-        totalLabel: "Total Value",
-        priceLabel: "YOUR PRICE:",
-        saveLabel: "You Save",
-        value: { total: "$407.94", price: "$139.99", save: "$267.95" },
-        includesTitle: "Starter Pack Includes",
+        headline: "Train smart. Move well. Get strong — again.",
+        subhead: "Coaching that replaces random routines with strength you can rely on—at work, at home, in your sport. Structured blocks, joint-friendly progressions, and coaching trusted by competitive lifters and athletes.",
         includes: [
-          "Unlimited small-group strength & conditioning for 30 days",
-          "Performance onboarding with a coach",
-          "Mobility + maintenance plan",
-          "Open gym access and recovery tools"
+          "Structured strength blocks — not random circuits",
+          "Joint‑friendly coaching and injury‑aware scaling",
+          "Lifts designed to boost your next game, match, or round"
         ],
-        primaryCTA: "Join Now — $139.99",
-        secondaryCTA: "Want to chat first? Schedule a call"
+        primaryCTA: "Train Smarter Today",
+        secondaryCTA: "Connect with Rick, Peak Fitness Owner"
       },
       problemFit: {
         title: "Why most programs stall out:",
@@ -580,44 +643,53 @@ const copy = {
         coreTitle: "Core Offer",
         coreValue: "$407.94 Value",
         core: [
-          "Coach-led strength & conditioning 5x/week",
-          "Movement assessment + tailored progressions",
-          "Strength benchmarks and tracking",
-          "Weekly accountability touchpoint"
+          "Unlimited access to 40+ coached classes/week",
+          "7 formats — Glutes & Abs, Muscle Building, Bootcamp, Yoga and more",
+          "Purposeful 60-minute sessions — warm-up, strength, finisher, done",
+          "No overcrowding — space to move, equipment always ready",
+          "Kid Zone access — bring the kids, lose the excuse. We got free WiFi."
         ],
         bonusTitle: "Built-In Bonuses (Included Free)",
         bonuses: [
-          "Mobility reset toolkit",
-          "Coach eye on every lift",
-          "Recovery lounge + contrast protocols",
-          "End-of-month progression plan"
+          "1 Personal Training Onboarding (60 min) — perfect your form & create your plan",
+          "2 Buddy Class Passes — bring a friend for motivation",
+          "2 InBody scans — one at onboarding, another at Day 30"
         ],
-        dealBubble: "65.7% Off!",
-        dealCTA: "Secure your spot"
+        dealBubble: "",
+        dealCTA: ""
       },
       guarantee: {
         title: "Try it risk-free",
         bullets: [
           "Full refund in the first 30 days if it’s not for you.",
-          "Keep your assessment + plan even if you cancel.",
-          "Coach-led environment keeps you safe." ],
+          "Coach-led environment keeps you safe.",
+          "Attend at least 10 classes during the 30 days to stay eligible." ],
         promise: "You’ll feel stronger, move better, and train smarter in 30 days or your money back.",
-        quote: "“Lift smarter. Feel better. Stronger than yesterday.”"
+        quote: "“Stronger than Day 1 or your money back.”",
+        media: {
+          src: "assets/riskfree-mens.png",
+          alt: "Man training with coach risk-free"
+        }
       },
       testimonials: {
         title: "What members say",
-        items: [
-          { quote: "Structure + real coaching. PRs without pain.", name: "Marc L." },
-          { quote: "Mobility finally caught up to my strength.", name: "Daniel P." },
-          { quote: "Accountability made 5am sessions legit.", name: "Alex G." }
-        ]
+        video: {
+          mobile: "assets/Testimonial-With-Subs.mp4",
+          desktop: "assets/Testimonial-Desktop.mp4"
+        },
+        items: []
       },
       timeline: {
-        title: "Your first 30 days",
+        title: "Your first 12 weeks",
         rows: [
-          { title: "Day 1–7", text: "Assessment, baseline testing, and a clear strength track." },
-          { title: "Day 14", text: "Weights climb, conditioning sharpens, recovery routine dialed." },
-          { title: "Day 30", text: "Benchmarks up, joints happy, next block mapped out." }
+          { title: "Day 1–3", text: "Baseline testing shows what slipped; joints already feel better with dialed warm-ups." },
+          { title: "Day 4–7", text: "Bar path smooths out, nagging shoulder/hip tightness eases, confidence returns." },
+          { title: "Week 2", text: "5–10% strength bump, conditioning finishers no longer gas you out at work." },
+          { title: "Week 4", text: "Mobility carries into sport—swings, shots, and lifts feel crisp with zero flare-ups." },
+          { title: "Week 6", text: "Waistline down, belt notches tighten, InBody shows lean mass trending up." },
+          { title: "Week 8", text: "Game speed improves—pickup runs, golf rounds, or matches feel explosive again." },
+          { title: "Week 10", text: "Busy weeks stay on track; recovery score better, no missed sessions, stress stays low." },
+          { title: "Week 12", text: "Numbers jump ~20 lb across big lifts, confident to attack the next strength block." }
         ]
       },
       faq: {
@@ -633,23 +705,17 @@ const copy = {
       }
     },
     youth: {
-      meta: { offerName: "Youth Athlete Starter Pack", heroImg: "assets/hero-youth-01.svg" },
+      meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-youth-stronger.png" },
       hero: {
-        headline: "Build speed, strength, and confidence — 30 days to a stronger athlete",
-        subhead: "Small-group coaching tailored for developing players. Safe, structured, and fun.",
-        totalLabel: "Total Value",
-        priceLabel: "YOUR PRICE:",
-        saveLabel: "You Save",
-        value: { total: "$407.94", price: "$139.99", save: "$267.95" },
-        includesTitle: "Starter Pack Includes",
+        headline: "Stand out at tryouts. Build speed, strength, and confidence.",
+        subhead: "A 30‑day phase with performance testing, strength + speed coaching, and clear progress reports for parents — safe, structured, and hockey‑relevant.",
         includes: [
-          "4 weeks of small-group performance sessions",
-          "Athletic baseline testing + InBody scan",
-          "Speed, agility, and strength programming",
-          "Coach-led accountability and home drills"
+          "Performance testing and benchmark reports",
+          "Coach‑led strength + speed sessions",
+          "Parent updates and a clear development plan"
         ],
-        primaryCTA: "Join Now — $139.99",
-        secondaryCTA: "Talk with a coach"
+        primaryCTA: "Start Your 30‑Day Prep",
+        secondaryCTA: "Connect with Rick, Peak Fitness Owner"
       },
       problemFit: {
         title: "Why most youth plans fall short:",
@@ -686,7 +752,11 @@ const copy = {
           "Keep testing data + action plan even if you cancel.",
           "Safe, coached environment with small ratios." ],
         promise: "We build stronger, faster, more confident athletes in 30 days or you don’t pay.",
-        quote: "“Confidence shows up when structure meets effort.”"
+        quote: "“Confidence shows up when structure meets effort.”",
+        media: {
+          src: "assets/riskfree-youth.png",
+          alt: "Smiling youth athlete in Risk-Free guarantee"
+        }
       },
       testimonials: {
         title: "What parents + athletes say",
@@ -697,11 +767,16 @@ const copy = {
         ]
       },
       timeline: {
-        title: "Your first 30 days",
+        title: "Your first 12 weeks",
         rows: [
-          { title: "Day 1–7", text: "Testing, movement foundations, and confidence building." },
-          { title: "Day 14", text: "Strength & speed gain traction. Skill work dialed to the sport." },
-          { title: "Day 30", text: "Noticeable performance gains + plan for the next phase." }
+          { title: "Day 1–3", text: "Performance testing captures baseline speed and strength; athlete leaves with clear targets." },
+          { title: "Day 4–7", text: "Movement fixes land, confidence builds, parents receive the first progress update." },
+          { title: "Week 2", text: "First-step quickness sharpens; change-of-direction looks smoother at team practices." },
+          { title: "Week 4", text: "Squats and pulls climb, shot power and puck control feel stronger." },
+          { title: "Week 6", text: "Sprint times drop, core strength pops, coaches notice more stability on the ice." },
+          { title: "Week 8", text: "Explosiveness shows up in games, recovery is faster, teammates look to them for leadership." },
+          { title: "Week 10", text: "Handles full shifts without gassing out; resilience stays high even during tournaments." },
+          { title: "Week 12", text: "Re-test highlights major gains; personalized plan set for the next season phase." }
         ]
       },
       faq: {
@@ -765,7 +840,9 @@ const copy = {
           "Keep your plan and checklists even if you cancel.",
           "Supportive staff, zero judgment." ],
         promise: "You’ll feel stronger, clearer, and more confident in 30 days or your money back.",
-        quote: "“Structure creates results. We bring both.”"
+        quote: "“Structure creates results. We bring both.”",
+        primaryCTA: "Start risk-free today",
+        secondaryCTA: "Talk with Rick"
       },
       testimonials: {
         title: "What members say",
@@ -798,75 +875,78 @@ const copy = {
   },
   fr: {
     women: {
-      meta: { offerName: "Forfait de 30 jours", heroImg: "assets/hero-women-01.svg" },
+      meta: { offerName: "Starter Stronger Than Yesterday", heroImg: "assets/hero-women-stronger2.png" },
       hero: {
-        headline: "Obtenez 65 % de rabais sur le premier mois — Une structure qui tient",
-        subhead: "Cours encadrés, vrai soutien et un plan qui ne vous laisse pas tomber.",
-        totalLabel: "Valeur totale",
-        priceLabel: "VOTRE PRIX :",
-        saveLabel: "Vous économisez",
-        value: { total: "407,94 $", price: "139,99 $", save: "267,95 $" },
-        includesTitle: "Le forfait de départ comprend",
+        headline: "Arrêtez de recommencer.",
+        subhead: "Un départ coaché de 30 jours qui remplace l’improvisation par structure, accompagnement et un plan adapté — pour enfin rester constante.",
         includes: [
-          "Essai de 30 jours pour plus de 40 cours encadrés/semaine",
-          "Rencontre 1‑à‑1 (60 min) d’intégration",
-          "Analyse InBody et liste nutrition",
-          "Accès gym libre et zone enfants"
+          "Intégration 1‑à‑1 + plan personnalisé",
+          "Séances encadrées adaptées à votre horaire",
+          "Suivi hebdo, récupération et nutrition simplifiées"
         ],
-        primaryCTA: "Je m’inscris — 139,99 $",
-        secondaryCTA: "Pas certaine? Planifiez un appel"
+        primaryCTA: "Commencer mon reset 30 jours",
+        secondaryCTA: "Parler à Rick, propriétaire de Peak Fitness"
       },
       problemFit: {
         title: "Pourquoi la plupart des entraînements ne durent pas :",
         tiles: [
-          "Journées chargées → séances sautées.",
-          "Trop d’options → fatigue décisionnelle.",
-          "Les grands gyms intimident.",
-          "Les apps n’encadrent pas → peu de résultats."
+          "Réunions qui s’étirent, soupers improvisés, navettes pour les enfants → entraînement annulé.",
+          "Trop d’options (Pilates, entraînements YouTube, spin) → fatigue décisionnelle.",
+          "Les gros gyms = intimidation, zéro accountability.",
+          "Scroll d’entraînements sans feedback → progrès qui plafonnent."
         ]
       },
       valueSplit: {
         coreTitle: "Offre principale",
         coreValue: "Valeur de 407,94 $",
         core: [
-          "Cours encadrés illimités pendant 30 jours",
-          "Plan personnalisé après l’intégration 1‑à‑1",
-          "Analyse InBody + revue des progrès",
-          "Suivi d’accountability chaque semaine"
+          "Accès illimité à 40+ cours coachés/semaine",
+          "7 formats — Glutes & Abs, Musculation, Bootcamp, Yoga et plus encore",
+          "Sessions de 60 minutes bien dosées — échauffement, force, finisher, c’est fait",
+          "Zéro encombrement — de l’espace pour bouger, équipement toujours prêt",
+          "Accès Kid Zone — amène les enfants, finis les excuses. Wi-Fi gratuit inclus."
         ],
         bonusTitle: "Bonis inclus (gratuits)",
         bonuses: [
-          "Liste de départ nutrition",
-          "Ajustements de mouvements et corrections",
-          "Accès aux outils de récupération",
-          "Point d’ancrage d’objectifs au jour 21"
+          "1 séance d’onboarding privée (60 min) — perfectionne ta forme et bâtis ton plan",
+          "2 laissez-passer Buddy — amène une amie pour la motivation",
+          "2 analyses InBody — une à l’onboarding, une au jour 30"
         ],
-        dealBubble: "65,7 % de rabais!",
-        dealCTA: "Profiter de l’offre"
+        dealBubble: "",
+        dealCTA: ""
       },
       guarantee: {
         title: "Essayez sans risque",
         bullets: [
           "Remboursement complet si vous annulez dans les 30 jours.",
-          "Gardez votre plan et vos notes même en annulant.",
-          "Équipe accueillante, zéro jugement." ],
+          "Gardez votre plan même en annulant.",
+          "Équipe supportive, aucun jugement." ],
         promise: "Présentez-vous, appuyez-vous sur nos coachs et vous vous sentirez plus forte en 30 jours.",
-        quote: "« Vous amenez l’effort. On amène la structure. »"
+        quote: "« Plus forte qu’au Jour 1 ou remboursée. »",
+        media: {
+          src: "assets/riskfree-womens.png",
+          alt: "Femmes célébrant la garantie sans risque"
+        }
       },
       testimonials: {
         title: "Ce que disent nos membres",
-        items: [
-          { quote: "Un gym qui s’adapte à ma vie. Je me sens forte à nouveau.", name: "Mélanie D." },
-          { quote: "La zone enfants = plus d’excuses. Coachs incroyables.", name: "Amanda P." },
-          { quote: "L’accountability a tout changé pour moi.", name: "Julie S." }
-        ]
+        video: {
+          mobile: "assets/Testimonial-With-Subs.mp4",
+          desktop: "assets/Testimonial-Desktop.mp4"
+        },
+        items: []
       },
       timeline: {
-        title: "Vos 30 premiers jours",
+        title: "Vos 12 premières semaines",
         rows: [
-          { title: "Jour 1–7", text: "Intégration, bases et premières victoires. Horaire réaliste assuré." },
-          { title: "Jour 14", text: "Confiance et technique en hausse. Momentum bien ancré." },
-          { title: "Jour 30", text: "Habitudes solides, plan clair pour la suite." }
+          { title: "Jour 1–3", text: "Premier lever d’accueil + InBody révèlent ton point de départ; soulagement, le plan cadre ton horaire." },
+          { title: "Jour 4–7", text: "Tu te réveilles plus énergisée, courbatures sous contrôle et ton temps d’entraînement est réservé sans culpabilité." },
+          { title: "Semaine 2", text: "Repères de force qui cliquent — push-ups, tirages et carries deviennent fluides, humeur stable malgré les journées pleines." },
+          { title: "Semaine 4", text: "Routine du matin écourtée, jeans glissent mieux, famille te trouve plus calme et présente." },
+          { title: "Semaine 6", text: "Tour de taille qui diminue, raideurs chroniques s’apaisent et InBody montre la masse maigre en hausse." },
+          { title: "Semaine 8", text: "Une taille de vêtement en moins, épaules et fessiers se dessinent, compliments à l’école et en réunion." },
+          { title: "Semaine 10", text: "Même les longues journées passent bien — charges +15 % et énergie encore le soir." },
+          { title: "Semaine 12", text: "Photos avant/après confirment l’éclat; confiance solidifiée pendant que la coach trace le prochain objectif." }
         ]
       },
       faq: {
@@ -882,23 +962,17 @@ const copy = {
       }
     },
     men: {
-      meta: { offerName: "Forfait de 30 jours", heroImg: "assets/hero-men-01.svg" },
+      meta: { offerName: "Starter Stronger Than Yesterday", heroImg: "assets/hero-men-stronger.png" },
       hero: {
-        headline: "Moins d’ego. Plus de force durable — 65 % de rabais le 1er mois",
-        subhead: "Coaching, structure et un plan qui respecte vos articulations (et votre horaire).",
-        totalLabel: "Valeur totale",
-        priceLabel: "VOTRE PRIX :",
-        saveLabel: "Vous économisez",
-        value: { total: "407,94 $", price: "139,99 $", save: "267,95 $" },
-        includesTitle: "Le forfait de départ comprend",
+        headline: "Entraînez intelligent. Bougez bien. Redevenez fort.",
+        subhead: "Un coaching qui remplace les routines aléatoires par une force fiable — au travail, à la maison, dans votre sport. Des blocs structurés, des progressions respectueuses des articulations et un coaching approuvé par des athlètes de haut niveau.",
         includes: [
-          "Séances de force et conditionnement encadrées 30 jours",
-          "Évaluation performance avec un coach",
-          "Plan mobilité et entretien",
-          "Accès gym libre + outils de récupération"
+          "Blocs de force structurés — pas de circuits aléatoires",
+          "Coaching respectueux des articulations et ajustements selon blessures",
+          "Des levées pensées pour hausser votre prochain match, partie ou ronde"
         ],
-        primaryCTA: "Je m’inscris — 139,99 $",
-        secondaryCTA: "Envie de discuter? Planifiez un appel"
+        primaryCTA: "M’entraîner plus intelligemment aujourd’hui",
+        secondaryCTA: "Parler à Rick, propriétaire de Peak Fitness"
       },
       problemFit: {
         title: "Pourquoi les programmes stagnent :",
@@ -913,44 +987,53 @@ const copy = {
         coreTitle: "Offre principale",
         coreValue: "Valeur de 407,94 $",
         core: [
-          "Séances coachées jusqu’à 5x semaine",
-          "Progrès personnalisés sur vos lifts",
-          "Suivi des charges et benchmarks",
-          "Point accountability chaque semaine"
+          "Accès illimité à 40+ cours coachés/semaine",
+          "7 formats — Glutes & Abs, Musculation, Bootcamp, Yoga et plus encore",
+          "Sessions de 60 minutes bien dosées — échauffement, force, finisher, c’est fait",
+          "Zéro encombrement — de l’espace pour bouger, équipement toujours prêt",
+          "Accès Kid Zone — amène les enfants, finis les excuses. Wi-Fi gratuit inclus."
         ],
         bonusTitle: "Bonis inclus (gratuits)",
         bonuses: [
-          "Trousse mobilité",
-          "Yeux de coach sur chaque levée",
-          "Lounge récupération + protocoles",
-          "Plan progression fin de mois"
+          "1 séance d’onboarding privée (60 min) — perfectionne ta forme et bâtis ton plan",
+          "2 laissez-passer Buddy — amène une amie pour la motivation",
+          "2 analyses InBody — une à l’onboarding, une au jour 30"
         ],
-        dealBubble: "65,7 % de rabais!",
-        dealCTA: "Réserver ma place"
+        dealBubble: "",
+        dealCTA: ""
       },
       guarantee: {
         title: "Essayez sans risque",
         bullets: [
           "Remboursement si vous n’êtes pas satisfait dans les 30 jours.",
-          "Gardez votre plan même en annulant.",
-          "Coach présent pour garder vos articulations heureuses." ],
+          "Coach présent pour garder vos articulations heureuses.",
+          "Participez à au moins 10 cours durant les 30 jours pour rester admissible." ],
         promise: "Plus fort, mieux bouger, plus intelligent en 30 jours ou remboursé.",
-        quote: "« S’entraîner plus intelligemment. Plus fort qu’hier. »"
+        quote: "« Plus fort qu’au Jour 1 ou remboursé. »",
+        media: {
+          src: "assets/riskfree-mens.png",
+          alt: "Athlète masculin profitant de la garantie sans risque"
+        }
       },
       testimonials: {
         title: "Ce que disent nos membres",
-        items: [
-          { quote: "Structure + coaching réel. PR sans douleur.", name: "Marc L." },
-          { quote: "Ma mobilité rattrape enfin ma force.", name: "Daniel P." },
-          { quote: "L’accountability rend mes matinées 5h possibles.", name: "Alex G." }
-        ]
+        video: {
+          mobile: "assets/Testimonial-With-Subs.mp4",
+          desktop: "assets/Testimonial-Desktop.mp4"
+        },
+        items: []
       },
       timeline: {
-        title: "Vos 30 premiers jours",
+        title: "Vos 12 premières semaines",
         rows: [
-          { title: "Jour 1–7", text: "Évaluation, tests de base, plan de force clair." },
-          { title: "Jour 14", text: "Charges en hausse, cardio solide, récupération optimisée." },
-          { title: "Jour 30", text: "Benchmarks up, articulations contentes, prochain bloc prêt." }
+          { title: "Jour 1–3", text: "Tests de base révèlent ce qui a glissé; articulations soulagées grâce aux échauffements ciblés." },
+          { title: "Jour 4–7", text: "Trajectoire de la barre plus fluide, épaules/hanches moins raides, confiance retrouvée." },
+          { title: "Semaine 2", text: "+5 à 10 % de force, finisseurs cardio ne t’épuisent plus au travail." },
+          { title: "Semaine 4", text: "Mobilité qui suit; swings, frappes et levées plus nettes sans flare-ups." },
+          { title: "Semaine 6", text: "Tour de taille réduit, ceinture resserrée, InBody confirme la masse maigre en hausse." },
+          { title: "Semaine 8", text: "Vitesse de jeu améliorée — hockey pick-up, golf ou matchs explosifs de nouveau." },
+          { title: "Semaine 10", text: "Semaines chargées maîtrisées : récupération stable, aucune séance manquée, stress mieux géré." },
+          { title: "Semaine 12", text: "+9 kg (~20 lb) sur les gros lifts, prêt pour le prochain bloc de force." }
         ]
       },
       faq: {
@@ -966,23 +1049,17 @@ const copy = {
       }
     },
     youth: {
-      meta: { offerName: "Forfait jeunes athlètes", heroImg: "assets/hero-youth-01.svg" },
+      meta: { offerName: "Starter Stronger Than Yesterday", heroImg: "assets/hero-youth-stronger.png" },
       hero: {
-        headline: "Plus de vitesse, de force et de confiance — 30 jours pour un(e) athlète plus fort(e)",
-        subhead: "Coaching en petits groupes pour jeunes en développement. Sécuritaire, structuré et plaisant.",
-        totalLabel: "Valeur totale",
-        priceLabel: "VOTRE PRIX :",
-        saveLabel: "Vous économisez",
-        value: { total: "407,94 $", price: "139,99 $", save: "267,95 $" },
-        includesTitle: "Le forfait comprend",
+        headline: "Démarque‑toi aux sélections. Plus de vitesse, de force et de confiance.",
+        subhead: "Phase de 30 jours avec tests de performance, coaching force + vitesse et rapports clairs pour les parents — sécuritaire, structuré et pertinent pour le hockey.",
         includes: [
-          "4 semaines de séances de performance encadrées",
-          "Tests de base + analyse InBody",
-          "Programme vitesse, agilité et force",
-          "Suivi coach avec athlète + parent"
+          "Tests de performance + rapports de repères",
+          "Séances coachées force + vitesse",
+          "Mises à jour parent et plan de développement clair"
         ],
-        primaryCTA: "Je réserve — 139,99 $",
-        secondaryCTA: "Discuter avec un coach"
+        primaryCTA: "Commencer ta préparation 30 jours",
+        secondaryCTA: "Parler à Rick, propriétaire de Peak Fitness"
       },
       problemFit: {
         title: "Pourquoi les programmes jeunesse échouent :",
@@ -1015,11 +1092,15 @@ const copy = {
       guarantee: {
         title: "Sans risque pour athlètes et parents",
         bullets: [
-          "Remboursement complet si les attentes ne sont pas atteintes.",
-          "Gardez les données et le plan même en annulant.",
-          "Milieu sécuritaire avec petits ratios." ],
-        promise: "Des athlètes plus forts, rapides et confiants en 30 jours ou vous ne payez pas.",
-        quote: "« La confiance arrive quand la structure rencontre l’effort. »"
+          "Remboursement complet dans les 30 jours si les attentes ne sont pas atteintes.",
+          "Gardez les données de tests et le plan d’action même en annulant.",
+          "Environnement sécuritaire avec ratio coach/athlète réduit." ],
+        promise: "On construit des athlètes plus rapides, plus forts et confiants en 30 jours ou c’est gratuit.",
+        quote: "« La confiance arrive quand la structure rencontre l’effort. »",
+        media: {
+          src: "assets/riskfree-youth.png",
+          alt: "Jeune athlète souriant pour la garantie sans risque"
+        }
       },
       testimonials: {
         title: "Témoignages",
@@ -1098,7 +1179,9 @@ const copy = {
           "Gardez votre plan même en annulant.",
           "Équipe supportive, aucun jugement." ],
         promise: "Plus de force, de clarté et de confiance en 30 jours ou remboursé.",
-        quote: "« La structure crée les résultats. On vous offre les deux. »"
+        quote: "« La structure crée les résultats. On vous offre les deux. »",
+        primaryCTA: "Commencer sans risque aujourd’hui",
+        secondaryCTA: "Parler à Rick"
       },
       testimonials: {
         title: "Ce que disent nos membres",
@@ -1229,12 +1312,54 @@ function renderLists(dict) {
   const testimonials = $('#testimonials');
   if (testimonials) {
     testimonials.innerHTML = '';
-    (dict.testimonials?.items || []).forEach(({ quote, name }) => {
+    const testimonialItems = dict.testimonials?.items || [];
+    testimonialItems.forEach(({ quote, name }) => {
       const card = document.createElement('div');
       card.className = 'testimonial';
       card.innerHTML = `<p>“${quote}”</p><div class="name">— ${name}</div>`;
       testimonials.appendChild(card);
     });
+    testimonials.hidden = testimonialItems.length === 0;
+  }
+
+  if (testimonialVideo && testimonialMedia) {
+    const videoConfig = dict.testimonials?.video;
+    let videoMobile = '';
+    let videoDesktop = '';
+    if (typeof videoConfig === 'string') {
+      videoMobile = videoConfig;
+      videoDesktop = videoConfig;
+    } else if (videoConfig) {
+      videoMobile = videoConfig.mobile || videoConfig.src || '';
+      videoDesktop = videoConfig.desktop || videoMobile || '';
+    }
+
+    if (videoMobile || videoDesktop) {
+      testimonialVideo.hidden = false;
+      testimonialMedia.hidden = false;
+      if (testimonialObserver) {
+        testimonialObserver.disconnect();
+        testimonialObserver = null;
+      }
+      testimonialMedia.pause();
+      testimonialMedia.removeAttribute('src');
+      testimonialMedia.load();
+      if (videoMobile) testimonialMedia.dataset.srcMobile = videoMobile; else delete testimonialMedia.dataset.srcMobile;
+      if (videoDesktop) testimonialMedia.dataset.srcDesktop = videoDesktop; else delete testimonialMedia.dataset.srcDesktop;
+      setupTestimonialObserver();
+    } else {
+      testimonialVideo.hidden = true;
+      testimonialMedia.hidden = true;
+      if (testimonialObserver) {
+        testimonialObserver.disconnect();
+        testimonialObserver = null;
+      }
+      testimonialMedia.pause();
+      testimonialMedia.removeAttribute('src');
+      testimonialMedia.load();
+      delete testimonialMedia.dataset.srcMobile;
+      delete testimonialMedia.dataset.srcDesktop;
+    }
   }
 
   const timeline = $('#timeline-rows');
@@ -1276,20 +1401,6 @@ function renderLists(dict) {
       modalIncludes.appendChild(li);
     });
   }
-
-  const modalBullets = $('#modal-bullets');
-  if (modalBullets) {
-    modalBullets.innerHTML = '';
-    const combined = [
-      ...(dict.valueSplit?.core || []),
-      ...(dict.valueSplit?.bonuses || [])
-    ].slice(0, 6);
-    combined.forEach((item) => {
-      const li = document.createElement('li');
-      li.textContent = item;
-      modalBullets.appendChild(li);
-    });
-  }
 }
 
 function checkIcon() {
@@ -1300,11 +1411,102 @@ function bulletDot() {
   return `<span class="bullet-dot" aria-hidden="true"></span>`;
 }
 
+function setupTestimonialObserver() {
+  if (!testimonialVideo || !testimonialMedia) return;
+  const prefersDesktop = () => {
+    if (typeof window === 'undefined') return false;
+    if (typeof window.matchMedia === 'function') {
+      const query = window.matchMedia('(min-width: 900px)');
+      if (typeof query.matches === 'boolean') return query.matches;
+    }
+    if (typeof window.innerWidth === 'number') return window.innerWidth >= 900;
+    return false;
+  };
+  const getPreferredSrc = () => {
+    const mobileSrc = testimonialMedia.dataset.srcMobile || '';
+    const desktopSrc = testimonialMedia.dataset.srcDesktop || '';
+    if (prefersDesktop() && desktopSrc) {
+      return desktopSrc;
+    }
+    return mobileSrc || desktopSrc || '';
+  };
+
+  if (!getPreferredSrc()) return;
+
+  const loadVideo = () => {
+    const selectedSrc = getPreferredSrc();
+    if (!selectedSrc) return;
+    const current = testimonialMedia.getAttribute('src');
+    if (current !== selectedSrc) {
+      testimonialMedia.src = selectedSrc;
+      testimonialMedia.load();
+    }
+    if (!testimonialMedia.muted) testimonialMedia.muted = true;
+    testimonialMedia.play().catch(() => {});
+    if (testimonialObserver) {
+      testimonialObserver.disconnect();
+      testimonialObserver = null;
+    }
+  };
+
+  if (typeof IntersectionObserver !== 'function') {
+    loadVideo();
+    return;
+  }
+
+  testimonialObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        loadVideo();
+      }
+    });
+  }, { threshold: 0.4 });
+
+  testimonialObserver.observe(testimonialVideo);
+}
+
 function updateMedia(dict) {
+  const src = dict.meta?.heroImg || 'assets/hero-neutral.svg';
+  const alt = dict.meta?.offerName || 'Starter Pack';
   const heroImg = $('#hero-img');
   if (heroImg) {
-    heroImg.src = dict.meta?.heroImg || 'assets/hero-neutral.svg';
-    heroImg.alt = dict.meta?.offerName || 'Starter Pack';
+    heroImg.src = src;
+    heroImg.alt = alt;
+  }
+  const bgImg = document.querySelector('.hero-background img');
+  if (bgImg) {
+    bgImg.src = src;
+    bgImg.alt = alt;
+  }
+
+  const guaranteeWrap = $('#guarantee-media');
+  const guaranteeImg = $('#guarantee-media-img');
+  const guaranteeSrc = dict.guarantee?.media?.src || '';
+  const guaranteeAlt = dict.guarantee?.media?.alt || '';
+  const guaranteeSection = $('#guarantee');
+  const guaranteeMobileSection = $('#guarantee-media-section');
+  if (guaranteeSection) {
+    if (guaranteeSrc) {
+      guaranteeSection.style.setProperty('--guarantee-image', `url("${guaranteeSrc}")`);
+      if (guaranteeWrap) guaranteeWrap.hidden = false;
+      if (guaranteeImg) {
+        guaranteeImg.src = guaranteeSrc;
+        guaranteeImg.alt = guaranteeAlt || alt;
+      }
+      if (guaranteeMobileSection) {
+        guaranteeMobileSection.style.setProperty('--guarantee-image', `url("${guaranteeSrc}")`);
+      }
+    } else {
+      guaranteeSection.style.removeProperty('--guarantee-image');
+      if (guaranteeWrap) guaranteeWrap.hidden = true;
+      if (guaranteeImg) {
+        guaranteeImg.removeAttribute('src');
+        guaranteeImg.removeAttribute('alt');
+      }
+      if (guaranteeMobileSection) {
+        guaranteeMobileSection.style.removeProperty('--guarantee-image');
+      }
+    }
   }
 }
 
@@ -1332,16 +1534,24 @@ function updateUI() {
   setText($('[data-copy="footer.privacy"]'), ui.footer.privacy);
   setText($('#modal-title'), ui.modal.title);
   setText($('#modal-desc'), ui.modal.subtitle);
+  setText($('#modal-payment-title'), ui.modal.paymentTitle);
+  setText($('#modal-billing-title'), ui.modal.billingTitle);
+  setText($('#modal-price-caption'), ui.modal.priceCaption);
+  setText($('#modal-card-number-label'), ui.modal.cardNumber);
+  setText($('#modal-card-expiry-label'), ui.modal.cardExpiry);
+  setText($('#modal-card-cvv-label'), ui.modal.cardCvv);
+  setText($('#modal-secure-copy'), ui.modal.secureCopy);
   const payButton = $('#modal-pay');
   const payLabel = payButton?.querySelector('span');
   if (payLabel && (typeof successPanel === 'undefined' || successPanel?.hidden !== false)) {
     setText(payLabel, getPayLabel());
   }
   setText($('#modal-cancel')?.querySelector('span'), ui.modal.cancel);
-  setText($('#checkout-modal .mini-card .h4'), ui.modal.includesTitle);
-  setText($('#checkout-modal .tiny'), ui.modal.note);
   const noscript = document.querySelector('noscript .noscript');
   if (noscript) noscript.textContent = ui.noscript;
+  // Update summary amounts after copy and price updates
+  attachSummaryListeners();
+  updateSummaryTotals();
 
   bindFAQ();
 
@@ -1409,6 +1619,9 @@ const receiptLink = $('#receipt-link');
 const calendlyModal = $('#calendly-modal');
 const calendlyClose = $('#calendly-close');
 const calendlyContainer = $('#calendly-container');
+const testimonialVideo = $('#testimonial-video');
+const testimonialMedia = $('#testimonial-video-media');
+let testimonialObserver = null;
 
 function focusables(root) {
   return $$('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])', root)
@@ -1430,6 +1643,8 @@ async function openModal(event) {
     }
     await ensureSquareCard();
     showCardError('');
+    attachSummaryListeners();
+    updateSummaryTotals();
   } catch (error) {
     console.error('modal init error', error);
     showCardError(error.message || 'Unable to initialize payment form.');
@@ -1446,6 +1661,16 @@ function bindModal() {
     modalOverlay.addEventListener('click', () => {
       if (calendlyModal && !calendlyModal.hidden) closeCalendly();
       if (modal && !modal.hidden) closeModal();
+    });
+  }
+  if (modal) {
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+  }
+  if (calendlyModal) {
+    calendlyModal.addEventListener('click', (event) => {
+      if (event.target === calendlyModal) closeCalendly();
     });
   }
   if (modalClose) modalClose.addEventListener('click', closeModal);

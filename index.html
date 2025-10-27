@@ -50,8 +50,8 @@
 
     <header class="site-header" role="banner">
       <div class="container header-inner">
-        <a href="/" class="brand" aria-label="Peak Fitness Dieppe">
-          <img src="assets/peak-logo.svg" alt="Peak Fitness Dieppe" width="140" height="28" decoding="async">
+        <a href="https://www.peakfitnessdieppe.ca/" class="brand" aria-label="Peak Fitness Dieppe">
+          <img src="assets/peak-logo.png" alt="Peak Fitness Dieppe" width="140" height="28" decoding="async">
         </a>
         <nav class="header-actions" aria-label="Top navigation">
           <button class="btn btn-ghost" data-cta="calendly">
@@ -71,49 +71,37 @@
 
     <main id="main">
       <section id="hero" class="section hero">
+        <div class="hero-background">
+          <img src="assets/hero-women-stronger.png" alt="" aria-hidden="true">
+        </div>
         <div class="container hero-grid">
           <div class="hero-copy">
-            <h1 class="h1" data-copy="hero.headline">Get 65% OFF Your First Month — Structure that sticks</h1>
-            <p class="subhead" data-copy="hero.subhead">Coached classes, real support, and a plan that won’t let you fall off.</p>
-            <div class="value-block">
-              <div class="value-line">
-                <span class="muted" data-copy="hero.totalLabel">Total Value</span>
-                <strong data-copy="hero.value.total">$407.94</strong>
-              </div>
-              <div class="price-badge" aria-live="polite">
-                <img class="price-arrow" src="assets/arrow-brush-yellow.svg" alt="" role="presentation">
-                <span class="label" data-copy="hero.priceLabel">YOUR PRICE:</span>
-                <span class="price" data-copy="hero.value.price">$139.99</span>
-              </div>
-              <div class="save-line">
-                <span class="muted" data-copy="hero.saveLabel">You Save</span>
-                <strong class="save" data-copy="hero.value.save">$267.95</strong>
-              </div>
-            </div>
-            <div class="badge-pill">
-              <span data-copy="hero.includesTitle">Starter Pack Includes</span>
-            </div>
-            <ul class="checklist" id="hero-includes" aria-label="Included in Starter Pack"></ul>
+            <div class="hero-eyebrow" id="hero-offer">Stronger Than Yesterday Starter</div>
+            <h1 class="h1" data-copy="hero.headline">Structure you can trust. Strength that sticks.</h1>
+            <p class="subhead" data-copy="hero.subhead">The Stronger Than Yesterday Starter is an immersive 30-day reset with personal coaching, community accountability, and programming built for women who carry everything.</p>
+            <ul class="hero-proof" id="hero-includes" aria-label="What you’ll experience"></ul>
             <div class="hero-ctas">
               <button class="btn btn-primary btn-large" id="primary-cta-hero" data-cta="open-modal">
-                <span data-copy="hero.primaryCTA">Join Now — $139.99</span>
+                <span data-copy="hero.primaryCTA">Start Your 30-Day Reset</span>
               </button>
               <button class="btn btn-link" id="calendly-cta-hero" data-cta="calendly">
-                <span data-copy="hero.secondaryCTA">Still undecided? Schedule a call</span>
+                <span data-copy="hero.secondaryCTA">Talk with a coach</span>
               </button>
             </div>
           </div>
-          <figure class="media-frame">
-            <img id="hero-img" src="assets/hero-women-01.svg" alt="30-Day Starter Pack" width="960" height="1080" decoding="async">
+          <figure class="hero-media">
+            <img id="hero-img" src="assets/hero-women-stronger.png" alt="Stronger Than Yesterday Starter" width="960" height="1080" decoding="async">
             <figcaption class="sr-only">Audience-specific hero image</figcaption>
           </figure>
         </div>
       </section>
 
-      <section id="problem-fit" class="section">
-        <div class="container">
-          <h2 class="h2" data-copy="problemFit.title">Why most workouts don’t stick:</h2>
-          <div id="problem-tiles" class="tile-grid"></div>
+      <section id="problem-fit" class="section problem">
+        <div class="container problem-grid">
+          <div class="problem-copy">
+            <h2 class="h2" data-copy="problemFit.title">Why most workouts don’t stick:</h2>
+            <div id="problem-tiles" class="problem-tiles"></div>
+          </div>
         </div>
       </section>
 
@@ -131,12 +119,14 @@
             </header>
             <ul class="bullet-list" id="bonus-list" aria-label="Included Bonuses"></ul>
           </article>
-          <div class="deal-bubble">
-            <div class="bubble" data-copy="valueSplit.dealBubble">65.7% Off!</div>
-            <button class="btn btn-primary btn-pill" id="primary-cta-value" data-cta="open-modal">
-              <span data-copy="valueSplit.dealCTA">Claim the deal</span>
-            </button>
-          </div>
+        </div>
+      </section>
+
+      <section id="guarantee-media-section" class="section guarantee-media-section" aria-hidden="true">
+        <div class="container">
+          <figure class="guarantee-media" id="guarantee-media">
+            <img id="guarantee-media-img" src="" alt="" loading="lazy" decoding="async">
+          </figure>
         </div>
       </section>
 
@@ -146,15 +136,30 @@
             <h2 class="h2" data-copy="guarantee.title">Try it completely risk-free</h2>
             <ul class="bullet-list" id="guarantee-bullets" aria-label="Guarantee"></ul>
             <p class="muted" data-copy="guarantee.promise">If you show up and follow the plan, you’ll feel stronger and more confident in 30 days. That’s our promise.</p>
+            <div class="guarantee-ctas">
+              <button class="btn btn-primary" data-cta="open-modal">
+                <span data-copy="guarantee.primaryCTA">Start risk-free today</span>
+              </button>
+              <button class="btn btn-link" data-cta="calendly">
+                <span data-copy="guarantee.secondaryCTA">Talk with Rick</span>
+              </button>
+            </div>
+            <blockquote class="pull-quote" data-copy="guarantee.quote">“You bring the effort. We bring the structure.”</blockquote>
           </div>
-          <blockquote class="pull-quote" data-copy="guarantee.quote">“You bring the effort. We bring the structure.”</blockquote>
         </div>
       </section>
 
       <section id="social-proof" class="section">
         <div class="container">
           <h2 class="h2" data-copy="testimonials.title">What members say</h2>
-          <div class="testimonials-grid" id="testimonials"></div>
+          <div class="social-proof-body">
+            <div class="testimonials-video" id="testimonial-video" hidden>
+              <div class="video-frame">
+                <video id="testimonial-video-media" data-src="" data-src-mobile="" data-src-desktop="" playsinline muted controls preload="metadata"></video>
+              </div>
+            </div>
+            <div class="testimonials-grid" id="testimonials"></div>
+          </div>
         </div>
       </section>
 
@@ -176,12 +181,14 @@
     <footer class="site-footer" role="contentinfo">
       <div class="container footer-inner">
         <div class="foot-brand">
-          <img src="assets/peak-logo.svg" alt="Peak Fitness Dieppe" width="120" height="24" decoding="async">
-          <span class="foot-loc">Dieppe, NB</span>
+          <a href="https://www.peakfitnessdieppe.ca/">
+            <img src="assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="24" decoding="async">
+          </a>
+          <span class="foot-loc">Peak Fitness<br>688 Babin St.<br>Dieppe, NB</span>
         </div>
         <nav aria-label="Footer">
-          <a href="#" class="foot-link" data-copy="footer.terms">Terms</a>
-          <a href="#" class="foot-link" data-copy="footer.privacy">Privacy</a>
+          <a href="https://www.peakfitnessdieppe.ca/termsconditions" class="foot-link" data-copy="footer.terms">Terms</a>
+          <a href="https://www.peakfitnessdieppe.ca/privacy-policy" class="foot-link" data-copy="footer.privacy">Privacy</a>
         </nav>
       </div>
     </footer>
@@ -194,52 +201,130 @@
           <button id="modal-close" class="icon-btn" aria-label="Close dialog">✕</button>
         </header>
         <div class="modal-body">
-          <p id="modal-desc" class="muted" data-copy="modal.subtitle">Review what’s included and confirm your purchase.</p>
-          <div class="price-badge tight">
-            <img class="price-arrow" src="assets/arrow-brush-yellow.svg" alt="" role="presentation">
-            <span class="label" data-copy="hero.priceLabel">YOUR PRICE:</span>
-            <span class="price" data-copy="hero.value.price">$139.99</span>
-          </div>
-          <form id="checkout-form" novalidate>
-            <div class="form-grid">
-              <label class="field">
-                <span class="field-label">First name</span>
-                <input type="text" id="first-name" name="firstName" autocomplete="given-name" required>
-              </label>
-              <label class="field">
-                <span class="field-label">Last name</span>
-                <input type="text" id="last-name" name="lastName" autocomplete="family-name">
-              </label>
-              <label class="field">
-                <span class="field-label">Email</span>
-                <input type="email" id="email" name="email" autocomplete="email" required>
-              </label>
-              <label class="field">
-                <span class="field-label">Mobile</span>
-                <input type="tel" id="phone" name="phone" autocomplete="tel">
-              </label>
-              <label class="field field-full">
-                <span class="field-label">Primary goal</span>
-                <input type="text" id="goal" name="goals" placeholder="Ex: Consistency, strength, weight loss">
-              </label>
-              <label class="consent">
-                <input type="checkbox" id="consent-email" name="consentEmail" checked>
-                <span>Email me updates</span>
-              </label>
-              <label class="consent">
-                <input type="checkbox" id="consent-sms" name="consentSms">
-                <span>Text me reminders</span>
-              </label>
+          <p id="modal-desc" class="muted" data-copy="modal.subtitle">Secure checkout — confirm your Starter Pack details.</p>
+          <div class="checkout-shell">
+            <form id="checkout-form" class="form-card" novalidate>
+              <section class="form-section form-section--payment">
+                <div class="section-head">
+                  <div class="section-titles">
+                    <h4 id="modal-payment-title" class="section-title">Payment info</h4>
+                    <p id="modal-price-caption" class="section-caption muted">One-time payment, taxes where applicable.</p>
+                  </div>
+                  <div class="card-brands" aria-label="Accepted payment brands">
+                    <img src="assets/logo-visa.svg" alt="Visa" class="card-icon">
+                    <img src="assets/logo-mastercard.svg" alt="Mastercard" class="card-icon">
+                    <img src="assets/logo-discover.svg" alt="Discover" class="card-icon">
+                    <img src="assets/logo-amex.svg" alt="American Express" class="card-icon">
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <label class="field field-full">
+                    <span class="field-label">Cardholder Name</span>
+                    <input type="text" id="cardholder-name" name="cardholderName" placeholder="Full Name on Card" autocomplete="cc-name">
+                  </label>
+                </div>
+
+                <div class="card-field">
+                  <div class="card-guides">
+                    <span id="modal-card-number-label">Card number</span>
+                    <span id="modal-card-expiry-label">Expiration date</span>
+                    <span id="modal-card-cvv-label">CVV</span>
+                  </div>
+                  <div class="card-input" aria-label="Credit card input">
+                    <div id="card-container"></div>
+                  </div>
+                  <div id="card-errors" class="form-error" role="alert" aria-live="polite"></div>
+                </div>
+              </section>
+
+              <section class="form-section form-section--summary" aria-labelledby="modal-summary-title">
+                <h4 id="modal-summary-title" class="section-title">Summary</h4>
+                <div class="summary">
+                  <div class="summary-row">
+                    <span class="summary-item">Stronger Than Yesterday Starter</span>
+                    <span id="summary-subtotal" class="summary-price">$139.99</span>
+                  </div>
+                  <div class="summary-row small">
+                    <span class="muted">Taxes</span>
+                    <span id="summary-tax">$0.00</span>
+                  </div>
+                  <div class="summary-row total">
+                    <span class="summary-total-label">Total</span>
+                    <span id="summary-total" class="summary-total-amount">$139.99</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="form-section form-section--billing">
+                <div class="section-head">
+                  <div class="section-titles">
+                    <h4 id="modal-billing-title" class="section-title">Billing address</h4>
+                  </div>
+                </div>
+
+                <div class="form-grid form-grid-2">
+                  <label class="field">
+                    <span class="field-label">First name</span>
+                    <input type="text" id="first-name" name="firstName" autocomplete="given-name" required>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Last name</span>
+                    <input type="text" id="last-name" name="lastName" autocomplete="family-name">
+                  </label>
+                </div>
+
+                <div class="form-grid form-grid-2">
+                  <label class="field">
+                    <span class="field-label">Email address</span>
+                    <input type="email" id="email" name="email" autocomplete="email" required>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Phone number</span>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel">
+                  </label>
+                </div>
+
+                <div class="form-grid form-grid-3">
+                  <label class="field">
+                    <span class="field-label">Country</span>
+                    <select id="country" name="country" class="select-field">
+                      <option value="Canada" selected>Canada</option>
+                      <option value="United States">United States</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span class="field-label">State/Province</span>
+                    <input type="text" id="state" name="state" autocomplete="address-level1">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">Postal code</span>
+                    <input type="text" id="postal" name="postal" autocomplete="postal-code">
+                  </label>
+                </div>
+
+                <div class="form-grid form-grid-3">
+                  <label class="field field-span-2">
+                    <span class="field-label">Address</span>
+                    <input type="text" id="address" name="address" autocomplete="address-line1">
+                  </label>
+                  <label class="field">
+                    <span class="field-label">City</span>
+                    <input type="text" id="city" name="city" autocomplete="address-level2">
+                  </label>
+                </div>
+              </section>
+
+              <div class="secure-note">
+                <span class="secure-icon" aria-hidden="true">🔒</span>
+                <span id="modal-secure-copy" class="muted secure-copy">Payments processed securely via Square.</span>
+              </div>
+            </form>
+            <div id="checkout-success" class="success-panel" hidden>
+              <h4 class="h4">Payment received!</h4>
+              <p class="muted">Check your inbox for the receipt and onboarding steps.</p>
+              <a id="receipt-link" class="btn btn-primary" target="_blank" rel="noopener">View receipt</a>
             </div>
-            <div class="card-wrapper">
-              <div id="card-container" aria-label="Credit card input"></div>
-              <div id="card-errors" class="form-error" role="alert" aria-live="polite"></div>
-            </div>
-          </form>
-          <div id="checkout-success" class="success-panel" hidden>
-            <h4 class="h4">Payment received!</h4>
-            <p class="muted">Check your inbox for the receipt and onboarding steps.</p>
-            <a id="receipt-link" class="btn btn-primary" target="_blank" rel="noopener">View receipt</a>
           </div>
         </div>
         <footer class="modal-foot">

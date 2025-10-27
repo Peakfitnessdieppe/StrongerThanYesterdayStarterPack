@@ -18,14 +18,17 @@ const jsonResponse = (status, payload, extraHeaders = {}) => new Response(
   }
 );
 
-export default async function handler(event) {
-  const method = (event.httpMethod || '').toUpperCase();
+// Support both legacy (event/httpMethod) and modern (Request.method) Netlify runtimes
+export default async function handler(eventOrRequest) {
+  const isRequest = typeof eventOrRequest?.method === 'string';
+  const method = (isRequest ? eventOrRequest.method : eventOrRequest?.httpMethod || '').toUpperCase();
+  const contentType = isRequest
+    ? eventOrRequest.headers?.get?.('content-type')
+    : eventOrRequest?.headers?.['content-type'];
+  console.log('capture-lead method', method, 'headers', contentType);
 
   if (method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: BASE_HEADERS
-    });
+    return new Response(null, { status: 204, headers: BASE_HEADERS });
   }
 
   if (method !== 'POST') {
@@ -33,7 +36,20 @@ export default async function handler(event) {
   }
 
   try {
-    const payload = JSON.parse(event.body || '{}');
+    let payload = {};
+    if (isRequest) {
+      // Modern Web API
+      try {
+        payload = await eventOrRequest.json();
+      } catch (_) {
+        const text = await eventOrRequest.text?.();
+        payload = text ? JSON.parse(text) : {};
+      }
+    } else {
+      // Legacy event-based API
+      payload = JSON.parse(eventOrRequest.body || '{}');
+    }
+
     const {
       email,
       firstName,
@@ -41,7 +57,6 @@ export default async function handler(event) {
       phone,
       audience,
       language,
-      goals,
       utm,
       consentEmail = false,
       consentSms = false
@@ -52,10 +67,11 @@ export default async function handler(event) {
     }
 
     const supabase = getSupabaseClient();
+    const db = supabase.schema('peak');
 
     // upsert lead by email
-    const { data: existingLead, error: fetchError } = await supabase
-      .from('peak.leads')
+    const { data: existingLead, error: fetchError } = await db
+      .from('leads')
       .select('*')
       .eq('email', email)
       .maybeSingle();
@@ -71,7 +87,6 @@ export default async function handler(event) {
       phone: phone || existingLead?.phone || null,
       audience: audience || existingLead?.audience || null,
       language: language || existingLead?.language || null,
-      goals: goals || existingLead?.goals || null,
       utm: utm ? utm : existingLead?.utm || null,
       consent_email: consentEmail,
       consent_sms: consentSms
@@ -80,8 +95,8 @@ export default async function handler(event) {
     let leadId;
 
     if (existingLead) {
-      const { data, error } = await supabase
-        .from('peak.leads')
+      const { data, error } = await db
+        .from('leads')
         .update(payloadToSave)
         .eq('id', existingLead.id)
         .select('*')
@@ -90,8 +105,8 @@ export default async function handler(event) {
       if (error) throw error;
       leadId = data.id;
     } else {
-      const { data, error } = await supabase
-        .from('peak.leads')
+      const { data, error } = await db
+        .from('leads')
         .insert(payloadToSave)
         .select('*')
         .single();

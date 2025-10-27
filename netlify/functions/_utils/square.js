@@ -1,22 +1,43 @@
-import square from 'square';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const squareModule = require('square');
+
+const SquareClient =
+  squareModule?.SquareClient ??
+  squareModule?.Client ??
+  squareModule?.default?.SquareClient ??
+  squareModule?.default?.Client ??
+  squareModule?.Square ??
+  squareModule;
+
+const SquareEnvironment =
+  squareModule?.SquareEnvironment ??
+  squareModule?.Environment ??
+  squareModule?.default?.SquareEnvironment ??
+  squareModule?.default?.Environment ??
+  squareModule?.Square?.SquareEnvironment ??
+  null;
 
 let cachedClient;
 
+function mapEnvironment(name) {
+  if (SquareEnvironment && SquareEnvironment[name]) {
+    return SquareEnvironment[name];
+  }
+  return name.toLowerCase();
+}
+
 function resolveEnvironment(accessToken) {
   const explicit = (process.env.SQUARE_ENVIRONMENT || '').toLowerCase();
-  if (explicit === 'sandbox' || explicit === 'production') {
-    return explicit;
-  }
+  if (explicit === 'sandbox') return mapEnvironment('Sandbox');
+  if (explicit === 'production') return mapEnvironment('Production');
 
-  if (process.env.SQUARE_APPLICATION_ID?.startsWith('sandbox-')) {
-    return 'sandbox';
-  }
+  if (process.env.SQUARE_APPLICATION_ID?.startsWith('sandbox-')) return mapEnvironment('Sandbox');
 
-  if (accessToken?.startsWith?.('sandbox-')) {
-    return 'sandbox';
-  }
+  if (accessToken?.startsWith?.('sandbox-')) return mapEnvironment('Sandbox');
 
-  return 'production';
+  return mapEnvironment('Production');
 }
 
 export function getSquareClient() {
@@ -27,7 +48,11 @@ export function getSquareClient() {
     throw new Error('Missing SQUARE_ACCESS_TOKEN environment variable.');
   }
 
-  cachedClient = new square.Client({
+  if (typeof SquareClient !== 'function') {
+    throw new Error('Square SDK Client export not available. Ensure dependency is installed correctly.');
+  }
+
+  cachedClient = new SquareClient({
     accessToken,
     environment: resolveEnvironment(accessToken)
   });

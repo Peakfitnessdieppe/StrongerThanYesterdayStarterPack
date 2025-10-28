@@ -532,7 +532,7 @@ const copy = {
     women: {
       meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-women-stronger2.png" },
       hero: {
-        headline: "Strength that fuels your calendar, your commitments, and your confidence.",
+        headline: "Strength that fuels your calendar and your confidence.",
         subhead: "Guided classes and supportive coaches help you feel strong on day one, and by week four you’ll glow with smoother mornings, stronger reps, and energy that feels five years younger. **100% Money-Back Guarantee.**",
         includes: [
           "1-on-1 welcome session to kick off with confidence",
@@ -550,6 +550,22 @@ const copy = {
           "Big-box crowds → intimidating, zero accountability.",
           "Swipe-through workouts, no feedback → results stall out."
         ]
+      },
+      riskfreeSecondary: {
+        title: "Try it completely risk-free!",
+        lead: "Our promise to you. If after...",
+        list: [
+          "Completing your personal onboarding session",
+          "Attending 10 classes in 30 days",
+          "A quick 5-minute exit chat with Rick"
+        ],
+        guarantee: "👉 …you’re not 100% satisfied, we’ll refund every penny. No pushy retention tactics. No guilt trips. Just results — or your money back.",
+        quote: "→ “We’re so confident you’ll love it, we’re taking all the risk off your shoulders.”",
+        primaryCTA: "Try Us Risk Free",
+        media: {
+          image: "assets/timeline-womens-desktop.png",
+          mobileVideo: "assets/Sophie-Rogan.mp4"
+        }
       },
       valueSplit: {
         coreTitle: "Core Offer",
@@ -587,8 +603,8 @@ const copy = {
       testimonials: {
         title: "What members say",
         video: {
-          mobile: "assets/Testimonial-With-Subs.mp4",
-          desktop: "assets/Testimonial-Desktop.mp4"
+          mobile: "assets/Testimonial-With-Subs-compressed.mp4",
+          desktop: "assets/Testimonial-Desktop-compressed.mp4"
         },
         items: []
       },
@@ -603,17 +619,21 @@ const copy = {
           { title: "Week 8", text: "Down a size, shoulders and glutes look defined, compliments land at school drop-off and meetings." },
           { title: "Week 10", text: "Longest days feel doable—lifts climb ~15% and you still have evening energy." },
           { title: "Week 12", text: "Before/after pics prove the glow; confidence sticks while your coach maps the next goal." }
-        ]
+        ],
+        media: {
+          src: "assets/timeline-womens.png",
+          alt: "Woman celebrating her Week 12 progress at Peak Fitness"
+        }
       },
       faq: {
         title: "Frequently asked questions",
         items: [
-          { q: "Do I need experience?", a: "No. Every class is coached and scaled to meet you where you’re at." },
-          { q: "What if I miss a class?", a: "Life happens. We’ll help you shift your week and keep momentum." },
-          { q: "Is this a contract?", a: "No contracts. The Starter Pack is a one-time plan." },
+          { q: "I haven't worked out in years. Will I be able to keep up?", a: "Absolutely. Your 60-minute onboarding session ensures you start at YOUR level. You'll never feel lost or left behind." },
+          { q: "How many times per week should I come?", a: "Sweet spot is 3× weekly, but you get unlimited access to all 40+ classes, so come as often as you like." },
+          { q: "What if I need to cancel?", a: "After your 30-day Starter Pack, it's month-to-month. Cancel anytime. No contracts, no drama." },
           { q: "Can I bring a friend?", a: "Yes—ask about a buddy pass during onboarding." },
-          { q: "Do you help with nutrition?", a: "Yes. You’ll get a kickstart checklist and habit coaching." },
-          { q: "Where are you located?", a: "Peak Fitness Dieppe. Easy parking, warm community." }
+          { q: "When will I actually see results?", a: "Energy boost and better sleep within 14 days. Visible changes (clothes fitting better) by week 6. Friends asking ‘what are you doing differently?’ by week 8." },
+          { q: "Where are you located?", a: "We are located at 688 Babin St, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Need directions?</a>" }
         ]
       }
     },
@@ -629,6 +649,22 @@ const copy = {
         ],
         primaryCTA: "Train Smarter Today",
         secondaryCTA: "Connect with Rick, Peak Fitness Owner"
+      },
+      riskfreeSecondary: {
+        title: "Try it completely risk-free!",
+        lead: "Our promise to you. If after...",
+        list: [
+          "Completing your personal onboarding session",
+          "Attending 10 classes in 30 days",
+          "A quick 5-minute exit chat with Rick"
+        ],
+        guarantee: "👉 …you’re not 100% satisfied, we’ll refund every penny. No pushy retention tactics. No guilt trips. Just results — or your money back.",
+        quote: "→ “We’re so confident you’ll love it, we’re taking all the risk off your shoulders.”",
+        primaryCTA: "Try Us Risk Free",
+        media: {
+          image: "assets/timeline-mens-desktop.png",
+          mobileVideo: "assets/Sophie-Rogan.mp4"
+        }
       },
       problemFit: {
         title: "Why most programs stall out:",
@@ -674,8 +710,8 @@ const copy = {
       testimonials: {
         title: "What members say",
         video: {
-          mobile: "assets/Testimonial-With-Subs.mp4",
-          desktop: "assets/Testimonial-Desktop.mp4"
+          mobile: "assets/Testimonial-With-Subs-compressed.mp4",
+          desktop: "assets/Testimonial-Desktop-compressed.mp4"
         },
         items: []
       },
@@ -690,7 +726,11 @@ const copy = {
           { title: "Week 8", text: "Game speed improves—pickup runs, golf rounds, or matches feel explosive again." },
           { title: "Week 10", text: "Busy weeks stay on track; recovery score better, no missed sessions, stress stays low." },
           { title: "Week 12", text: "Numbers jump ~20 lb across big lifts, confident to attack the next strength block." }
-        ]
+        ],
+        media: {
+          src: "assets/timeline-mens.png",
+          alt: "Male athlete hitting Week 12 performance strides at Peak Fitness"
+        }
       },
       faq: {
         title: "Frequently asked questions",
@@ -700,7 +740,8 @@ const copy = {
           { q: "Do I have to track macros?", a: "Only if you want. We focus on simple habits to fuel performance." },
           { q: "Can I train open gym?", a: "Yes. Starter Pack includes open gym access." },
           { q: "What does the refund cover?", a: "Attend, follow the plan. If you’re not happy inside 30 days, you get a refund." },
-          { q: "Is this just CrossFit?", a: "It’s coach-led functional training with strength bias, built for longevity." }
+          { q: "Is this just CrossFit?", a: "It’s coach-led functional training with strength bias, built for longevity." },
+          { q: "Where are you located?", a: "We are located at 688 Babin St, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Need directions?</a>" }
         ]
       }
     },
@@ -716,6 +757,22 @@ const copy = {
         ],
         primaryCTA: "Start Your 30‑Day Prep",
         secondaryCTA: "Connect with Rick, Peak Fitness Owner"
+      },
+      riskfreeSecondary: {
+        title: "Try it completely risk-free!",
+        lead: "Our promise to you. If after...",
+        list: [
+          "Completing your personal onboarding session",
+          "Attending 10 classes in 30 days",
+          "A quick 5-minute exit chat with Rick"
+        ],
+        guarantee: "👉 …you’re not 100% satisfied, we’ll refund every penny. No pushy retention tactics. No guilt trips. Just results — or your money back.",
+        quote: "→ “We’re so confident you’ll love it, we’re taking all the risk off your shoulders.”",
+        primaryCTA: "Try Us Risk Free",
+        media: {
+          image: "assets/timeline-youth-desktop.png",
+          mobileVideo: "assets/Peak-Fitness-Athletics.mp4"
+        }
       },
       problemFit: {
         title: "Why most youth plans fall short:",
@@ -769,15 +826,19 @@ const copy = {
       timeline: {
         title: "Your first 12 weeks",
         rows: [
-          { title: "Day 1–3", text: "Performance testing captures baseline speed and strength; athlete leaves with clear targets." },
-          { title: "Day 4–7", text: "Movement fixes land, confidence builds, parents receive the first progress update." },
-          { title: "Week 2", text: "First-step quickness sharpens; change-of-direction looks smoother at team practices." },
-          { title: "Week 4", text: "Squats and pulls climb, shot power and puck control feel stronger." },
-          { title: "Week 6", text: "Sprint times drop, core strength pops, coaches notice more stability on the ice." },
-          { title: "Week 8", text: "Explosiveness shows up in games, recovery is faster, teammates look to them for leadership." },
-          { title: "Week 10", text: "Handles full shifts without gassing out; resilience stays high even during tournaments." },
-          { title: "Week 12", text: "Re-test highlights major gains; personalized plan set for the next season phase." }
-        ]
+          { title: "Day 1–3", text: "Performance testing and welcome lift show exactly where you stand; big relief that the plan fits school and sport." },
+          { title: "Day 4–7", text: "Speed drills + strength sessions boost confidence; soreness stays light thanks to coaching." },
+          { title: "Week 2", text: "Acceleration and change-of-direction times drop; parents see posture and focus improve." },
+          { title: "Week 4", text: "Game-day warm-ups feel automatic; power numbers climb with no burnout." },
+          { title: "Week 6", text: "Stronger plays and quicker shifts; testing shows clear strength and speed gains." },
+          { title: "Week 8", text: "Confidence shows up in school and sport; coaches notice hustle and form." },
+          { title: "Week 10", text: "Stay consistent through exams and travel; recovery and sleep stay dialed." },
+          { title: "Week 12", text: "Athlete hits new PRs, parents get clear next steps, and the season has a plan." }
+        ],
+        media: {
+          src: "assets/timeline-youth.png",
+          alt: "Youth athlete celebrating Week 12 gains with coaches"
+        }
       },
       faq: {
         title: "Frequently asked questions",
@@ -787,7 +848,8 @@ const copy = {
           { q: "Do parents need to stay?", a: "No, but we love having you watch first sessions." },
           { q: "How do you handle injuries?", a: "We scale movements, communicate with parents, and progress safely." },
           { q: "Will this conflict with team practices?", a: "We plan around in-season schedules so athletes stay fresh." },
-          { q: "Do girls train separately?", a: "We offer mixed and girls-only times—ask about the best fit." }
+          { q: "Do girls train separately?", a: "We offer mixed and girls-only times—ask about the best fit." },
+          { q: "Where are you located?", a: "We are located at 688 Babin St, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Need directions?</a>" }
         ]
       }
     },
@@ -931,8 +993,8 @@ const copy = {
       testimonials: {
         title: "Ce que disent nos membres",
         video: {
-          mobile: "assets/Testimonial-With-Subs.mp4",
-          desktop: "assets/Testimonial-Desktop.mp4"
+          mobile: "assets/Testimonial-With-Subs-compressed.mp4",
+          desktop: "assets/Testimonial-Desktop-compressed.mp4"
         },
         items: []
       },
@@ -952,12 +1014,12 @@ const copy = {
       faq: {
         title: "Questions fréquentes",
         items: [
-          { q: "Ai-je besoin d’expérience?", a: "Non. Chaque séance est encadrée et adaptée." },
-          { q: "Que faire si je manque un cours?", a: "La vie arrive. On ajuste votre semaine pour garder l’élan." },
-          { q: "Y a-t-il un contrat?", a: "Aucun contrat. Le forfait est un achat unique." },
+          { q: "Je ne me suis pas entraînée depuis des années. Est-ce que je vais pouvoir suivre?", a: "Absolument. Votre séance d’intégration de 60 minutes vous place exactement à votre niveau. Vous ne vous sentirez jamais perdue ni laissée derrière." },
+          { q: "Combien de fois par semaine devrais-je venir?", a: "La fréquence idéale est de 3× par semaine, mais vous avez accès illimité à nos 40+ cours — venez aussi souvent que vous le voulez." },
+          { q: "Que se passe-t-il si je dois annuler?", a: "Après votre Starter Pack de 30 jours, c’est au mois. Annulez quand vous le voulez. Aucun contrat, aucun drame." },
           { q: "Puis-je amener une amie?", a: "Oui. Informez-vous d’un laissez-passer lors de l’intégration." },
-          { q: "Offrez-vous un suivi nutritionnel?", a: "Oui. Liste de départ et coaching d’habitudes." },
-          { q: "Où êtes-vous situés?", a: "Peak Fitness Dieppe. Stationnement facile, ambiance chaleureuse." }
+          { q: "Quand vais-je réellement voir des résultats?", a: "Boost d’énergie et sommeil plus profond en 14 jours. Changements visibles (vêtements qui tombent mieux) dès la semaine 6. Amis et collègues demandent “qu’est-ce que tu fais de différent?” à la semaine 8." },
+          { q: "Où êtes-vous situés?", a: "Nous sommes situés au 688 rue Babin, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Besoin d’itinéraire?</a>" }
         ]
       }
     },
@@ -1018,8 +1080,8 @@ const copy = {
       testimonials: {
         title: "Ce que disent nos membres",
         video: {
-          mobile: "assets/Testimonial-With-Subs.mp4",
-          desktop: "assets/Testimonial-Desktop.mp4"
+          mobile: "assets/Testimonial-With-Subs-compressed.mp4",
+          desktop: "assets/Testimonial-Desktop-compressed.mp4"
         },
         items: []
       },
@@ -1044,7 +1106,8 @@ const copy = {
           { q: "Dois-je suivre mes macros?", a: "Seulement si vous le souhaitez. On mise sur des habitudes simples." },
           { q: "Puis-je utiliser le gym libre?", a: "Oui. L’accès gym libre est inclus." },
           { q: "Comment fonctionne le remboursement?", a: "Présentez-vous, suivez le plan. Si vous n’êtes pas satisfait avant 30 jours, on vous rembourse." },
-          { q: "Est-ce juste du CrossFit?", a: "C’est un entraînement fonctionnel coaché, centré sur la force et la longévité." }
+          { q: "Est-ce juste du CrossFit?", a: "C’est un entraînement fonctionnel coaché, centré sur la force et la longévité." },
+          { q: "Où êtes-vous situés?", a: "Nous sommes situés au 688 rue Babin, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Besoin d’itinéraire?</a>" }
         ]
       }
     },
@@ -1122,11 +1185,12 @@ const copy = {
         title: "Questions fréquentes",
         items: [
           { q: "Quel âge ciblez-vous?", a: "Nous accueillons principalement les 11–17 ans et gardons de petits groupes." },
-          { q: "Est-ce spécifique au sport?", a: "Oui, on adapte selon hockey, terrain, court et le profil de l’athlète." },
+          { q: "Est-ce spécifique à un sport?", a: "Oui, on adapte selon hockey, terrain, court et le profil de l’athlète." },
           { q: "Les parents doivent-ils rester?", a: "Pas obligatoire, mais vous êtes les bienvenus pour observer." },
           { q: "Comment gérez-vous les blessures?", a: "On adapte, communique avec les parents et progresse graduellement." },
           { q: "Est-ce que ça entre en conflit avec les pratiques?", a: "On planifie selon l’horaire en saison pour garder l’énergie." },
-          { q: "Offrez-vous des groupes filles?", a: "Oui, séances mixtes et groupes filles selon la demande." }
+          { q: "Offrez-vous des groupes filles?", a: "Oui, séances mixtes et groupes filles selon la demande." },
+          { q: "Où êtes-vous situés?", a: "Nous sommes situés au 688 rue Babin, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Besoin d’itinéraire?</a>" }
         ]
       }
     },
@@ -1249,11 +1313,34 @@ function getCopy() {
 }
 
 function replaceText(dict) {
-  $$('[data-copy]').forEach((node) => {
-    const key = node.getAttribute('data-copy');
-    if (!key) return;
-    const value = getPath(dict, key);
-    if (typeof value === "string") setText(node, value);
+  $$("[data-copy], [data-copy-html], [data-copy-list]").forEach((node) => {
+    const textKey = node.getAttribute('data-copy');
+    const htmlKey = node.getAttribute('data-copy-html');
+    const listKey = node.getAttribute('data-copy-list');
+
+    if (textKey) {
+      const value = getPath(dict, textKey);
+      setText(node, typeof value === 'string' ? value : '');
+      return;
+    }
+
+    if (htmlKey) {
+      const value = getPath(dict, htmlKey);
+      node.innerHTML = typeof value === 'string' ? value : '';
+      return;
+    }
+
+    if (listKey) {
+      const items = getPath(dict, listKey);
+      node.innerHTML = '';
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          node.appendChild(li);
+        });
+      }
+    }
   });
 }
 
@@ -1373,6 +1460,42 @@ function renderLists(dict) {
     });
   }
 
+  const riskfreeImg = $('#riskfree-secondary-img');
+  if (riskfreeVideoSection && riskfreeImg && riskfreeVideoWrap && riskfreeVideoEl) {
+    const media = dict.riskfreeSecondary?.media || {};
+    const imageSrc = media.image || 'assets/riskfree-secondary.jpg';
+    if (imageSrc) {
+      riskfreeImg.src = imageSrc;
+      riskfreeVideoSection.style.setProperty('--riskfree-image', `url("${imageSrc}")`);
+    } else {
+      riskfreeVideoSection.style.removeProperty('--riskfree-image');
+    }
+    riskfreeImg.hidden = true;
+    riskfreeImg.setAttribute('aria-hidden', 'true');
+
+    const mobileVideo = media.mobileVideo;
+    if (mobileVideo) {
+      if (riskfreeVideoEl.getAttribute('src') !== mobileVideo) {
+        riskfreeVideoEl.src = mobileVideo;
+        riskfreeVideoEl.load();
+      }
+      riskfreeVideoEl.muted = true;
+      riskfreeVideoEl.setAttribute('muted', '');
+      riskfreeVideoEl.loop = true;
+      riskfreeVideoEl.setAttribute('loop', '');
+      riskfreeVideoEl.playsInline = true;
+      riskfreeVideoEl.setAttribute('playsinline', '');
+      riskfreeVideoWrap.hidden = false;
+      setupRiskfreeObserver();
+    } else {
+      riskfreeVideoEl.pause();
+      riskfreeVideoEl.removeAttribute('src');
+      riskfreeVideoEl.load();
+      riskfreeVideoWrap.hidden = true;
+      teardownRiskfreeObserver();
+    }
+  }
+
   const faq = $('#faq-accordion');
   if (faq) {
     faq.innerHTML = '';
@@ -1463,6 +1586,63 @@ function setupTestimonialObserver() {
   }, { threshold: 0.4 });
 
   testimonialObserver.observe(testimonialVideo);
+}
+
+function setupRiskfreeObserver() {
+  if (!riskfreeVideoSection || !riskfreeVideoWrap || !riskfreeVideoEl) return;
+  if (riskfreeObserver) return;
+
+  const prefersMobile = () => {
+    if (typeof window === 'undefined') return true;
+    if (typeof window.matchMedia === 'function') {
+      const query = window.matchMedia('(max-width: 860px)');
+      if (typeof query.matches === 'boolean') return query.matches;
+    }
+    if (typeof window.innerWidth === 'number') return window.innerWidth <= 860;
+    return true;
+  };
+
+  if (!prefersMobile()) {
+    riskfreeVideoEl.pause();
+    return;
+  }
+
+  const playVideo = () => {
+    if (riskfreeVideoEl.paused) {
+      riskfreeVideoEl.play().catch(() => {});
+    }
+  };
+
+  const pauseVideo = () => {
+    if (!riskfreeVideoEl.paused) {
+      riskfreeVideoEl.pause();
+    }
+  };
+
+  const handleIntersect = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        playVideo();
+      } else {
+        pauseVideo();
+      }
+    });
+  };
+
+  if (typeof IntersectionObserver === 'function') {
+    riskfreeObserver = new IntersectionObserver(handleIntersect, { threshold: 0.35 });
+    riskfreeObserver.observe(riskfreeVideoWrap);
+  } else {
+    // Fallback: autoplay immediately on mobile if observer unsupported
+    playVideo();
+  }
+}
+
+function teardownRiskfreeObserver() {
+  if (riskfreeObserver) {
+    riskfreeObserver.disconnect();
+    riskfreeObserver = null;
+  }
 }
 
 function updateMedia(dict) {
@@ -1622,6 +1802,10 @@ const calendlyContainer = $('#calendly-container');
 const testimonialVideo = $('#testimonial-video');
 const testimonialMedia = $('#testimonial-video-media');
 let testimonialObserver = null;
+const riskfreeVideoSection = $('#riskfree-secondary');
+const riskfreeVideoWrap = $('#riskfree-secondary-video');
+const riskfreeVideoEl = $('#riskfree-secondary-video-el');
+let riskfreeObserver = null;
 
 function focusables(root) {
   return $$('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])', root)

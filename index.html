@@ -27,25 +27,26 @@
         w.gtag('config', (w.PF_GA_ID || 'G-REPLACE'), { send_page_view: true });
       })(window, document, 'script', 'dataLayer');
     </script>
+    <!-- Meta Pixel Code -->
     <script>
-      (function(w, d, s, u) {
-        w.fbq = w.fbq || function(){ (w.fbq.q = w.fbq.q || []).push(arguments); };
-        w._fbq = w.fbq;
-        var f = d.getElementsByTagName(s)[0];
-        var j = d.createElement(s); j.async = true; j.src = u;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-      window.fbq('init', (window.PF_PIXEL_ID || 'REPLACE_ME'));
-      window.fbq('track', 'PageView');
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '869088914796896');
+    fbq('track', 'PageView');
     </script>
-    <noscript>
-      <img alt="" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=REPLACE_ME&amp;ev=PageView&amp;noscript=1">
-    </noscript>
+    <!-- End Meta Pixel Code -->
 
     <script defer src="app.js"></script>
     <script async src="https://assets.calendly.com/assets/external/widget.js"></script>
   </head>
   <body data-audience="women" data-variant="" data-lang="en">
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=869088914796896&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="site-header" role="banner">
@@ -167,6 +168,34 @@
         <div class="container">
           <h2 class="h2" data-copy="timeline.title">Your first 30 days</h2>
           <div class="timeline-rows" id="timeline-rows"></div>
+        </div>
+      </section>
+
+      <section id="riskfree-secondary" class="section section-riskfree">
+        <div class="container riskfree-secondary">
+          <div class="riskfree-secondary-media">
+            <img class="riskfree-secondary-img" id="riskfree-secondary-img" src="assets/riskfree-secondary.jpg" alt="Peak Fitness facility interior with turf lane" loading="lazy" decoding="async">
+            <div class="riskfree-secondary-video" id="riskfree-secondary-video" hidden>
+              <div class="video-frame">
+                <video id="riskfree-secondary-video-el" playsinline muted loop controls preload="metadata"></video>
+              </div>
+            </div>
+          </div>
+          <div class="riskfree-secondary-copy">
+            <h2 class="h2" data-copy="riskfreeSecondary.title">Try it completely risk-free!</h2>
+            <p class="lead" data-copy="riskfreeSecondary.lead">Our promise to you. If after...</p>
+            <ul class="riskfree-secondary-list" data-copy-list="riskfreeSecondary.list"></ul>
+            <p class="riskfree-secondary-guarantee" data-copy="riskfreeSecondary.guarantee">👉 …you’re not 100% satisfied, we’ll refund every penny. No pushy retention tactics. No guilt trips. Just results — or your money back.</p>
+            <p class="riskfree-secondary-quote" data-copy="riskfreeSecondary.quote">→ “We’re so confident you’ll love it, we’re taking all the risk off your shoulders.”</p>
+            <div class="riskfree-secondary-cta">
+              <button class="btn btn-primary" data-cta="open-modal">
+                <span data-copy="riskfreeSecondary.primaryCTA">Start risk-free today</span>
+              </button>
+              <button class="btn btn-link" data-cta="calendly">
+                <span data-copy="hero.secondaryCTA">Talk with Rick</span>
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 

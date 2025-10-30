@@ -532,24 +532,25 @@ const copy = {
     women: {
       meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-women-stronger2.png" },
       hero: {
-        headline: "Strength that fuels your calendar and your confidence.",
-        subhead: "Guided classes and supportive coaches help you feel strong on day one, and by week four you’ll glow with smoother mornings, stronger reps, and energy that feels five years younger. **100% Money-Back Guarantee.**",
+        headline: "<span class=\"hero-line-one\">Become <span class=\"hero-highlight\">Fitter</span>, <span class=\"hero-highlight\">Stronger</span></span><br>& More <span class=\"hero-highlight\">Confident</span><br><span class=\"hero-line-three\">In just <span class=\"hero-highlight\">60</span> minutes</span>",
+        subhead: "Sign up today for guided classes from day one.\nFeel stronger by week four.\nBacked by a 100% money-back guarantee.",
         includes: [
           "1-on-1 welcome session to kick off with confidence",
           "Coach-led Glutes & Abs, Muscle Building, and recovery yoga",
           "2 Buddy Class Passes — bring a friend for motivation"
         ],
-        primaryCTA: "Feel Strong Today—Join Us",
-        secondaryCTA: "Connect with Rick, Peak Fitness Owner"
+        primaryCTA: "<span class=\"hero-cta-line hero-cta-line--primary\">Start Today</span><span class=\"hero-cta-line hero-cta-line--secondary\">Become Stronger Than Yesterday</span>",
+        secondaryCTA: "Chat with Rick"
       },
       problemFit: {
-        title: "Why most workouts don’t stick:",
+        title: "Why Most Workouts Don't Stick!",
         tiles: [
           "Meetings run late, dinners pop up, kids need rides → workouts skipped.",
-          "Too many options (Pilates, YouTube workouts, Spin) → decision fatigue.",
-          "Big-box crowds → intimidating, zero accountability.",
-          "Swipe-through workouts, no feedback → results stall out."
-        ]
+          "No plan at the gym → wandering between machines, wasting time.",
+          "Life gets busy → motivation fades → another month without results.",
+          "You want to feel strong, but don't know where to start."
+        ],
+        conclusion: "Coffee helps mornings. Coaching helps momentum. Use both."
       },
       riskfreeSecondary: {
         title: "Try it completely risk-free!",
@@ -562,6 +563,7 @@ const copy = {
         guarantee: "👉 …you’re not 100% satisfied, we’ll refund every penny. No pushy retention tactics. No guilt trips. Just results — or your money back.",
         quote: "→ “We’re so confident you’ll love it, we’re taking all the risk off your shoulders.”",
         primaryCTA: "Try Us Risk Free",
+        secondaryCTA: "Chat with Rick",
         media: {
           image: "assets/timeline-womens-desktop.png",
           mobileVideo: "assets/Sophie-Rogan.mp4"
@@ -577,7 +579,7 @@ const copy = {
           "No overcrowding — space to move, equipment always ready",
           "Kid Zone access — bring the kids, lose the excuse. We got free WiFi."
         ],
-        bonusTitle: "Built-In Bonuses (Included Free)",
+        bonusTitle: "Bonuses (Included Free)",
         bonuses: [
           "1 Personal Training Onboarding (60 min) — perfect your form & create your plan",
           "2 Buddy Class Passes — bring a friend for motivation",
@@ -593,11 +595,16 @@ const copy = {
           "Friendly staff meets you where you’re at.",
           "Attend at least 10 classes during the 30 days to stay eligible."
         ],
-        promise: "Show up, lean on our coaches, and you’ll feel stronger and more confident in 30 days.",
-        quote: "“Stronger than Day 1 or your money back.”",
+        promise: "Show up, lean on our coaches, and you’ll feel stronger and more confident in 30 days.",
+        quote: "",
         media: {
-          src: "assets/riskfree-womens.png",
-          alt: "Women celebrating risk-free guarantee"
+          type: "video",
+          sources: {
+            desktop: "assets/monic-oct-promo.mp4",
+            mobile: "assets/monic-oct-promo.mp4"
+          },
+          poster: "assets/monic-oct-promo-poster.jpg",
+          alt: "Monic sharing the Peak Fitness guarantee"
         }
       },
       testimonials: {
@@ -641,7 +648,7 @@ const copy = {
       meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-men-stronger.png" },
       hero: {
         headline: "Train smart. Move well. Get strong — again.",
-        subhead: "Coaching that replaces random routines with strength you can rely on—at work, at home, in your sport. Structured blocks, joint-friendly progressions, and coaching trusted by competitive lifters and athletes.",
+        subhead: "Sign up today for guided classes from day one.\nFeel stronger by week four.\nBacked by a 100% money-back guarantee.",
         includes: [
           "Structured strength blocks — not random circuits",
           "Joint‑friendly coaching and injury‑aware scaling",
@@ -673,7 +680,8 @@ const copy = {
           "No plan → lose steam by week three.",
           "Bro-splits ignore mobility + conditioning.",
           "Solo training? Accountability fades fast."
-        ]
+        ],
+        conclusion: "It's not about working harder. It's about working smarter with a plan that evolves as you do."
       },
       valueSplit: {
         coreTitle: "Core Offer",
@@ -749,7 +757,7 @@ const copy = {
       meta: { offerName: "Stronger Than Yesterday Starter", heroImg: "assets/hero-youth-stronger.png" },
       hero: {
         headline: "Stand out at tryouts. Build speed, strength, and confidence.",
-        subhead: "A 30‑day phase with performance testing, strength + speed coaching, and clear progress reports for parents — safe, structured, and hockey‑relevant.",
+        subhead: "Sign up today for guided classes from day one.\nFeel stronger by week four.\nBacked by a 100% money-back guarantee.",
         includes: [
           "Performance testing and benchmark reports",
           "Coach‑led strength + speed sessions",
@@ -781,7 +789,8 @@ const copy = {
           "Too much, too soon → burnout.",
           "No strength base → limited speed gains.",
           "Generic apps ignore real coaching."
-        ]
+        ],
+        conclusion: "It's not about training harder than everyone else. It's about training smarter with a plan that grows with you."
       },
       valueSplit: {
         coreTitle: "Core Offer",
@@ -874,7 +883,8 @@ const copy = {
       },
       problemFit: {
         title: "Why most plans fail:",
-        tiles: ["No structure", "No coaching", "Random circuits", "No tracking"]
+        tiles: ["No structure", "No coaching", "Random circuits", "No tracking"],
+        conclusion: "It's not that you don't care. It's that you don't have a clear, coached plan that fits your busy life."
       },
       valueSplit: {
         coreTitle: "Core Offer",
@@ -947,16 +957,17 @@ const copy = {
           "Suivi hebdo, récupération et nutrition simplifiées"
         ],
         primaryCTA: "Commencer mon reset 30 jours",
-        secondaryCTA: "Parler à Rick, propriétaire de Peak Fitness"
+        secondaryCTA: "Discuter avec Rick"
       },
       problemFit: {
         title: "Pourquoi la plupart des entraînements ne durent pas :",
         tiles: [
-          "Réunions qui s’étirent, soupers improvisés, navettes pour les enfants → entraînement annulé.",
-          "Trop d’options (Pilates, entraînements YouTube, spin) → fatigue décisionnelle.",
-          "Les gros gyms = intimidation, zéro accountability.",
-          "Scroll d’entraînements sans feedback → progrès qui plafonnent."
-        ]
+          "Réunions qui s'étirent, soupers improvisés, navettes pour les enfants → entraînement annulé.",
+          "Aucun plan au gym → on erre entre les appareils, on perd son temps.",
+          "La vie devient chargée → la motivation baisse → encore un mois sans résultats.",
+          "On veut se sentir forte, mais on ne sait pas par où commencer."
+        ],
+        conclusion: "Ce n'est pas que vous ne vous en souciez pas. C'est que vous n'avez pas de plan d'entraînement clair et encadré qui s'adapte à votre vie bien remplie."
       },
       valueSplit: {
         coreTitle: "Offre principale",
@@ -968,7 +979,7 @@ const copy = {
           "Zéro encombrement — de l’espace pour bouger, équipement toujours prêt",
           "Accès Kid Zone — amène les enfants, finis les excuses. Wi-Fi gratuit inclus."
         ],
-        bonusTitle: "Bonis inclus (gratuits)",
+        bonusTitle: "Bonus (inclus)",
         bonuses: [
           "1 séance d’onboarding privée (60 min) — perfectionne ta forme et bâtis ton plan",
           "2 laissez-passer Buddy — amène une amie pour la motivation",
@@ -983,11 +994,16 @@ const copy = {
           "Remboursement complet si vous annulez dans les 30 jours.",
           "Gardez votre plan même en annulant.",
           "Équipe supportive, aucun jugement." ],
-        promise: "Présentez-vous, appuyez-vous sur nos coachs et vous vous sentirez plus forte en 30 jours.",
-        quote: "« Plus forte qu’au Jour 1 ou remboursée. »",
+        promise: "Présentez-vous, appuyez-vous sur nos coachs, et vous vous sentirez plus forte et plus confiante en 30 jours.",
+        quote: "",
         media: {
-          src: "assets/riskfree-womens.png",
-          alt: "Femmes célébrant la garantie sans risque"
+          type: "video",
+          sources: {
+            desktop: "assets/monic-oct-promo.mp4",
+            mobile: "assets/monic-oct-promo.mp4"
+          },
+          poster: "assets/monic-oct-promo-poster.jpg",
+          alt: "Monic présente la garantie sans risque"
         }
       },
       testimonials: {
@@ -1043,7 +1059,8 @@ const copy = {
           "Pas de plan → l’élan disparaît à la 3e semaine.",
           "Programmes bros ignorent mobilité + cardio.",
           "Seul? L’accountability disparaît vite."
-        ]
+        ],
+        conclusion: "Il ne s'agit pas de travailler plus fort, mais de travailler plus intelligemment avec un plan qui évolue avec vous."
       },
       valueSplit: {
         coreTitle: "Offre principale",
@@ -1131,7 +1148,8 @@ const copy = {
           "Trop, trop vite → surmenage.",
           "Sans base de force → vitesse limitée.",
           "Apps génériques → pas de coaching réel."
-        ]
+        ],
+        conclusion: "Il ne s'agit pas de t'entraîner plus fort que les autres, mais de t'entraîner plus intelligemment avec un plan qui grandit avec toi."
       },
       valueSplit: {
         coreTitle: "Offre principale",
@@ -1245,7 +1263,7 @@ const copy = {
         promise: "Plus de force, de clarté et de confiance en 30 jours ou remboursé.",
         quote: "« La structure crée les résultats. On vous offre les deux. »",
         primaryCTA: "Commencer sans risque aujourd’hui",
-        secondaryCTA: "Parler à Rick"
+        secondaryCTA: "Discuter avec Rick"
       },
       testimonials: {
         title: "Ce que disent nos membres",
@@ -1356,14 +1374,20 @@ function renderLists(dict) {
   }
 
   const problemTiles = $('#problem-tiles');
+  const problemConclusion = $('#problem-conclusion-text');
+  
   if (problemTiles) {
     problemTiles.innerHTML = '';
     (dict.problemFit?.tiles || []).forEach((tile) => {
       const div = document.createElement('div');
       div.className = 'tile';
-      div.textContent = tile;
+      div.innerHTML = tile;
       problemTiles.appendChild(div);
     });
+  }
+  
+  if (problemConclusion && dict.problemFit?.conclusion) {
+    problemConclusion.textContent = dict.problemFit.conclusion;
   }
 
   const coreList = $('#core-offer-list');
@@ -1659,32 +1683,85 @@ function updateMedia(dict) {
     bgImg.alt = alt;
   }
 
-  const guaranteeWrap = $('#guarantee-media');
-  const guaranteeImg = $('#guarantee-media-img');
   const guaranteeSrc = dict.guarantee?.media?.src || '';
+  const guaranteeMedia = dict.guarantee?.media;
   const guaranteeAlt = dict.guarantee?.media?.alt || '';
   const guaranteeSection = $('#guarantee');
-  const guaranteeMobileSection = $('#guarantee-media-section');
+  const guaranteeWrap = $('#guarantee-media-area');
+  const guaranteeImg = $('#guarantee-media-img');
+  const guaranteeVideo = $('#guarantee-media-video');
+  const setVideoSources = (videoEl, sources = {}) => {
+    if (!videoEl) return;
+    while (videoEl.firstChild) videoEl.removeChild(videoEl.firstChild);
+    const desktopSrc = sources.desktop || guaranteeMedia?.src;
+    const mobileSrc = sources.mobile || desktopSrc;
+    if (mobileSrc) {
+      const sourceMobile = document.createElement('source');
+      sourceMobile.src = mobileSrc;
+      sourceMobile.type = 'video/mp4';
+      sourceMobile.media = '(max-width: 768px)';
+      videoEl.appendChild(sourceMobile);
+    }
+    if (desktopSrc) {
+      const sourceDesktop = document.createElement('source');
+      sourceDesktop.src = desktopSrc;
+      sourceDesktop.type = 'video/mp4';
+      sourceDesktop.media = '(min-width: 769px)';
+      videoEl.appendChild(sourceDesktop);
+    }
+    videoEl.load();
+  };
   if (guaranteeSection) {
-    if (guaranteeSrc) {
+    if (guaranteeMedia?.type === 'video') {
+      guaranteeSection.style.removeProperty('--guarantee-image');
+      if (guaranteeWrap) guaranteeWrap.hidden = false;
+      if (guaranteeImg) {
+        guaranteeImg.hidden = true;
+        guaranteeImg.removeAttribute('src');
+        guaranteeImg.removeAttribute('alt');
+      }
+      if (guaranteeVideo) {
+        guaranteeVideo.hidden = false;
+        guaranteeVideo.poster = guaranteeMedia.poster || '';
+        guaranteeVideo.setAttribute('aria-label', guaranteeAlt || alt);
+        guaranteeVideo.autoplay = true;
+        guaranteeVideo.muted = true;
+        guaranteeVideo.setAttribute('muted', '');
+        guaranteeVideo.setAttribute('autoplay', '');
+        setVideoSources(guaranteeVideo, guaranteeMedia.sources);
+        guaranteeVideo.play?.().catch(() => {});
+      }
+    } else if (guaranteeSrc) {
       guaranteeSection.style.setProperty('--guarantee-image', `url("${guaranteeSrc}")`);
       if (guaranteeWrap) guaranteeWrap.hidden = false;
       if (guaranteeImg) {
+        guaranteeImg.hidden = false;
         guaranteeImg.src = guaranteeSrc;
         guaranteeImg.alt = guaranteeAlt || alt;
       }
-      if (guaranteeMobileSection) {
-        guaranteeMobileSection.style.setProperty('--guarantee-image', `url("${guaranteeSrc}")`);
+      if (guaranteeVideo) {
+        guaranteeVideo.hidden = true;
+        guaranteeVideo.pause?.();
+        guaranteeVideo.removeAttribute('poster');
+        guaranteeVideo.removeAttribute('autoplay');
+        guaranteeVideo.removeAttribute('muted');
+        while (guaranteeVideo.firstChild) guaranteeVideo.removeChild(guaranteeVideo.firstChild);
       }
     } else {
       guaranteeSection.style.removeProperty('--guarantee-image');
       if (guaranteeWrap) guaranteeWrap.hidden = true;
       if (guaranteeImg) {
+        guaranteeImg.hidden = false;
         guaranteeImg.removeAttribute('src');
         guaranteeImg.removeAttribute('alt');
       }
-      if (guaranteeMobileSection) {
-        guaranteeMobileSection.style.removeProperty('--guarantee-image');
+      if (guaranteeVideo) {
+        guaranteeVideo.hidden = true;
+        guaranteeVideo.pause?.();
+        guaranteeVideo.removeAttribute('poster');
+        guaranteeVideo.removeAttribute('autoplay');
+        guaranteeVideo.removeAttribute('muted');
+        while (guaranteeVideo.firstChild) guaranteeVideo.removeChild(guaranteeVideo.firstChild);
       }
     }
   }

@@ -78,16 +78,27 @@
         <div class="container hero-grid">
           <div class="hero-copy">
             <div class="hero-eyebrow" id="hero-offer">Stronger Than Yesterday Starter</div>
-            <h1 class="h1" data-copy="hero.headline">Structure you can trust. Strength that sticks.</h1>
+            <h1 class="h1" data-copy-html="hero.headline">Structure you can trust. Strength that sticks.</h1>
             <p class="subhead" data-copy="hero.subhead">The Stronger Than Yesterday Starter is an immersive 30-day reset with personal coaching, community accountability, and programming built for women who carry everything.</p>
-            <ul class="hero-proof" id="hero-includes" aria-label="What you’ll experience"></ul>
-            <div class="hero-ctas">
-              <button class="btn btn-primary btn-large" id="primary-cta-hero" data-cta="open-modal">
-                <span data-copy="hero.primaryCTA">Start Your 30-Day Reset</span>
-              </button>
-              <button class="btn btn-link" id="calendly-cta-hero" data-cta="calendly">
-                <span data-copy="hero.secondaryCTA">Talk with a coach</span>
-              </button>
+            <div class="hero-info-row">
+              <ul class="hero-proof" id="hero-includes" aria-label="What you’ll experience"></ul>
+              <div class="hero-cta-panel">
+                <button class="btn btn-primary hero-cta-main" id="primary-cta-hero" data-cta="open-modal">
+                  <span data-copy-html="hero.primaryCTA">Join Us - Become Stronger Today</span>
+                </button>
+                <button class="btn hero-cta-secondary" id="calendly-cta-hero" data-cta="calendly" aria-label="Chat with Rick, Peak Fitness Owner">
+                  <span class="hero-cta-secondary-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.4 3h3.2c.3 0 .6.2.7.5l1.2 3.6c.1.3 0 .6-.2.8l-2.1 2.1c1 1.9 2.6 3.5 4.5 4.5l2.1-2.1c.2-.2.5-.3.8-.2l3.6 1.2c.3.1.5.4.5.7V19c0 .6-.4 1-1 1C10.8 20 4 13.2 4 4c0-.6.4-1 1-1h.4Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span class="hero-cta-secondary-text">
+                    <span class="hero-cta-secondary-line hero-cta-secondary-line--primary">Chat with Rick</span>
+                    <span class="hero-cta-secondary-line">Peak Fitness Owner</span>
+                  </span>
+                </button>
+                <img class="hero-review-badge" src="assets/feneste-google-review.png" alt="Google review rating" width="220" height="88" loading="lazy">
+              </div>
             </div>
           </div>
           <figure class="hero-media">
@@ -100,34 +111,33 @@
       <section id="problem-fit" class="section problem">
         <div class="container problem-grid">
           <div class="problem-copy">
-            <h2 class="h2" data-copy="problemFit.title">Why most workouts don’t stick:</h2>
-            <div id="problem-tiles" class="problem-tiles"></div>
+            <div class="problem-layout">
+              <div class="problem-heading">
+                <h2 class="problem-title" data-copy="problemFit.title">Why Most Workouts Don't Stick!</h2>
+              </div>
+              <div id="problem-tiles" class="problem-tiles"></div>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="value-split" class="section">
-        <div class="container value-grid">
-          <article class="card">
-            <header class="card-head">
-              <h3 class="h3" data-copy="valueSplit.coreTitle">Core Offer (<span data-copy="valueSplit.coreValue">$407.94 Value</span>)</h3>
-            </header>
-            <ul class="bullet-list" id="core-offer-list" aria-label="Core Offer"></ul>
-          </article>
-          <article class="card">
-            <header class="card-head">
-              <h3 class="h3" data-copy="valueSplit.bonusTitle">Built-In Bonuses (Included Free)</h3>
-            </header>
-            <ul class="bullet-list" id="bonus-list" aria-label="Included Bonuses"></ul>
-          </article>
-        </div>
-      </section>
-
-      <section id="guarantee-media-section" class="section guarantee-media-section" aria-hidden="true">
-        <div class="container">
-          <figure class="guarantee-media" id="guarantee-media">
-            <img id="guarantee-media-img" src="" alt="" loading="lazy" decoding="async">
-          </figure>
+        <div class="container value-section">
+          <blockquote id="problem-conclusion-text" class="problem-quote" data-copy="problemFit.conclusion">“Coffee helps mornings. Coaching helps momentum. Use both.”<img src="assets/rick.png" alt="Rick, Peak Fitness Owner" class="problem-quote-rick" loading="lazy" decoding="async"></blockquote>
+          <div class="value-grid">
+            <article class="card">
+              <header class="card-head">
+                <h3 class="h3" data-copy="valueSplit.coreTitle">Core Offer (<span data-copy="valueSplit.coreValue">$407.94 Value</span>)</h3>
+              </header>
+              <ul class="bullet-list" id="core-offer-list" aria-label="Core Offer"></ul>
+            </article>
+            <article class="card">
+              <header class="card-head">
+                <h3 class="h3" data-copy="valueSplit.bonusTitle">Built-In Bonuses (Included Free)</h3>
+              </header>
+              <ul class="bullet-list" id="bonus-list" aria-label="Included Bonuses"></ul>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -137,15 +147,29 @@
             <h2 class="h2" data-copy="guarantee.title">Try it completely risk-free</h2>
             <ul class="bullet-list" id="guarantee-bullets" aria-label="Guarantee"></ul>
             <p class="muted" data-copy="guarantee.promise">If you show up and follow the plan, you’ll feel stronger and more confident in 30 days. That’s our promise.</p>
-            <div class="guarantee-ctas">
-              <button class="btn btn-primary" data-cta="open-modal">
-                <span data-copy="guarantee.primaryCTA">Start risk-free today</span>
+            <div class="guarantee-ctas cta-stack">
+              <button class="btn btn-primary hero-cta-main" data-cta="open-modal">
+                <span class="hero-cta-line hero-cta-line--primary" data-copy="guarantee.primaryCTA">Start risk-free today</span>
               </button>
-              <button class="btn btn-link" data-cta="calendly">
-                <span data-copy="guarantee.secondaryCTA">Talk with Rick</span>
+              <button class="btn hero-cta-secondary" data-cta="calendly" aria-label="Chat with Rick, Peak Fitness Owner">
+                <span class="hero-cta-secondary-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.4 3h3.2c.3 0 .6.2.7.5l1.2 3.6c.1.3 0 .6-.2.8l-2.1 2.1c1 1.9 2.6 3.5 4.5 4.5l2.1-2.1c.2-.2.5-.3.8-.2l3.6 1.2c.3.1.5.4.5.7V19c0 .6-.4 1-1 1C10.8 20 4 13.2 4 4c0-.6.4-1 1-1h.4Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="hero-cta-secondary-text">
+                  <span class="hero-cta-secondary-line hero-cta-secondary-line--primary" data-copy="hero.secondaryCTA">Chat with Rick</span>
+                  <span class="hero-cta-secondary-line">Peak Fitness Owner</span>
+                </span>
               </button>
             </div>
             <blockquote class="pull-quote" data-copy="guarantee.quote">“You bring the effort. We bring the structure.”</blockquote>
+          </div>
+          <div class="guarantee-media-area" id="guarantee-media-area" hidden>
+            <div class="guarantee-media-frame">
+              <video id="guarantee-media-video" playsinline muted controls preload="metadata"></video>
+              <img id="guarantee-media-img" src="" alt="" loading="lazy" decoding="async">
+            </div>
           </div>
         </div>
       </section>
@@ -154,6 +178,9 @@
         <div class="container">
           <h2 class="h2" data-copy="testimonials.title">What members say</h2>
           <div class="social-proof-body">
+            <div class="testimonials-image">
+              <img src="assets/womens-testimonials.png" alt="Peak Fitness women sharing testimonials" loading="lazy" decoding="async">
+            </div>
             <div class="testimonials-video" id="testimonial-video" hidden>
               <div class="video-frame">
                 <video id="testimonial-video-media" data-src="" data-src-mobile="" data-src-desktop="" playsinline muted controls preload="metadata"></video>
@@ -168,6 +195,16 @@
         <div class="container">
           <h2 class="h2" data-copy="timeline.title">Your first 30 days</h2>
           <div class="timeline-rows" id="timeline-rows"></div>
+        </div>
+      </section>
+
+      <section id="guarantee-mobile-video" class="section guarantee-mobile-video" aria-hidden="true">
+        <div class="container">
+          <div class="guarantee-mobile-video-frame">
+            <video id="guarantee-mobile-video-el" playsinline muted controls preload="metadata" poster="assets/monic-oct-promo-poster.jpg">
+              <source src="assets/monic-oct-promo.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </section>
 
@@ -187,17 +224,24 @@
             <ul class="riskfree-secondary-list" data-copy-list="riskfreeSecondary.list"></ul>
             <p class="riskfree-secondary-guarantee" data-copy="riskfreeSecondary.guarantee">👉 …you’re not 100% satisfied, we’ll refund every penny. No pushy retention tactics. No guilt trips. Just results — or your money back.</p>
             <p class="riskfree-secondary-quote" data-copy="riskfreeSecondary.quote">→ “We’re so confident you’ll love it, we’re taking all the risk off your shoulders.”</p>
-            <div class="riskfree-secondary-cta">
-              <button class="btn btn-primary" data-cta="open-modal">
-                <span data-copy="riskfreeSecondary.primaryCTA">Start risk-free today</span>
+            <div class="riskfree-secondary-cta cta-stack">
+              <button class="btn btn-primary hero-cta-main" data-cta="open-modal">
+                <span class="hero-cta-line hero-cta-line--primary" data-copy="riskfreeSecondary.primaryCTA">Start risk-free today</span>
               </button>
-              <button class="btn btn-link" data-cta="calendly">
-                <span data-copy="hero.secondaryCTA">Talk with Rick</span>
+              <button class="btn hero-cta-secondary" data-cta="calendly" aria-label="Chat with Rick, Peak Fitness Owner">
+                <span class="hero-cta-secondary-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.4 3h3.2c.3 0 .6.2.7.5l1.2 3.6c.1.3 0 .6-.2.8l-2.1 2.1c1 1.9 2.6 3.5 4.5 4.5l2.1-2.1c.2-.2.5-.3.8-.2l3.6 1.2c.3.1.5.4.5.7V19c0 .6-.4 1-1 1C10.8 20 4 13.2 4 4c0-.6.4-1 1-1h.4Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                <span class="hero-cta-secondary-text">
+                  <span class="hero-cta-secondary-line hero-cta-secondary-line--primary" data-copy="hero.secondaryCTA">Chat with Rick</span>
+                  <span class="hero-cta-secondary-line">Peak Fitness Owner</span>
+                </span>
               </button>
             </div>
           </div>
         </div>
-      </section>
 
       <section id="faq" class="section">
         <div class="container">

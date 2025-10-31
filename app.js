@@ -565,7 +565,6 @@ const copy = {
         primaryCTA: "Try Us Risk Free",
         secondaryCTA: "Chat with Rick",
         media: {
-          image: "assets/timeline-womens-desktop.png",
           mobileVideo: "assets/Sophie-Rogan.mp4"
         }
       },
@@ -616,16 +615,18 @@ const copy = {
         items: []
       },
       timeline: {
-        title: "Your first 12 weeks",
+        title: "Your First 12 Weeks at Peak Fitness",
         rows: [
-          { title: "Day 1–3", text: "First welcome lift + InBody reveal your exact starting point; relief hits as the plan fits your calendar." },
-          { title: "Day 4–7", text: "You wake with more energy, soreness stays manageable, and your workout time is blocked without guilt." },
-          { title: "Week 2", text: "Strength cues click—push-ups, rows, and carries feel smoother, mood stays steady through stacked days." },
-          { title: "Week 4", text: "Morning routine shortens, jeans glide on easier, family notices you’re calmer and more present." },
-          { title: "Week 6", text: "Waistline trims, chronic stiffness eases, and InBody shows lean muscle climbing." },
-          { title: "Week 8", text: "Down a size, shoulders and glutes look defined, compliments land at school drop-off and meetings." },
-          { title: "Week 10", text: "Longest days feel doable—lifts climb ~15% and you still have evening energy." },
-          { title: "Week 12", text: "Before/after pics prove the glow; confidence sticks while your coach maps the next goal." }
+          { title: "Day 1 (Welcome Session + InBody)", text: "Quick movement screen to gauge comfort, mobility, and any red flags—so you feel prepared for class. InBody gives a clear starting point. Coach suggests a simple mix (e.g., Muscle Building, Glutes & Abs, Recovery Yoga) that fits your week." },
+          { title: "Days 2–3", text: "First two guided 60-minute classes. You get clear cues, safe ranges, and pace guidance—no wandering or guesswork. Soreness is normal; coach gives a quick recover-well recipe (walk + mobility + protein + sleep). You try a Buddy Pass for motivation and fun." },
+          { title: "Days 4–7", text: "You find your “home” class times and feel less guilt about taking the hour—you’ve blocked it. Energy is steadier; sleep starts improving; soreness stays manageable." },
+          { title: "Week 2", text: "Foundational patterns click (hinge, squat, push, pull, carry). You’re more confident choosing the right scale at each station." },
+          { title: "Week 3", text: "You move through the room without overthinking. Coach nudges a small load or tempo change; work feels challenging but controlled." },
+          { title: "Week 4", text: "Mornings run smoother; jeans fit a touch easier. Family notices you’re calmer and more present after class days." },
+          { title: "Week 6", text: "Waist feels trimmer; stiffness eases. You notice you’re picking up slightly heavier weights or lasting longer on intervals—without joint drama." },
+          { title: "Week 8", text: "Clothes sit better through the hips and shoulders; glutes look more defined. Compliments pop up at drop-off and in meetings. Confidence grows." },
+          { title: "Week 10", text: "What used to feel like a “long day” is now doable. You’re lifting more than Week 1 and finishing with energy to spare." },
+          { title: "Week 12", text: "The routine feels like part of your week instead of something you debate. You know the coaches, the cues, and the versions that work for your body—Stronger Than Yesterday is your new normal." }
         ],
         media: {
           src: "assets/timeline-womens.png",
@@ -730,7 +731,7 @@ const copy = {
           { title: "Day 4–7", text: "Bar path smooths out, nagging shoulder/hip tightness eases, confidence returns." },
           { title: "Week 2", text: "5–10% strength bump, conditioning finishers no longer gas you out at work." },
           { title: "Week 4", text: "Mobility carries into sport—swings, shots, and lifts feel crisp with zero flare-ups." },
-          { title: "Week 6", text: "Waistline down, belt notches tighten, InBody shows lean mass trending up." },
+          { title: "Week 6", text: "Waistline down, belt notches tighten, InBody shows lean muscle climbing." },
           { title: "Week 8", text: "Game speed improves—pickup runs, golf rounds, or matches feel explosive again." },
           { title: "Week 10", text: "Busy weeks stay on track; recovery score better, no missed sessions, stress stays low." },
           { title: "Week 12", text: "Numbers jump ~20 lb across big lifts, confident to attack the next strength block." }
@@ -1015,17 +1016,23 @@ const copy = {
         items: []
       },
       timeline: {
-        title: "Vos 12 premières semaines",
+        title: "Vos 12 premières semaines chez Peak Fitness",
         rows: [
-          { title: "Jour 1–3", text: "Premier lever d’accueil + InBody révèlent ton point de départ; soulagement, le plan cadre ton horaire." },
-          { title: "Jour 4–7", text: "Tu te réveilles plus énergisée, courbatures sous contrôle et ton temps d’entraînement est réservé sans culpabilité." },
-          { title: "Semaine 2", text: "Repères de force qui cliquent — push-ups, tirages et carries deviennent fluides, humeur stable malgré les journées pleines." },
-          { title: "Semaine 4", text: "Routine du matin écourtée, jeans glissent mieux, famille te trouve plus calme et présente." },
-          { title: "Semaine 6", text: "Tour de taille qui diminue, raideurs chroniques s’apaisent et InBody montre la masse maigre en hausse." },
-          { title: "Semaine 8", text: "Une taille de vêtement en moins, épaules et fessiers se dessinent, compliments à l’école et en réunion." },
-          { title: "Semaine 10", text: "Même les longues journées passent bien — charges +15 % et énergie encore le soir." },
-          { title: "Semaine 12", text: "Photos avant/après confirment l’éclat; confiance solidifiée pendant que la coach trace le prochain objectif." }
-        ]
+          { title: "Jour 1 (Séance d’accueil + InBody)", text: "Évaluation rapide pour vérifier confort, mobilité et signaux rouges — vous arrivez en classe préparée. InBody fournit un point de départ clair. Le coach propose un mix simple (ex. Musculation, Glutes & Abs, Yoga récupération) adapté à votre semaine." },
+          { title: "Jours 2–3", text: "Deux premiers cours guidés de 60 minutes. Consignes claires, amplitudes sécuritaires, rythme encadré — fini l’improvisation. Courbatures normales; le coach donne une recette express de récupération (marche + mobilité + protéine + sommeil). Vous essayez un laissez-passer Buddy pour la motivation et le plaisir." },
+          { title: "Jours 4–7", text: "Vous trouvez vos plages horaires « maison » et bloquez l’heure sans culpabilité. L’énergie devient plus stable; le sommeil s’améliore; les courbatures restent gérables." },
+          { title: "Semaine 2", text: "Les patrons fondamentaux s’ancrent (hinge, squat, push, pull, carry). Vous choisissez mieux le bon niveau à chaque station." },
+          { title: "Semaine 3", text: "Vous circulez dans la salle sans trop réfléchir. Le coach suggère une petite charge ou un tempo différent; l’effort est exigeant mais maîtrisé." },
+          { title: "Semaine 4", text: "Les matins roulent mieux; les jeans glissent un peu plus facilement. La famille remarque que vous êtes plus calme et présente après les cours." },
+          { title: "Semaine 6", text: "La taille s’affine; les raideurs diminuent. Vous soulevez légèrement plus lourd ou tenez plus longtemps les intervalles — sans stress articulaire." },
+          { title: "Semaine 8", text: "Les vêtements tombent mieux aux hanches et aux épaules; les fessiers se dessinent. Les compliments fusent au dépôt des enfants et au travail. La confiance monte." },
+          { title: "Semaine 10", text: "Ce qui ressemblait à une « longue journée » devient gérable. Vous soulevez plus qu’en semaine 1 et terminez avec de l’énergie en réserve." },
+          { title: "Semaine 12", text: "La routine fait partie de votre semaine plutôt que d’un débat. Vous connaissez les coachs, les consignes et les variantes qui conviennent à votre corps — Stronger Than Yesterday devient votre nouvelle norme." }
+        ],
+        media: {
+          src: "assets/timeline-womens.png",
+          alt: "Femme célébrant ses progrès à la semaine 12 chez Peak Fitness"
+        }
       },
       faq: {
         title: "Questions fréquentes",
@@ -1616,21 +1623,6 @@ function setupRiskfreeObserver() {
   if (!riskfreeVideoSection || !riskfreeVideoWrap || !riskfreeVideoEl) return;
   if (riskfreeObserver) return;
 
-  const prefersMobile = () => {
-    if (typeof window === 'undefined') return true;
-    if (typeof window.matchMedia === 'function') {
-      const query = window.matchMedia('(max-width: 860px)');
-      if (typeof query.matches === 'boolean') return query.matches;
-    }
-    if (typeof window.innerWidth === 'number') return window.innerWidth <= 860;
-    return true;
-  };
-
-  if (!prefersMobile()) {
-    riskfreeVideoEl.pause();
-    return;
-  }
-
   const playVideo = () => {
     if (riskfreeVideoEl.paused) {
       riskfreeVideoEl.play().catch(() => {});
@@ -1666,6 +1658,50 @@ function teardownRiskfreeObserver() {
   if (riskfreeObserver) {
     riskfreeObserver.disconnect();
     riskfreeObserver = null;
+  }
+}
+
+function setupGuaranteeMobileObserver() {
+  if (!guaranteeMobileVideoSection || !guaranteeMobileVideoEl) return;
+  if (guaranteeMobileObserver) return;
+
+  const playVideo = () => {
+    guaranteeMobileVideoEl.play().catch(() => {});
+  };
+
+  const pauseVideo = () => {
+    guaranteeMobileVideoEl.pause();
+  };
+
+  const handleIntersect = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        playVideo();
+      } else {
+        pauseVideo();
+      }
+    });
+  };
+
+  guaranteeMobileVideoEl.autoplay = false;
+  guaranteeMobileVideoEl.removeAttribute('autoplay');
+  guaranteeMobileVideoEl.muted = true;
+  guaranteeMobileVideoEl.setAttribute('muted', '');
+  guaranteeMobileVideoEl.playsInline = true;
+  guaranteeMobileVideoEl.setAttribute('playsinline', '');
+
+  if (typeof IntersectionObserver === 'function') {
+    guaranteeMobileObserver = new IntersectionObserver(handleIntersect, { threshold: 0.5 });
+    guaranteeMobileObserver.observe(guaranteeMobileVideoSection);
+  } else {
+    playVideo();
+  }
+}
+
+function teardownGuaranteeMobileObserver() {
+  if (guaranteeMobileObserver) {
+    guaranteeMobileObserver.disconnect();
+    guaranteeMobileObserver = null;
   }
 }
 
@@ -1763,6 +1799,20 @@ function updateMedia(dict) {
         guaranteeVideo.removeAttribute('muted');
         while (guaranteeVideo.firstChild) guaranteeVideo.removeChild(guaranteeVideo.firstChild);
       }
+    }
+  }
+
+  if (guaranteeMobileVideoEl) {
+    if (dict.meta?.audience === 'women' || state.audience === 'women') {
+      if (state.lang === 'en' || state.lang === 'fr') {
+        setupGuaranteeMobileObserver();
+      } else {
+        teardownGuaranteeMobileObserver();
+        guaranteeMobileVideoEl.pause();
+      }
+    } else {
+      teardownGuaranteeMobileObserver();
+      guaranteeMobileVideoEl.pause();
     }
   }
 }
@@ -1882,6 +1932,9 @@ let testimonialObserver = null;
 const riskfreeVideoSection = $('#riskfree-secondary');
 const riskfreeVideoWrap = $('#riskfree-secondary-video');
 const riskfreeVideoEl = $('#riskfree-secondary-video-el');
+const guaranteeMobileVideoSection = $('#guarantee-mobile-video');
+const guaranteeMobileVideoEl = $('#guarantee-mobile-video-el');
+let guaranteeMobileObserver = null;
 let riskfreeObserver = null;
 
 function focusables(root) {

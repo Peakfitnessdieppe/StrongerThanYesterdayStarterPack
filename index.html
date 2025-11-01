@@ -189,7 +189,7 @@
           </div>
           <div class="social-proof-toolkit" aria-hidden="true">
             <h3 class="toolkit-title">Stronger Than Yesterday Nutrition Toolkit</h3>
-            <p class="toolkit-subtext">A simple meal framework, quick plug-and-play recipes, and a personalized calorie guide. Learn how to eat for energy, fat loss, and strength without tracking every bite. Stay on track anywhere with our restaurant and takeout guide.</p>
+            <p class="toolkit-subtext" id="promo-trigger-mobile">A simple meal framework, quick plug-and-play recipes, and a personalized calorie guide. Learn how to eat for energy, fat loss, and strength without tracking every bite. Stay on track anywhere with our restaurant and takeout guide.</p>
             <div class="toolkit-includes">
               <div class="toolkit-includes-head">Nutrition Toolkit (Digital Downloads)</div>
               <ul class="toolkit-list">
@@ -200,10 +200,10 @@
                 <li><strong>How to Calculate Your Calorie Intake (22 pages)</strong> — step-by-step personalization + cheat sheet</li>
                 <li><strong>Eat Well Anywhere: Guide to Eating Out (46 pages)</strong> — real-world strategies + 9 restaurant-style favorite recipes</li>
               </ul>
-              <div class="toolkit-note">All ebooks are PDF downloads delivered after sign-up.</div>
+              <div class="toolkit-note" id="promo-trigger-desktop">All ebooks are PDF downloads delivered after sign-up.</div>
             </div>
           </div>
-          <h2 class="h2" data-copy="testimonials.title">What members say</h2>
+          <h2 class="h2" data-copy="testimonials.title">What Members Say</h2>
           <div class="social-proof-body">
             <div class="testimonials-image">
               <img src="assets/womens-testimonials.png" alt="Peak Fitness women sharing testimonials" loading="lazy" decoding="async">
@@ -240,7 +240,7 @@
           <div class="riskfree-secondary-media">
             <div class="riskfree-secondary-video" id="riskfree-secondary-video">
               <div class="video-frame">
-                <video id="riskfree-secondary-video-el" playsinline muted autoplay loop preload="metadata" poster="assets/sophie-rogan-poster.jpg">
+                <video id="riskfree-secondary-video-el" playsinline muted autoplay loop controls preload="metadata" poster="assets/sophie-rogan-poster.jpg">
                   <source src="assets/Sophie-Rogan.mp4" type="video/mp4">
                 </video>
               </div>
@@ -274,7 +274,7 @@
 
       <section id="faq" class="section">
         <div class="container">
-          <h2 class="h2" data-copy="faq.title">Frequently asked questions</h2>
+          <h2 class="h2 faq-heading" data-copy="faq.title">Frequently Asked Questions</h2>
           <div class="faq-accordion" id="faq-accordion"></div>
         </div>
       </section>
@@ -294,6 +294,33 @@
         </nav>
       </div>
     </footer>
+
+    <div id="promo-overlay" class="promo-overlay" hidden></div>
+    <aside id="promo-popup" class="promo-popup" role="dialog" aria-modal="true" aria-labelledby="promo-title" hidden>
+      <div class="promo-inner">
+        <button type="button" id="promo-close" class="promo-close" aria-label="Close offer">✕</button>
+        <div class="promo-media">
+          <img src="assets/recipebundle.png" alt="Stronger Than Yesterday Toolkit preview" loading="lazy" decoding="async">
+        </div>
+        <div class="promo-copy">
+          <h3 id="promo-title">Grab 9 Carb-Based Recipes on Us</h3>
+          <p id="promo-description">Drop your email and we’ll send you a sneak peek of the Stronger Than Yesterday Nutrition Toolkit.</p>
+        </div>
+        <form id="promo-form" class="promo-form" novalidate>
+          <label class="promo-field">
+            <span class="promo-label">Email address</span>
+            <input type="email" id="promo-email" name="email" autocomplete="email" placeholder="you@example.com" required>
+          </label>
+          <p class="promo-consent">By entering your email, you agree to get Peak Fitness Dieppe updates about classes and the Stronger Than Yesterday Toolkit. Unsubscribe anytime.</p>
+          <button type="submit" id="promo-submit" class="btn btn-primary promo-submit">Send the recipes</button>
+          <p class="promo-error" id="promo-error" role="alert" hidden></p>
+        </form>
+        <div id="promo-success" class="promo-success" hidden>
+          <h4>Check your inbox!</h4>
+          <p>We’ll send the Carb-Based Recipes PDF within a few minutes. Watch for an email from Peak Fitness Dieppe.</p>
+        </div>
+      </div>
+    </aside>
 
     <div id="modal-overlay" class="modal-overlay" hidden></div>
     <div id="checkout-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" hidden>

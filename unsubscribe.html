@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Peak Fitness Emails</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="page-unsubscribe">
+  <main class="pf-unsub-shell" aria-labelledby="pf-unsub-title">
+    <article class="pf-unsub-card" role="region">
+      <header class="pf-unsub-head">
+        <h1 id="pf-unsub-title">Update Your Peak Fitness Emails</h1>
+        <p>If you’re no longer into our Stronger Than Yesterday updates, let us know below.</p>
+      </header>
+
+      <form id="pf-unsub-form" class="pf-unsub-form" novalidate>
+        <label class="pf-unsub-field">
+          <span>Email address</span>
+          <input type="email" name="email" autocomplete="email" required placeholder="you@example.com">
+        </label>
+
+        <label class="pf-unsub-field">
+          <span>Tell us why (optional)</span>
+          <select name="reason">
+            <option value="">Choose a reason</option>
+            <option value="too_many_emails">Too many emails</option>
+            <option value="not_relevant">Not relevant to me</option>
+            <option value="got_what_i_needed">I already have what I need</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label class="pf-unsub-field pf-unsub-textarea" data-hidden>
+          <span>Anything else?</span>
+          <textarea name="notes" rows="3" placeholder="Let us know how we can improve."></textarea>
+        </label>
+
+        <button type="submit" class="pf-unsub-btn">Unsubscribe me</button>
+        <p class="pf-unsub-error" role="alert" hidden></p>
+      </form>
+
+      <div id="pf-unsub-success" class="pf-unsub-success" hidden>
+        <h2>You’re unsubscribed</h2>
+        <p>Thanks for letting us know. We’ve removed you from future emails. If this was a mistake, you can resubscribe anytime during a class visit.</p>
+        <a class="pf-unsub-btn pf-unsub-btn--ghost" href="https://peakfitnessdieppe.ca/">Return to the site</a>
+      </div>
+    </article>
+  </main>
+
+  <script type="module" src="./unsubscribe.js"></script>
+</body>
+</html>

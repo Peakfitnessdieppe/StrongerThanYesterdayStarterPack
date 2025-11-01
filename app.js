@@ -13,6 +13,13 @@ let CURRENCY              = "CAD";
 let PRICE_CENTS           = 13999;
 const API_BASE = '/.netlify/functions';
 
+// Promo popup configuration
+const PROMO_WEBHOOK_PLACEHOLDER = `${API_BASE}/promo-hook`;
+let PROMO_WEBHOOK_URL = PROMO_WEBHOOK_PLACEHOLDER;
+const PROMO_SUBMITTED_KEY = 'pf_promo_submitted_v1';
+const PROMO_DISMISSED_SESSION_KEY = 'pf_promo_dismissed_session_v1';
+const PROMO_MOBILE_QUERY = '(max-width: 720px)';
+
 let squarePayments = null;
 let squareCard = null;
 let configLoaded = false;
@@ -157,6 +164,18 @@ let squareCardAttached = false;
 const dialogRegistry = new WeakMap();
 let dialogFocusReturn = null;
 
+// --- Promo helpers ---
+function isValidEmail(value = '') {
+  return /^[\w.!#$%&'*+/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)+$/.test((value || '').trim().toLowerCase());
+}
+
+function setLocalStorage(key, value) {
+  try { localStorage.setItem(key, value); } catch (_) {}
+}
+function getLocalStorage(key) {
+  try { return localStorage.getItem(key); } catch (_) { return null; }
+}
+
 function handleDialogKeydown(event, dialog, closeFn) {
   if (event.key === "Escape") {
     event.preventDefault();
@@ -202,6 +221,99 @@ function hideDialog(dialog) {
     if (dialogFocusReturn && typeof dialogFocusReturn.focus === "function") dialogFocusReturn.focus();
     dialogFocusReturn = null;
   }
+}
+
+// --- Promo popup controls ---
+function showPromoOverlay() {
+  const ov = document.getElementById('promo-overlay');
+  if (ov) ov.hidden = false;
+  document.body.classList.add('promo-open');
+}
+
+function hidePromoOverlay() {
+  const ov = document.getElementById('promo-overlay');
+  if (ov) ov.hidden = true;
+  document.body.classList.remove('promo-open');
+}
+
+let promoShown = false;
+let promoObserver = null;
+let promoFocusReturn = null;
+const promoMediaQuery = (typeof window !== 'undefined' && typeof window.matchMedia === 'function')
+  ? window.matchMedia(PROMO_MOBILE_QUERY)
+  : null;
+
+function openPromoPopup() {
+  if (promoShown) return;
+  const popup = document.getElementById('promo-popup');
+  if (!popup) return;
+  promoShown = true;
+  promoFocusReturn = document.activeElement;
+  showPromoOverlay();
+  popup.hidden = false;
+  const nodes = focusables(popup);
+  if (nodes[0]) nodes[0].focus();
+  popup.addEventListener('keydown', (event) => handleDialogKeydown(event, popup, () => closePromoPopup({ dismissed: true })));
+}
+
+function isPromoSuccessVisible() {
+  return promoSuccess && !promoSuccess.hidden;
+}
+
+function closePromoPopup({ dismissed = false, submitted = false } = {}) {
+  const popup = document.getElementById('promo-popup');
+  if (!popup) return;
+  popup.hidden = true;
+  hidePromoOverlay();
+  if (promoFocusReturn && typeof promoFocusReturn.focus === 'function') {
+    try { promoFocusReturn.focus(); } catch (_) {}
+    promoFocusReturn = null;
+  }
+  if (dismissed) {
+    try { sessionStorage.setItem(PROMO_DISMISSED_SESSION_KEY, '1'); } catch (_) {}
+  }
+  if (submitted) setLocalStorage(PROMO_SUBMITTED_KEY, '1');
+}
+
+function shouldShowPromo() {
+  const popup = document.getElementById('promo-popup');
+  if (!popup) return false;
+  if (getLocalStorage(PROMO_SUBMITTED_KEY)) return false;
+  try { if (sessionStorage.getItem(PROMO_DISMISSED_SESSION_KEY)) return false; } catch (_) {}
+  return true;
+}
+
+function handlePromoIntersect(entries) {
+  if (!shouldShowPromo()) return;
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      if (promoObserver) { promoObserver.disconnect(); promoObserver = null; }
+      openPromoPopup();
+    }
+  });
+}
+
+function setupPromoObserver() {
+  if (!shouldShowPromo()) return;
+  const triggerDesktop = document.getElementById('promo-trigger-desktop');
+  const triggerMobile = document.getElementById('promo-trigger-mobile');
+  if (!triggerDesktop && !triggerMobile) return;
+  if (promoObserver) return;
+  const target = (promoMediaQuery && promoMediaQuery.matches) ? triggerMobile : triggerDesktop;
+  if (!target) return;
+  const opts = { root: null, threshold: 0.4 };
+  promoObserver = new IntersectionObserver(handlePromoIntersect, opts);
+  promoObserver.observe(target);
+}
+
+function teardownPromoObserver() {
+  if (promoObserver) { promoObserver.disconnect(); promoObserver = null; }
+}
+
+function handlePromoResize() {
+  if (!promoMediaQuery) return;
+  teardownPromoObserver();
+  if (!promoShown) setupPromoObserver();
 }
 
 function showCardError(message = "") {
@@ -582,7 +694,8 @@ const copy = {
         bonuses: [
           "1 Personal Training Onboarding (60 min) — perfect your form & create your plan",
           "2 Buddy Class Passes — bring a friend for motivation",
-          "2 InBody scans — one at onboarding, another at Day 30"
+          "2 InBody scans — one at onboarding, another at Day 30",
+          "Nutrition Toolkit — Meal Guide, 27 macro recipes, 22p Calorie Guide + cheat sheet, 46p Eat Well Anywhere Guide."
         ],
         dealBubble: "",
         dealCTA: ""
@@ -698,7 +811,8 @@ const copy = {
         bonuses: [
           "1 Personal Training Onboarding (60 min) — perfect your form & create your plan",
           "2 Buddy Class Passes — bring a friend for motivation",
-          "2 InBody scans — one at onboarding, another at Day 30"
+          "2 InBody scans — one at onboarding, another at Day 30",
+          "Nutrition Toolkit — Meal Guide, 27 macro recipes, 22p Calorie Guide + cheat sheet, 46p Eat Well Anywhere Guide."
         ],
         dealBubble: "",
         dealCTA: ""
@@ -950,53 +1064,71 @@ const copy = {
     women: {
       meta: { offerName: "Starter Stronger Than Yesterday", heroImg: "assets/hero-women-stronger2.png" },
       hero: {
-        headline: "Arrêtez de recommencer.",
-        subhead: "Un départ coaché de 30 jours qui remplace l’improvisation par structure, accompagnement et un plan adapté — pour enfin rester constante.",
+        headline: "<span class=\"hero-line-one\">Deviens <span class=\"hero-highlight\">plus en forme</span>, <span class=\"hero-highlight\">plus forte</span></span><br>et plus <span class=\"hero-highlight\">confiante</span><br><span class=\"hero-line-three\">En seulement <span class=\"hero-highlight\">60</span> minutes</span>",
+        subhead: "Inscris-toi aujourd’hui à des cours coachés dès le jour 1.\nSens-toi plus forte dès la quatrième semaine.\nGarantie de remboursement 100 %.",
         includes: [
-          "Intégration 1‑à‑1 + plan personnalisé",
-          "Séances encadrées adaptées à votre horaire",
-          "Suivi hebdo, récupération et nutrition simplifiées"
+          "Séance d’accueil 1:1 pour partir confiante",
+          "Cours coachés Glutes & Abs, Musculation et yoga de récupération",
+          "2 laissez-passer Buddy — amène une amie pour la motivation"
         ],
-        primaryCTA: "Commencer mon reset 30 jours",
-        secondaryCTA: "Discuter avec Rick"
+        primaryCTA: "<span class=\"hero-cta-line hero-cta-line--primary\">Commencer aujourd’hui</span><span class=\"hero-cta-line hero-cta-line--secondary\">Deviens plus forte qu’hier</span>",
+        secondaryCTA: "Jaser avec Rick"
       },
       problemFit: {
-        title: "Pourquoi la plupart des entraînements ne durent pas :",
+        title: "Pourquoi la plupart des entraînements ne collent pas !",
         tiles: [
-          "Réunions qui s'étirent, soupers improvisés, navettes pour les enfants → entraînement annulé.",
-          "Aucun plan au gym → on erre entre les appareils, on perd son temps.",
-          "La vie devient chargée → la motivation baisse → encore un mois sans résultats.",
-          "On veut se sentir forte, mais on ne sait pas par où commencer."
+          "Les rencontres s’étirent, un souper de dernière minute, taxi pour les kids → l’entraînement saute.",
+          "Pas de plan au gym → on erre entre les machines pis on perd notre heure.",
+          "La vie roule vite → la motivation descend → un autre mois sans progrès.",
+          "Tu veux te sentir forte, mais tu ne sais pas trop par où commencer."
         ],
-        conclusion: "Ce n'est pas que vous ne vous en souciez pas. C'est que vous n'avez pas de plan d'entraînement clair et encadré qui s'adapte à votre vie bien remplie."
+        conclusion: "Le café part la journée. Le coaching garde l’élan. Prends les deux."
+      },
+      riskfreeSecondary: {
+        title: "Essaie-le complètement sans risque !",
+        lead: "Notre promesse pour toi. Si après…",
+        list: [
+          "Avoir complété ta séance d’accueil personnalisée",
+          "Avoir assisté à 10 cours en 30 jours",
+          "Avoir pris 5 minutes pour jasette de sortie avec Rick"
+        ],
+        guarantee: "👉 …t’es pas 100 % satisfaite, on te rembourse chaque sou. Pas de tactiques plates. Pas de culpabilité. Juste des résultats — ou ton argent revient.",
+        quote: "→ « On est tellement certaines que tu vas aimer ça qu’on prend tout le risque pour toi. »",
+        primaryCTA: "Essaie-nous sans risque",
+        secondaryCTA: "Jaser avec Rick",
+        media: {
+          mobileVideo: "assets/Sophie-Rogan.mp4"
+        }
       },
       valueSplit: {
         coreTitle: "Offre principale",
         coreValue: "Valeur de 407,94 $",
         core: [
-          "Accès illimité à 40+ cours coachés/semaine",
+          "Accès illimité à 40+ cours coachés par semaine",
           "7 formats — Glutes & Abs, Musculation, Bootcamp, Yoga et plus encore",
-          "Sessions de 60 minutes bien dosées — échauffement, force, finisher, c’est fait",
-          "Zéro encombrement — de l’espace pour bouger, équipement toujours prêt",
-          "Accès Kid Zone — amène les enfants, finis les excuses. Wi-Fi gratuit inclus."
+          "Séances de 60 minutes bien structurées — warm-up, force, finisher, c’est réglé",
+          "Aucun encombrement — de l’espace pour bouger, équipement prêt quand t’arrives",
+          "Zone Kid — amène les enfants, finis les excuses. Wi-Fi gratuit."
         ],
-        bonusTitle: "Bonus (inclus)",
+        bonusTitle: "Bonus (inclus gratuits)",
         bonuses: [
-          "1 séance d’onboarding privée (60 min) — perfectionne ta forme et bâtis ton plan",
+          "1 séance d’onboarding privée (60 min) — ajuste ta technique et bâtis ton plan",
           "2 laissez-passer Buddy — amène une amie pour la motivation",
-          "2 analyses InBody — une à l’onboarding, une au jour 30"
+          "2 analyses InBody — une à l’accueil, une au jour 30",
+          "Nutrition Toolkit — Guide repas, 27 recettes macro, guide calories 22 p + aide-mémoire, guide Manger bien partout 46 p."
         ],
         dealBubble: "",
         dealCTA: ""
       },
       guarantee: {
-        title: "Essayez sans risque",
+        title: "Essaie-nous complètement sans risque",
         bullets: [
-          "Remboursement complet si vous annulez dans les 30 jours.",
-          "Gardez votre plan même en annulant.",
-          "Équipe supportive, aucun jugement." ],
-        promise: "Présentez-vous, appuyez-vous sur nos coachs, et vous vous sentirez plus forte et plus confiante en 30 jours.",
-        quote: "",
+          "Annule n’importe quand dans les 30 premiers jours pour un remboursement complet.",
+          "L’équipe t’accueille où tu es, sans jugement.",
+          "Fais au moins 10 cours dans les 30 jours pour rester admissible."
+        ],
+        promise: "Présente-toi, appuie-toi sur nos coachs et, en 30 jours, tu te sens plus forte et plus confiante.",
+        quote: "« On gère la structure, tu amènes l’effort. »",
         media: {
           type: "video",
           sources: {
@@ -1004,11 +1136,11 @@ const copy = {
             mobile: "assets/monic-oct-promo.mp4"
           },
           poster: "assets/monic-oct-promo-poster.jpg",
-          alt: "Monic présente la garantie sans risque"
+          alt: "Monic qui explique la garantie Peak Fitness"
         }
       },
       testimonials: {
-        title: "Ce que disent nos membres",
+        title: "Ce que les membres racontent",
         video: {
           mobile: "assets/Testimonial-With-Subs-compressed.mp4",
           desktop: "assets/Testimonial-Desktop-compressed.mp4"
@@ -1016,33 +1148,33 @@ const copy = {
         items: []
       },
       timeline: {
-        title: "Vos 12 premières semaines chez Peak Fitness",
+        title: "Tes 12 premières semaines chez Peak Fitness",
         rows: [
-          { title: "Jour 1 (Séance d’accueil + InBody)", text: "Évaluation rapide pour vérifier confort, mobilité et signaux rouges — vous arrivez en classe préparée. InBody fournit un point de départ clair. Le coach propose un mix simple (ex. Musculation, Glutes & Abs, Yoga récupération) adapté à votre semaine." },
-          { title: "Jours 2–3", text: "Deux premiers cours guidés de 60 minutes. Consignes claires, amplitudes sécuritaires, rythme encadré — fini l’improvisation. Courbatures normales; le coach donne une recette express de récupération (marche + mobilité + protéine + sommeil). Vous essayez un laissez-passer Buddy pour la motivation et le plaisir." },
-          { title: "Jours 4–7", text: "Vous trouvez vos plages horaires « maison » et bloquez l’heure sans culpabilité. L’énergie devient plus stable; le sommeil s’améliore; les courbatures restent gérables." },
-          { title: "Semaine 2", text: "Les patrons fondamentaux s’ancrent (hinge, squat, push, pull, carry). Vous choisissez mieux le bon niveau à chaque station." },
-          { title: "Semaine 3", text: "Vous circulez dans la salle sans trop réfléchir. Le coach suggère une petite charge ou un tempo différent; l’effort est exigeant mais maîtrisé." },
-          { title: "Semaine 4", text: "Les matins roulent mieux; les jeans glissent un peu plus facilement. La famille remarque que vous êtes plus calme et présente après les cours." },
-          { title: "Semaine 6", text: "La taille s’affine; les raideurs diminuent. Vous soulevez légèrement plus lourd ou tenez plus longtemps les intervalles — sans stress articulaire." },
-          { title: "Semaine 8", text: "Les vêtements tombent mieux aux hanches et aux épaules; les fessiers se dessinent. Les compliments fusent au dépôt des enfants et au travail. La confiance monte." },
-          { title: "Semaine 10", text: "Ce qui ressemblait à une « longue journée » devient gérable. Vous soulevez plus qu’en semaine 1 et terminez avec de l’énergie en réserve." },
-          { title: "Semaine 12", text: "La routine fait partie de votre semaine plutôt que d’un débat. Vous connaissez les coachs, les consignes et les variantes qui conviennent à votre corps — Stronger Than Yesterday devient votre nouvelle norme." }
+          { title: "Jour 1 (Séance d’accueil + InBody)", text: "Mini bilan de mouvements pour voir comment tu te sens, la mobilité et les zones sensibles — tu arrives prête en classe. InBody te donne un point de départ clair. Le coach te propose un mix simple (p. ex. Musculation, Glutes & Abs, Yoga récup) qui fitte dans ta semaine." },
+          { title: "Jours 2–3", text: "Deux premiers cours guidés de 60 minutes. Cues clairs, amplitudes sécuritaires, rythme coaché — fini l’impro. Les courbatures sont normales; le coach te donne sa recette récup (marche + mobilité + protéine + sommeil). Tu profites d’un laissez-passer Buddy pour la motivation." },
+          { title: "Jours 4–7", text: "Tu bloques tes plages horaires “maison” sans culpabilité. L’énergie se stabilise, le sommeil s’améliore, les courbatures restent gérables." },
+          { title: "Semaine 2", text: "Les patrons de base collent (hinge, squat, push, pull, carry). Tu choisis mieux ton niveau à chaque station." },
+          { title: "Semaine 3", text: "Tu circules dans la salle sans suranalyser. Le coach suggère une petite charge ou un tempo différent; l’effort est challengeant mais contrôlé." },
+          { title: "Semaine 4", text: "Les matins roulent mieux; les jeans glissent un brin plus facile. La famille remarque que t’es plus calme et présente après les cours." },
+          { title: "Semaine 6", text: "La taille s’affine; les raideurs lâchent prise. Tu lèves un peu plus lourd ou tu tiens plus longtemps les intervalles — sans drame articulaire." },
+          { title: "Semaine 8", text: "Les vêtements tombent mieux aux hanches et aux épaules; les fessiers se dessinent. Les compliments partent à l’école et au bureau. Confiance en hausse." },
+          { title: "Semaine 10", text: "Ce qui était une “longue journée” devient faisable. Tu lèves plus qu’en semaine 1 et tu finis avec de l’énergie en réserve." },
+          { title: "Semaine 12", text: "La routine fait partie de ta semaine au lieu d’un débat. Tu connais les coachs, les cues et les variantes qui fittent pour ton corps — Stronger Than Yesterday devient ton nouveau normal." }
         ],
         media: {
           src: "assets/timeline-womens.png",
-          alt: "Femme célébrant ses progrès à la semaine 12 chez Peak Fitness"
+          alt: "Membre qui célèbre ses progrès à la semaine 12 chez Peak Fitness"
         }
       },
       faq: {
-        title: "Questions fréquentes",
+        title: "Questions posées souvent",
         items: [
-          { q: "Je ne me suis pas entraînée depuis des années. Est-ce que je vais pouvoir suivre?", a: "Absolument. Votre séance d’intégration de 60 minutes vous place exactement à votre niveau. Vous ne vous sentirez jamais perdue ni laissée derrière." },
-          { q: "Combien de fois par semaine devrais-je venir?", a: "La fréquence idéale est de 3× par semaine, mais vous avez accès illimité à nos 40+ cours — venez aussi souvent que vous le voulez." },
-          { q: "Que se passe-t-il si je dois annuler?", a: "Après votre Starter Pack de 30 jours, c’est au mois. Annulez quand vous le voulez. Aucun contrat, aucun drame." },
-          { q: "Puis-je amener une amie?", a: "Oui. Informez-vous d’un laissez-passer lors de l’intégration." },
-          { q: "Quand vais-je réellement voir des résultats?", a: "Boost d’énergie et sommeil plus profond en 14 jours. Changements visibles (vêtements qui tombent mieux) dès la semaine 6. Amis et collègues demandent “qu’est-ce que tu fais de différent?” à la semaine 8." },
-          { q: "Où êtes-vous situés?", a: "Nous sommes situés au 688 rue Babin, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Besoin d’itinéraire?</a>" }
+          { q: "Ça fait des années que je ne me suis pas entraînée. Est-ce que je vais suivre?", a: "Oui. Ta séance d’intégration de 60 minutes t’amène exactement à ton niveau. Jamais perdue, jamais laissée derrière." },
+          { q: "Combien de fois par semaine devrais-je venir?", a: "L’idéal c’est 3 fois semaine, mais t’as accès illimité à nos 40+ cours — viens aussi souvent que tu veux." },
+          { q: "Qu’est-ce qui arrive si je dois annuler?", a: "Après ton Starter de 30 jours, c’est du mois à mois. Tu annules quand tu veux, sans contrat ni chicane." },
+          { q: "Puis-je amener une amie?", a: "Oui ! On te remet un laissez-passer Buddy pendant l’intégration." },
+          { q: "Quand est-ce que je vais voir des résultats pour vrai?", a: "Boost d’énergie et meilleur sommeil en 14 jours. À la semaine 6, tes vêtements tombent mieux. À la semaine 8, le monde te demande ce que tu fais de différent." },
+          { q: "Où êtes-vous situés?", a: "On est au 688 rue Babin, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Besoin d’itinéraire?</a>" }
         ]
       }
     },
@@ -1395,6 +1527,21 @@ function renderLists(dict) {
   
   if (problemConclusion && dict.problemFit?.conclusion) {
     problemConclusion.textContent = dict.problemFit.conclusion;
+    const existingCaption = problemConclusion.querySelector('.problem-quote-rick-caption');
+    if (existingCaption) existingCaption.remove();
+    if (state.audience === 'women') {
+      const cap = document.createElement('span');
+      cap.className = 'problem-quote-rick-caption';
+      const name = document.createElement('span');
+      name.className = 'problem-quote-rick-name';
+      name.textContent = 'Rick Leger';
+      const title = document.createElement('span');
+      title.className = 'problem-quote-rick-title';
+      title.textContent = 'Peak Fitness Owner';
+      cap.appendChild(name);
+      cap.appendChild(title);
+      problemConclusion.appendChild(cap);
+    }
   }
 
   const coreList = $('#core-offer-list');
@@ -1531,16 +1678,11 @@ function renderLists(dict) {
   if (faq) {
     faq.innerHTML = '';
     (dict.faq?.items || []).forEach(({ q, a }, idx) => {
-      const controlId = `faq-${idx}`;
       const item = document.createElement('div');
       item.className = 'faq-item';
       item.innerHTML = `
-        <h3 class="h4">
-          <button class="btn btn-ghost" aria-expanded="false" aria-controls="${controlId}" id="${controlId}-btn">${q}</button>
-        </h3>
-        <div id="${controlId}" class="faq-panel" role="region" aria-labelledby="${controlId}-btn" hidden>
-          <p class="muted">${a}</p>
-        </div>
+        <h3 class="faq-question">${q}</h3>
+        <p class="faq-answer">${a}</p>
       `;
       faq.appendChild(item);
     });
@@ -1661,12 +1803,81 @@ function teardownRiskfreeObserver() {
   }
 }
 
+function setupGuaranteeObserver() {
+  if (!guaranteeVideoSection || !guaranteeVideoWrap || !guaranteeVideoEl) return;
+  if (guaranteeObserver) return;
+
+  const playVideo = () => {
+    if (guaranteeVideoEl.paused) {
+      guaranteeVideoEl.muted = true;
+      guaranteeVideoEl.setAttribute('muted', '');
+      guaranteeVideoEl.play().then(() => {
+        guaranteeVideoEl.muted = false;
+        guaranteeVideoEl.removeAttribute('muted');
+        guaranteeVideoEl.volume = 1;
+      }).catch(() => {
+        guaranteeVideoEl.muted = true;
+      });
+    }
+  };
+
+  const pauseVideo = () => {
+    if (!guaranteeVideoEl.paused) {
+      guaranteeVideoEl.pause();
+    }
+  };
+
+  const handleIntersect = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        playVideo();
+      } else {
+        pauseVideo();
+      }
+    });
+  };
+
+  guaranteeVideoEl.autoplay = false;
+  guaranteeVideoEl.removeAttribute('autoplay');
+  guaranteeVideoEl.muted = true;
+  guaranteeVideoEl.setAttribute('muted', '');
+  guaranteeVideoEl.playsInline = true;
+  guaranteeVideoEl.setAttribute('playsinline', '');
+  guaranteeVideoEl.volume = 1;
+  pauseVideo();
+
+  if (typeof IntersectionObserver === 'function') {
+    guaranteeObserver = new IntersectionObserver(handleIntersect, { threshold: 0.35, rootMargin: '0px 0px -5%' });
+    guaranteeObserver.observe(guaranteeVideoWrap);
+  } else {
+    playVideo();
+  }
+}
+
+function teardownGuaranteeObserver() {
+  if (guaranteeObserver) {
+    guaranteeObserver.disconnect();
+    guaranteeObserver = null;
+  }
+  if (guaranteeVideoEl) {
+    guaranteeVideoEl.pause?.();
+  }
+}
+
 function setupGuaranteeMobileObserver() {
   if (!guaranteeMobileVideoSection || !guaranteeMobileVideoEl) return;
   if (guaranteeMobileObserver) return;
 
   const playVideo = () => {
-    guaranteeMobileVideoEl.play().catch(() => {});
+    guaranteeMobileVideoEl.muted = true;
+    guaranteeMobileVideoEl.setAttribute('muted', '');
+    guaranteeMobileVideoEl.play().then(() => {
+      guaranteeMobileVideoEl.muted = false;
+      guaranteeMobileVideoEl.removeAttribute('muted');
+      guaranteeMobileVideoEl.volume = 1;
+    }).catch(() => {
+      guaranteeMobileVideoEl.muted = true;
+    });
   };
 
   const pauseVideo = () => {
@@ -1689,9 +1900,11 @@ function setupGuaranteeMobileObserver() {
   guaranteeMobileVideoEl.setAttribute('muted', '');
   guaranteeMobileVideoEl.playsInline = true;
   guaranteeMobileVideoEl.setAttribute('playsinline', '');
+  guaranteeMobileVideoEl.volume = 1;
+  pauseVideo();
 
   if (typeof IntersectionObserver === 'function') {
-    guaranteeMobileObserver = new IntersectionObserver(handleIntersect, { threshold: 0.5 });
+    guaranteeMobileObserver = new IntersectionObserver(handleIntersect, { threshold: 0.35, rootMargin: '0px 0px -5%' });
     guaranteeMobileObserver.observe(guaranteeMobileVideoSection);
   } else {
     playVideo();
@@ -1731,6 +1944,8 @@ function updateMedia(dict) {
     while (videoEl.firstChild) videoEl.removeChild(videoEl.firstChild);
     const desktopSrc = sources.desktop || guaranteeMedia?.src;
     const mobileSrc = sources.mobile || desktopSrc;
+    videoEl.preload = 'auto';
+    videoEl.setAttribute('preload', 'auto');
     if (mobileSrc) {
       const sourceMobile = document.createElement('source');
       sourceMobile.src = mobileSrc;
@@ -1760,12 +1975,14 @@ function updateMedia(dict) {
         guaranteeVideo.hidden = false;
         guaranteeVideo.poster = guaranteeMedia.poster || '';
         guaranteeVideo.setAttribute('aria-label', guaranteeAlt || alt);
-        guaranteeVideo.autoplay = true;
-        guaranteeVideo.muted = true;
-        guaranteeVideo.setAttribute('muted', '');
-        guaranteeVideo.setAttribute('autoplay', '');
+        guaranteeVideo.autoplay = false;
+        guaranteeVideo.removeAttribute('autoplay');
+        guaranteeVideo.muted = false;
+        guaranteeVideo.removeAttribute('muted');
         setVideoSources(guaranteeVideo, guaranteeMedia.sources);
-        guaranteeVideo.play?.().catch(() => {});
+        guaranteeVideo.volume = 1;
+        guaranteeVideo.pause?.();
+        setupGuaranteeObserver();
       }
     } else if (guaranteeSrc) {
       guaranteeSection.style.setProperty('--guarantee-image', `url("${guaranteeSrc}")`);
@@ -1783,6 +2000,7 @@ function updateMedia(dict) {
         guaranteeVideo.removeAttribute('muted');
         while (guaranteeVideo.firstChild) guaranteeVideo.removeChild(guaranteeVideo.firstChild);
       }
+      teardownGuaranteeObserver();
     } else {
       guaranteeSection.style.removeProperty('--guarantee-image');
       if (guaranteeWrap) guaranteeWrap.hidden = true;
@@ -1799,6 +2017,7 @@ function updateMedia(dict) {
         guaranteeVideo.removeAttribute('muted');
         while (guaranteeVideo.firstChild) guaranteeVideo.removeChild(guaranteeVideo.firstChild);
       }
+      teardownGuaranteeObserver();
     }
   }
 
@@ -1932,8 +2151,12 @@ let testimonialObserver = null;
 const riskfreeVideoSection = $('#riskfree-secondary');
 const riskfreeVideoWrap = $('#riskfree-secondary-video');
 const riskfreeVideoEl = $('#riskfree-secondary-video-el');
+const guaranteeVideoSection = $('#guarantee');
+const guaranteeVideoWrap = $('#guarantee-media-area');
+const guaranteeVideoEl = $('#guarantee-media-video');
 const guaranteeMobileVideoSection = $('#guarantee-mobile-video');
 const guaranteeMobileVideoEl = $('#guarantee-mobile-video-el');
+let guaranteeObserver = null;
 let guaranteeMobileObserver = null;
 let riskfreeObserver = null;
 
@@ -2047,6 +2270,86 @@ function bindCalendly() {
   $$('[data-cta="calendly"]').forEach((node) => node.addEventListener('click', openCalendly));
 }
 
+// --- Promo popup binding & submit ---
+function submitPromoForm(event) {
+  event?.preventDefault();
+  const emailInput = document.getElementById('promo-email');
+  const errorNode = document.getElementById('promo-error');
+  const submitBtn = document.getElementById('promo-submit');
+  const form = document.getElementById('promo-form');
+  const success = document.getElementById('promo-success');
+  if (!emailInput) return;
+  const email = (emailInput.value || '').trim();
+  if (!isValidEmail(email)) {
+    if (errorNode) {
+      errorNode.textContent = state.lang === 'fr' ? 'Entre une adresse courriel valide.' : 'Enter a valid email address.';
+      errorNode.hidden = false;
+    }
+    emailInput.focus();
+    return;
+  }
+  if (errorNode) errorNode.hidden = true;
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = state.lang === 'fr' ? 'Envoi…' : 'Sending…'; }
+  const atlanticTimestamp = new Date().toLocaleString('sv-SE', {
+    timeZone: 'America/Halifax',
+    hour12: false
+  }).replace(' ', 'T');
+
+  const payload = {
+    email,
+    locale: state.lang,
+    audience: state.audience,
+    utm: state.utm,
+    timestamp: `${atlanticTimestamp}-03:00`,
+    offer: 'stronger_than_yesterday_recipes',
+    source: 'recipe_promo_popup'
+  };
+  const url = PROMO_WEBHOOK_URL;
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then((res) => {
+    if (!res.ok) throw new Error('promo webhook failed');
+    setLocalStorage(PROMO_SUBMITTED_KEY, '1');
+    if (form) form.hidden = true;
+    if (success) success.hidden = false;
+  }).catch((err) => {
+    console.error('promo submit error', err);
+    if (errorNode) {
+      errorNode.textContent = state.lang === 'fr' ? 'Oups! Réessaie dans un instant.' : 'Something went wrong. Please try again in a moment.';
+      errorNode.hidden = false;
+    }
+  }).finally(() => {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = state.lang === 'fr' ? 'Envoyer les recettes' : 'Send the recipes'; }
+  });
+}
+
+function bindPromoPopup() {
+  const overlay = document.getElementById('promo-overlay');
+  const popup = document.getElementById('promo-popup');
+  const closeBtn = document.getElementById('promo-close');
+  const form = document.getElementById('promo-form');
+  if (!popup) return;
+  if (overlay) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        const successVisible = isPromoSuccessVisible();
+        closePromoPopup({ dismissed: !successVisible, submitted: successVisible });
+      }
+    });
+  }
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      const successVisible = isPromoSuccessVisible();
+      closePromoPopup({ dismissed: !successVisible, submitted: successVisible });
+    });
+  }
+  if (form) form.addEventListener('submit', submitPromoForm);
+  if (promoMediaQuery) promoMediaQuery.addEventListener('change', handlePromoResize);
+  setupPromoObserver();
+}
+
 function bindLangToggle() {
   const langEN = $('#lang-en');
   const langFR = $('#lang-fr');
@@ -2063,6 +2366,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindLangToggle();
   bindModal();
   bindCalendly();
+  bindPromoPopup();
   updateUI();
   resetCheckoutForm();
 

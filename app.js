@@ -257,7 +257,8 @@ function openPromoPopup() {
 }
 
 function isPromoSuccessVisible() {
-  return promoSuccess && !promoSuccess.hidden;
+  const successNode = document.getElementById('promo-success');
+  return Boolean(successNode && successNode.hidden === false);
 }
 
 function closePromoPopup({ dismissed = false, submitted = false } = {}) {

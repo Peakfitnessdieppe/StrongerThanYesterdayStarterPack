@@ -24,7 +24,9 @@ const jsonResponse = (status, payload, extraHeaders = {}) => new Response(
 );
 
 async function notifyZapier(eventName, payload) {
-  const webhook = process.env.ZAPIER_WEBHOOK_URL;
+  const webhook =
+    process.env.ZAPIER_SQUARE_PURCHASE_WEBHOOK_URL ||
+    process.env.ZAPIER_WEBHOOK_URL;
   if (!webhook) return;
 
   try {
@@ -156,7 +158,7 @@ export default async function handler(eventOrRequest) {
         currency: DEFAULT_CURRENCY
       },
       autocomplete: true,
-      note: 'Peak Fitness Starter Pack',
+      note: 'Stronger Than Yesterday Starter',
       buyerEmailAddress: buyerEmail || undefined,
       customerDetails: {
         emailAddress: buyerEmail || undefined,
@@ -164,12 +166,75 @@ export default async function handler(eventOrRequest) {
       }
     };
 
-    const response = await createPaymentFn(paymentRequest);
-    const payment = response.result?.payment;
+    const squareBaseUrl = (process.env.SQUARE_ENVIRONMENT || '').toLowerCase() === 'sandbox'
+      ? 'https://connect.squareupsandbox.com'
+      : 'https://connect.squareup.com';
+
+    const restPayload = {
+      idempotency_key: idempotencyKey,
+      source_id: sourceId,
+      location_id: locationId,
+      amount_money: {
+        amount: Number(paymentRequest.amountMoney.amount),
+        currency: paymentRequest.amountMoney.currency
+      },
+      autocomplete: true,
+      note: paymentRequest.note,
+      buyer_email_address: paymentRequest.buyerEmailAddress,
+      customer_details: {
+        email_address: paymentRequest.customerDetails?.emailAddress,
+        phone_number: paymentRequest.customerDetails?.phoneNumber
+      }
+    };
+
+    const squareResponse = await fetch(`${squareBaseUrl}/v2/payments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.SQUARE_ACCESS_TOKEN}`,
+        'Square-Version': process.env.SQUARE_API_VERSION || '2024-01-18'
+      },
+      body: JSON.stringify(restPayload)
+    });
+
+    const squareJson = await squareResponse.json().catch(() => null);
+
+    if (!squareResponse.ok) {
+      console.error('Square REST error', squareJson);
+      const detail = squareJson?.errors?.[0]?.detail || 'Square payment failed';
+      throw new Error(detail);
+    }
+
+    const payment = squareJson?.payment;
 
     if (!payment) {
       throw new Error('Square payment response missing payment object');
     }
+
+    let receiptUrl = payment.receipt_url || payment.receiptUrl || null;
+    if (
+      receiptUrl &&
+      (process.env.SQUARE_ENVIRONMENT || '').toLowerCase() === 'sandbox' &&
+      receiptUrl.includes('squareup.com/receipt')
+    ) {
+      receiptUrl = receiptUrl.replace('squareup.com/receipt', 'squareupsandbox.com/receipt');
+    }
+
+    const amountMoney = payment.amountMoney || {};
+    const rawAmount = amountMoney.amount ?? priceCents;
+    const amountCentsValue = typeof rawAmount === 'bigint' ? Number(rawAmount) : Number(rawAmount);
+    const amountCentsSafe = Number.isFinite(amountCentsValue) ? amountCentsValue : priceCents;
+    const currency = amountMoney.currency || DEFAULT_CURRENCY;
+
+    let formattedAmount = `${(amountCentsSafe / 100).toFixed(2)} ${currency}`;
+    try {
+      formattedAmount = new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency
+      }).format(amountCentsSafe / 100);
+    } catch (_) {}
+
+    const purchasedAtIso = payment.createdAt || payment.created_at || new Date().toISOString();
 
     const supabase = getSupabaseClient();
     const db = supabase.schema('peak');
@@ -188,13 +253,48 @@ export default async function handler(eventOrRequest) {
         .insert({ id: leadId, email: buyerEmail, audience, language, utm, consent_email: true });
     }
 
+    let orderNumber;
+
+    const { data: existingPayment, error: existingPaymentError } = await db
+      .from('payments')
+      .select('id, order_number')
+      .eq('square_payment_id', payment.id)
+      .maybeSingle();
+
+    if (existingPaymentError && existingPaymentError.code !== 'PGRST116') {
+      throw existingPaymentError;
+    }
+
+    if (existingPayment?.order_number) {
+      orderNumber = existingPayment.order_number;
+    } else {
+      const { data: latestOrders, error: latestOrderError } = await db
+        .from('payments')
+        .select('order_number')
+        .not('order_number', 'is', null)
+        .order('order_number', { ascending: false })
+        .limit(1);
+
+      if (latestOrderError && latestOrderError.code !== 'PGRST116') {
+        throw latestOrderError;
+      }
+
+      const latestValue = latestOrders?.[0]?.order_number;
+      const numericPart = latestValue ? Number.parseInt(String(latestValue).replace(/^START-/i, ''), 10) : 0;
+      const nextValue = Number.isFinite(numericPart) ? numericPart + 1 : 1;
+      orderNumber = `START-${String(nextValue).padStart(3, '0')}`;
+    }
+
     const paymentRecord = {
       lead_id: leadId,
       square_payment_id: payment.id,
+      order_number: orderNumber,
       status: payment.status,
-      amount_cents: payment.amountMoney?.amount ?? priceCents,
-      currency: payment.amountMoney?.currency ?? DEFAULT_CURRENCY,
-      receipt_url: payment.receiptUrl || null,
+      amount_cents: amountCentsSafe,
+      currency,
+      receipt_url: receiptUrl,
+      purchased_at: purchasedAtIso,
+      buyer_phone: buyerPhone || payment.customerDetails?.phoneNumber || null,
       raw: payment
     };
 
@@ -206,17 +306,29 @@ export default async function handler(eventOrRequest) {
 
     await notifyZapier('payment.created', {
       leadId,
+      buyerEmail: buyerEmail || payment.customerDetails?.emailAddress || null,
+      buyerName,
+      buyerPhone: paymentRecord.buyer_phone,
       squarePaymentId: payment.id,
+      orderNumber,
       status: payment.status,
-      amountCents: paymentRecord.amount_cents,
-      currency: paymentRecord.currency,
+      amountCents: amountCentsSafe,
+      formattedAmount,
+      currency,
+      purchasedAt: purchasedAtIso,
       receiptUrl: paymentRecord.receipt_url
     });
 
     return jsonResponse(200, {
       paymentId: payment.id,
       status: payment.status,
-      receiptUrl: payment.receiptUrl || null
+      amountCents: amountCentsSafe,
+      formattedAmount,
+      currency,
+      purchasedAt: purchasedAtIso,
+      orderNumber,
+      buyerPhone: paymentRecord.buyer_phone,
+      receiptUrl: receiptUrl
     });
   } catch (error) {
     console.error('create-payment error', error);

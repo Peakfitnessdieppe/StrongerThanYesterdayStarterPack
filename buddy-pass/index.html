@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Redeem Your Buddy Pass</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{background:linear-gradient(180deg,var(--ink-0),var(--ink-2));min-height:100vh;display:flex;flex-direction:column;}
+      body.locked{overflow:hidden;}
+      main{flex:1;display:grid;gap:48px;background:radial-gradient(circle at top left,rgba(90,214,122,.16),transparent 40%),linear-gradient(180deg,rgba(12,15,14,.96),rgba(9,12,10,.92));}
+      .hero{padding:88px 0 36px;text-align:center;position:relative;overflow:hidden;}
+      .hero::after{content:"";position:absolute;inset:auto -25%;bottom:-380px;height:420px;background:radial-gradient(ellipse at center,rgba(90,214,122,.28),transparent 65%);filter:blur(80px);opacity:.45;pointer-events:none;}
+      .hero-inner{position:relative;z-index:1;display:grid;gap:18px;justify-items:center;}
+      .hero h1{margin:0;font-size:clamp(30px,5vw,44px);font-weight:820;letter-spacing:-.01em;}
+      .hero .toolkit-eyebrow{text-transform:uppercase;letter-spacing:.22em;font-weight:780;color:#9AE6AD;font-size:.88rem;}
+      .hero p{max-width:640px;margin:0 auto;color:rgba(214,240,225,.82);font-size:1rem;line-height:1.7;}
+      .container{max-width:860px;margin:0 auto;padding:0 24px;}
+      .card{background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:36px 40px;box-shadow:0 32px 70px rgba(0,0,0,.35);display:grid;gap:28px;position:relative;overflow:hidden;}
+      .card::before{content:"";position:absolute;inset:22px;width:auto;height:auto;border-radius:24px;border:1px solid rgba(90,214,122,.16);pointer-events:none;}
+      .card-content{position:relative;display:grid;gap:24px;}
+      .card-header{display:grid;gap:12px;text-align:center;}
+      .card-header h2{margin:0;font-size:1.6rem;font-weight:790;color:#F1FFF5;}
+      .card-header p{margin:0;color:rgba(201,235,212,.82);font-size:1rem;}
+      .pass-counter{display:inline-flex;align-items:center;gap:10px;margin:0 auto;padding:10px 18px;border-radius:999px;background:rgba(90,214,122,.16);border:1px solid rgba(90,214,122,.32);color:#DFF5E4;font-weight:720;font-size:.95rem;box-shadow:0 10px 24px rgba(0,0,0,.25);}
+      .pass-counter-value{display:flex;align-items:center;gap:6px;font-size:1rem;font-weight:780;color:#9BEAB5;}
+      .pass-counter-value strong{font-size:1.1rem;color:#F4FFF7;}
+      .counter-note{margin:0;color:rgba(173,214,188,.76);font-size:.9rem;}
+      form{position:relative;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+      label{font-weight:720;color:#CFF5DA;font-size:.95rem;letter-spacing:.01em;}
+      input{background:rgba(14,22,17,.92);border:1px solid rgba(90,214,122,.28);border-radius:16px;padding:13px 15px;color:#F6FFF7;font-size:1rem;transition:border .18s ease, box-shadow .18s ease;box-shadow:inset 0 0 0 0 rgba(90,214,122,.18);}
+      input:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.26);border-color:rgba(90,214,122,.62);}
+      input[readonly]{opacity:.85;cursor:not-allowed;border-style:dashed;}
+      .btn-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;grid-column:1/-1;}
+      .muted{color:rgba(169,208,182,.7);font-size:.92rem;}
+      #status{font-weight:720;}
+      .success{color:#9BEAB5;font-weight:720;}
+      .error{color:#FF9C8A;font-weight:720;}
+      .result{margin-top:6px;padding:20px 22px;border-radius:18px;background:rgba(18,30,22,.88);border:1px solid rgba(90,214,122,.24);display:none;gap:12px;}
+      .result.show{display:grid;}
+      .cta-link{justify-self:start;margin-top:4px;}
+      .cta-link.btn{font-size:1rem;font-weight:750;}
+      .cta-link.btn:hover{transform:translateY(-1px);}
+      .helper-list{margin:0;padding:0;display:grid;gap:10px;text-align:left;}
+      .helper-list li{list-style:none;color:rgba(203,236,212,.78);font-size:.95rem;display:flex;gap:10px;align-items:flex-start;}
+      .helper-dot{width:6px;height:6px;border-radius:50%;background:#5AD67A;margin-top:9px;flex-shrink:0;}
+      .footer-note{padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;}
+      .footer-note a{color:#9BEAB5;}
+      @media(max-width:600px){
+        .card{padding:28px 24px;border-radius:24px;}
+        .card::before{inset:18px;border-radius:20px;}
+      }
+      .access-overlay{position:fixed;inset:0;background:rgba(9,13,11,.92);backdrop-filter:blur(14px);display:grid;place-items:center;z-index:200;}
+      .access-card{background:rgba(14,22,17,.96);border:1px solid rgba(90,214,122,.32);border-radius:28px;padding:36px 32px;width:min(92vw,420px);box-shadow:0 40px 120px rgba(0,0,0,.45);display:grid;gap:18px;text-align:center;}
+      .access-card h2{margin:0;font-size:1.6rem;font-weight:820;color:#F4FFF6;}
+      .access-card p{margin:0;color:#C8EBD3;font-size:1rem;line-height:1.6;}
+      #access-form{display:grid;gap:14px;margin-top:8px;}
+      #access-form label{text-align:left;font-weight:700;color:#B8E7C8;font-size:.9rem;}
+      #overlay-order{background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.3);border-radius:16px;padding:14px 16px;font-size:1rem;color:#F4FFF6;}
+      #overlay-order:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      #access-error{color:#FF9C8A;font-weight:700;font-size:.9rem;}
+    </style>
+  </head>
+  <body>
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="toolkit-eyebrow">Stronger Than Yesterday</div>
+          <h1>Redeem Your Buddy Pass</h1>
+          <p>Each Starter Pack includes two invites. Confirm the order number and we’ll email your buddy the link to join you.</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="card">
+            <div class="card-content">
+              <div class="card-header">
+                <h2>Invite a training partner</h2>
+                <div class="pass-counter" id="pass-counter" hidden>
+                  <span>Buddy passes remaining</span>
+                  <span class="pass-counter-value"><strong id="pass-remaining">2</strong>/<span id="pass-total">2</span></span>
+                </div>
+                <p class="counter-note" id="counter-note">Invites refresh instantly after you send them.</p>
+              </div>
+
+              <form id="redeem-form">
+                <input type="hidden" id="buyerName" name="buyerName">
+                <label for="order">Purchaser Order Number</label>
+                <input id="order" name="order" placeholder="START-001" required>
+
+                <label for="buddyName">Buddy Name</label>
+                <input id="buddyName" name="buddyName" placeholder="First Last" required>
+
+                <label for="email">Buddy Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+                <div class="btn-row">
+                  <button class="btn btn-primary btn-large" type="submit">Send Buddy Pass</button>
+                  <span id="status" class="muted"></span>
+                </div>
+              </form>
+
+              <div id="result" class="result">
+                <div id="result-text" class="success"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+    </footer>
+
+    <div id="access-overlay" class="access-overlay" hidden>
+      <div class="access-card">
+        <h2>Redeem a Buddy Pass</h2>
+        <p>Enter the purchaser order number (e.g., START-001) to unlock your invites.</p>
+        <form id="access-form">
+          <label for="overlay-order">Order number</label>
+          <input id="overlay-order" name="order" type="text" inputmode="text" autocomplete="off" placeholder="START-001" required>
+          <button class="btn btn-primary btn-large" type="submit">Unlock Buddy Pass Manager</button>
+          <div id="access-error" hidden>Please enter a valid order number starting with START-</div>
+        </form>
+        <p class="muted" style="font-size:.85rem;">Can’t find it? Check the purchaser confirmation email or contact <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>.</p>
+      </div>
+    </div>
+
+    <script type="module">
+      const form = document.getElementById('redeem-form');
+      const statusEl = document.getElementById('status');
+      const result = document.getElementById('result');
+      const resultText = document.getElementById('result-text');
+      const params = new URLSearchParams(window.location.search);
+      const orderParam = (params.get('order') || '').trim().toUpperCase();
+      const buyerParam = params.get('buyer') || params.get('buyerName') || '';
+      const orderInput = document.getElementById('order');
+      const buyerInput = document.getElementById('buyerName');
+      const buddyNameInput = document.getElementById('buddyName');
+      const buddyEmailInput = document.getElementById('email');
+      const overlay = document.getElementById('access-overlay');
+      const overlayForm = document.getElementById('access-form');
+      const overlayOrderInput = document.getElementById('overlay-order');
+      const overlayError = document.getElementById('access-error');
+      const passCounter = document.getElementById('pass-counter');
+      const passRemainingEl = document.getElementById('pass-remaining');
+      const passTotalEl = document.getElementById('pass-total');
+      const counterNote = document.getElementById('counter-note');
+      let orderInitial = '';
+      let buyerInitial = '';
+
+      const ORDER_PATTERN = /^START-\d{3,}$/i;
+
+      async function loadBalanceGet(orderValue){
+        try{
+          const res = await fetch(`/.netlify/functions/redeem-buddy-pass?order=${encodeURIComponent(orderValue)}`);
+          const data = await res.json();
+          if(res.ok && typeof data.remaining === 'number'){
+            updateCounter(data.remaining, data.total ?? 2);
+            return data.remaining;
+          }
+          throw new Error(data.message || 'Unable to load pass balance');
+        }catch(error){
+          console.error('Balance fetch failed', error);
+          updateCounter(null, null, error.message);
+          return null;
+        }
+      }
+
+      function updateCounter(remaining, total = 2, errorMessage){
+        if(typeof remaining === 'number'){
+          passRemainingEl.textContent = remaining;
+          passTotalEl.textContent = total;
+          passCounter?.removeAttribute('hidden');
+          if(counterNote){
+            counterNote.textContent = remaining > 0
+              ? `You can still invite ${remaining} friend${remaining === 1 ? '' : 's'}.`
+              : 'All buddy passes have been used for this order.';
+          }
+        } else if(errorMessage){
+          passCounter?.removeAttribute('hidden');
+          passRemainingEl.textContent = '—';
+          passTotalEl.textContent = '2';
+          counterNote.textContent = errorMessage;
+        }
+      }
+
+      function unlockWithOrder(orderValue){
+        if(!ORDER_PATTERN.test(orderValue)) return false;
+        document.body.classList.remove('locked');
+        overlay?.setAttribute('hidden','');
+        orderInput.value = orderValue;
+        orderInput.readOnly = true;
+        orderInitial = orderValue;
+        loadBalanceGet(orderValue);
+        return true;
+      }
+
+      if (orderParam) {
+        if(!unlockWithOrder(orderParam)){
+          document.body.classList.add('locked');
+          overlay?.removeAttribute('hidden');
+        }
+      } else {
+        document.body.classList.add('locked');
+        overlay?.removeAttribute('hidden');
+      }
+      if (buyerParam) {
+        const decodedBuyer = decodeURIComponent(buyerParam).trim();
+        buyerInput.value = decodedBuyer;
+        document.querySelector('.card')?.setAttribute('data-buyer', decodedBuyer);
+        buyerInitial = decodedBuyer;
+      }
+
+      overlayForm?.addEventListener('submit',(event)=>{
+        event.preventDefault();
+        const value = (overlayOrderInput.value || '').trim().toUpperCase();
+        if(ORDER_PATTERN.test(value)){
+          overlayError?.setAttribute('hidden','');
+          overlayOrderInput.value = value;
+          unlockWithOrder(value);
+          const url = new URL(window.location.href);
+          url.searchParams.set('order', value);
+          window.history.replaceState({}, '', url.toString());
+        } else {
+          overlayError?.removeAttribute('hidden');
+        }
+      });
+
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        statusEl.textContent = 'Submitting…';
+        statusEl.className = 'muted';
+        result.classList.remove('show');
+        const payload = {
+          order: (orderInput.value||'').trim().toUpperCase(),
+          buddyName: (buddyNameInput.value||'').trim(),
+          buddyEmail: (buddyEmailInput.value||'').trim(),
+          buyerName: (buyerInput.value||'').trim()
+        };
+        try{
+          const res = await fetch('/.netlify/functions/redeem-buddy-pass',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if(!res.ok){
+            throw new Error(data.message||'Something went wrong');
+          }
+          statusEl.textContent = '';
+          const successCopy = data.message || `Buddy pass approved for ${buddyNameInput.value || 'your friend'}! We’ll email them everything they need.`;
+          resultText.textContent = successCopy;
+          result.classList.add('show');
+          form.reset();
+          if(typeof data.remaining === 'number'){
+            updateCounter(data.remaining, data.total ?? 2);
+          }
+          if (orderInitial) {
+            orderInput.value = orderInitial;
+            orderInput.readOnly = true;
+          }
+          if (buyerInitial) {
+            buyerInput.value = buyerInitial;
+          }
+        }catch(err){
+          statusEl.textContent = err.message;
+          statusEl.className = 'error';
+        }
+      });
+    </script>
+  </body>
+</html>

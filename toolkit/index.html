@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Stronger Than Yesterday Nutrition Toolkit</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{background:linear-gradient(180deg,var(--ink-0),var(--ink-1));min-height:100vh;display:flex;flex-direction:column;}
+      body.locked{overflow:hidden;}
+      .toolkit-hero{padding:80px 0 40px;position:relative;overflow:hidden;background:radial-gradient(circle at top left,rgba(90,214,122,.18),transparent 45%),linear-gradient(180deg,rgba(10,10,12,.92),rgba(10,10,12,.68));}
+      .toolkit-hero::after{content:"";position:absolute;inset:auto -20%;height:420px;bottom:-360px;background:radial-gradient(ellipse at center,rgba(90,214,122,.3),transparent 60%);filter:blur(70px);opacity:.45;pointer-events:none;}
+      .toolkit-hero-inner{position:relative;z-index:1;display:grid;gap:24px;justify-items:center;text-align:center;}
+      .toolkit-eyebrow{text-transform:uppercase;letter-spacing:.22em;font-weight:780;color:#9AE6AD;font-size:.9rem;}
+      .toolkit-subhead{color:var(--muted);max-width:640px;font-size:1.05rem;line-height:1.6;margin:0 auto;}
+      .toolkit-actions{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:16px;}
+      .order-chip{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:rgba(90,214,122,.16);border:1px solid rgba(90,214,122,.36);color:#DFF5E4;font-weight:720;font-size:.95rem;box-shadow:0 10px 30px rgba(0,0,0,.28);margin-top:12px;}
+      .rick-card{display:grid;justify-items:center;gap:10px;padding:18px 24px;border-radius:26px;background:rgba(13,20,16,.74);box-shadow:0 18px 38px rgba(0,0,0,.32);min-width:180px;}
+      .rick-photo{position:relative;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 20%,rgba(148,255,195,.12),rgba(15,20,16,0.4));}
+      .rick-photo::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:2px solid rgba(255,255,255,.08);opacity:.65;}
+      .rick-photo::after{content:"";position:absolute;inset:-28px;border-radius:50%;border:1px solid rgba(255,255,255,.04);filter:blur(0.2px);}
+      .rick-photo img{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0 12px 24px rgba(0,0,0,.45);}
+      .rick-meta{display:grid;gap:4px;text-align:center;}
+      .rick-name{font-weight:760;font-size:1.02rem;color:#F0FFF5;}
+      .rick-title{font-size:.88rem;font-weight:600;color:rgba(200,237,210,.82);letter-spacing:.02em;}
+      .toolkit-section{padding:56px 0;background:linear-gradient(180deg,var(--ink-1),var(--ink-2));}
+      .toolkit-section.alt{background:linear-gradient(180deg,#102015,#0F1811);}
+      .section-heading{text-align:center;margin-bottom:32px;}
+      .section-heading h2{margin:0;font-size:clamp(26px,5vw,40px);font-weight:820;}
+      .section-heading p{margin:12px auto 0;color:var(--muted);max-width:620px;}
+      .resource-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+      .resource-card{background:rgba(13,19,16,.92);border:1px solid rgba(90,214,122,.22);border-radius:20px;padding:22px 24px;box-shadow:var(--shadow-sm);display:grid;gap:12px;text-align:left;}
+      .resource-card img{border-radius:16px;border:1px solid rgba(90,214,122,.18);width:100%;height:auto;object-fit:cover;box-shadow:0 14px 30px rgba(0,0,0,.24);}
+      .resource-card h3{margin:0;font-size:1.15rem;color:var(--text);font-weight:760;}
+      .resource-card p{margin:0;color:rgba(230,246,235,.82);font-size:.95rem;line-height:1.5;}
+      .resource-card .btn{justify-content:flex-start;}
+      .calculator{background:rgba(13,19,16,.92);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:24px;display:grid;gap:20px;box-shadow:var(--shadow-sm);}
+      .calculator form{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+      .calculator label{font-weight:700;color:#CFF5DA;font-size:.92rem;}
+      .calculator input,.calculator select{background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.25);border-radius:14px;padding:12px 14px;color:var(--text);font-size:1rem;}
+      .calculator input:focus,.calculator select:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.28);border-color:rgba(90,214,122,.65);}
+      .calculator-results{background:rgba(15,26,19,.78);border:1px solid rgba(90,214,122,.28);border-radius:20px;padding:20px;display:grid;gap:18px;grid-template-columns:1fr;}
+      .calc-grid{display:grid;gap:10px;}
+      .calc-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#F4FFF6;font-size:.98rem;}
+      .calc-row span:last-child{font-weight:760;color:#9BEAB5;}
+      #validation-error{color:#FF9C8A;font-weight:700;}
+      #macroChart{width:100%;height:100%;}
+      .macro-chart{position:relative;width:min(260px,100%);height:260px;margin:0 auto;}
+      .macro-chart canvas{position:absolute;inset:0;width:100% !important;height:100% !important;}
+      .macro-chart-labels{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;pointer-events:none;padding:0 8px;}
+      .macro-chip{display:flex;align-items:center;gap:8px;background:rgba(8,15,11,.78);border:1px solid rgba(90,214,122,.24);border-radius:16px;padding:6px 12px;min-width:0;}
+      .macro-chip-dot{width:10px;height:10px;border-radius:50%;}
+      .macro-chip-text{display:grid;gap:2px;text-align:left;}
+      .macro-chip-label{font-size:.78rem;font-weight:680;color:#C9F3D9;letter-spacing:.02em;text-transform:uppercase;}
+      .macro-chip-value{font-size:.92rem;font-weight:760;color:#E8FAF0;}
+      .macro-chip--protein .macro-chip-dot{background:#5AD67A;}
+      .macro-chip--carbs .macro-chip-dot{background:#FFCE56;}
+      .macro-chip--fat .macro-chip-dot{background:#FF6384;}
+      .footer-note{padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;}
+      @media(min-width:860px){
+        .calculator-results{grid-template-columns:minmax(0,1fr) minmax(0,280px);align-items:center;}
+        .macro-chart{height:240px;width:240px;}
+      }
+      @media(min-width:900px){
+        .toolkit-actions{display:inline-grid;grid-auto-flow:column;grid-auto-columns:max-content;align-items:center;gap:8px;}
+        .rick-card{min-width:180px;margin-left:0;}
+      }
+      .calculator-results p{grid-column:1 / -1;}
+      .access-overlay{position:fixed;inset:0;background:rgba(9,13,11,.92);backdrop-filter:blur(12px);display:grid;place-items:center;z-index:200;}
+      .access-card{background:rgba(14,22,17,.96);border:1px solid rgba(90,214,122,.32);border-radius:28px;padding:36px 32px;max-width:420px;width:min(90vw,420px);box-shadow:0 40px 120px rgba(0,0,0,.45);display:grid;gap:18px;text-align:center;}
+      .access-card h2{margin:0;font-size:1.65rem;font-weight:820;color:#F4FFF6;}
+      .access-card p{margin:0;color:#C8EBD3;font-size:1rem;line-height:1.55;}
+      #access-form{display:grid;gap:14px;margin-top:8px;}
+      #access-form label{text-align:left;font-weight:700;color:#B8E7C8;font-size:.9rem;}
+      #order-input{background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.3);border-radius:16px;padding:14px 16px;font-size:1rem;color:#F4FFF6;}
+      #order-input:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      #access-error{color:#FF9C8A;font-weight:700;font-size:.9rem;}
+      @media(max-width:640px){
+        .toolkit-hero{padding:64px 0 36px;}
+        .calculator{padding:24px;}
+        .calculator form{grid-template-columns:1fr;}
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  </head>
+  <body data-audience="women" data-lang="en">
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="toolkit-hero">
+        <div class="container toolkit-hero-inner">
+          <div class="toolkit-eyebrow">Stronger Than Yesterday</div>
+          <h1 class="h1" style="text-align:center;">Nutrition Toolkit</h1>
+          <p class="toolkit-subhead"><span id="personal-greeting">Everything you need to stay fueled, recover faster, and keep momentum between coached sessions.</span> Bookmark this page so the playbooks, recipes, and calculator are always within reach.</p>
+          <div class="order-chip" id="order-chip" hidden>
+            Order <span id="order-number"></span>
+          </div>
+          <div class="toolkit-actions">
+            <a class="btn hero-cta-secondary" href="https://calendly.com/peakfitnessdieppe-info/30min" target="_blank" rel="noopener">
+              <span class="hero-cta-secondary-text">
+                <span class="hero-cta-secondary-line hero-cta-secondary-line--primary">Chat with Rick</span>
+                <span class="hero-cta-secondary-line">Schedule your Intake Call</span>
+              </span>
+            </a>
+            <div class="rick-card">
+              <div class="rick-photo">
+                <img src="../assets/rick.png" alt="Rick Leger" loading="lazy" width="150" height="150">
+              </div>
+              <div class="rick-meta">
+                <span class="rick-name">Rick Leger</span>
+                <span class="rick-title">Peak Fitness Owner</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolkit-section">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Core Nutrition Guides</h2>
+            <p>Start with these fundamentals to dial in fueling and recovery around your training schedule.</p>
+          </div>
+          <div class="resource-grid">
+            <article class="resource-card">
+              <h3>Balanced Meal Guide</h3>
+              <img src="../assets/Balanced%20Meal%20Guide%20Cover.png" alt="Balanced Meal Guide cover" width="320" height="180" loading="lazy">
+              <p>Build plates that hit protein, carbs, and fats in ratios that keep energy steady throughout your day.</p>
+              <a class="btn btn-primary" href="../assets/Balanced%20Meal%20Guide.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </article>
+            <article class="resource-card">
+              <h3>Eat Well Anywhere</h3>
+              <img src="../assets/Guide%20to%20Eating%20Out%20Cover.png" alt="Guide to Eating Out cover" width="320" height="180" loading="lazy">
+              <p>Restaurant swaps, travel-day options, and stress-proof decisions so momentum survives busy weeks.</p>
+              <a class="btn btn-primary" href="../assets/Eat%20Well%20Anywhere-Guide%20to%20Eating%20Out.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </article>
+            <article class="resource-card">
+              <h3>Calorie Intake Blueprint</h3>
+              <img src="../assets/Calorie%20Guide%20Cover.png" alt="Calorie Guide cover" width="320" height="180" loading="lazy">
+              <p>Step-by-step instructions to set calories for leaning out, maintaining, or adding muscle mass.</p>
+              <a class="btn btn-primary" href="../assets/How%20to%20Calculate%20Your%20Calorie%20Intake%20.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolkit-section alt">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Recipe Bundles</h2>
+            <p>Pick meals that match your macro targets while keeping prep quick and flavour high.</p>
+          </div>
+          <div class="resource-grid">
+            <article class="resource-card">
+              <h3>Carb-Based Recipes</h3>
+              <img src="../assets/Carbs%20Cover.png" alt="Carb-based recipes cover" width="320" height="180" loading="lazy">
+              <p>High-energy meals perfect for class days, endurance work, or double sessions.</p>
+              <a class="btn btn-primary" href="../assets/Carb%20Based%20Recipes.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </article>
+            <article class="resource-card">
+              <h3>Protein Recipes</h3>
+              <img src="../assets/protein-cover.png" alt="Protein recipes cover" width="320" height="180" loading="lazy">
+              <p>Lean, satisfying options to help you crush your daily protein goals without guesswork.</p>
+              <a class="btn btn-primary" href="../assets/Protein%20Recipes.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </article>
+            <article class="resource-card">
+              <h3>Fat-Based Recipes</h3>
+              <img src="../assets/fat-recipes.png" alt="Fat-based recipes cover" width="320" height="180" loading="lazy">
+              <p>Healthy fats that stabilize hunger, support hormones, and keep flavour on point.</p>
+              <a class="btn btn-primary" href="../assets/Fat%20Based%20Recipes.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolkit-section">
+        <div class="container" style="display:grid;gap:32px;">
+          <div class="section-heading">
+            <h2>Calorie &amp; Macro Calculator</h2>
+            <p>Update targets anytime training volume, weight goals, or seasons change. Adjust the fields to see updated macros instantly.</p>
+          </div>
+          <div class="calculator" id="calculator">
+            <div id="validation-error"></div>
+            <form id="calculator-form">
+              <label for="weight">Bodyweight (lbs)</label>
+              <input type="number" id="weight" name="weight" min="0" required>
+
+              <label for="height">Height (e.g., 5.7 for 5’8”)</label>
+              <input type="number" id="height" name="height" step="0.01" min="0" required>
+
+              <label for="age">Age</label>
+              <input type="number" id="age" name="age" min="0" required>
+
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" required>
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+
+              <label for="activity">Activity Level</label>
+              <select id="activity" name="activity" required>
+                <option value="">Select</option>
+                <option value="1.2">Sedentary · Little to no exercise</option>
+                <option value="1.375">Light · 1-2 sessions/week</option>
+                <option value="1.55">Moderate · 3-4 sessions/week</option>
+                <option value="1.725">High · 4-5 intense sessions/week</option>
+                <option value="1.9">Elite · Double sessions or physical job</option>
+              </select>
+
+              <label for="goal">Goal</label>
+              <select id="goal" name="goal" required>
+                <option value="">Select</option>
+                <option value="lose">Lean out</option>
+                <option value="maintain">Maintain</option>
+                <option value="gain">Add muscle</option>
+              </select>
+
+              <label for="bodyFat">Body Fat % (optional)</label>
+              <input type="number" id="bodyFat" name="bodyFat" step="0.1" min="0" max="60" placeholder="e.g., 22">
+            </form>
+            <div class="calculator-results" id="results">
+              <div class="calc-grid">
+                <div class="calc-row"><span>Basal Metabolic Rate (BMR)</span><span><span id="bmr">0</span> kcal</span></div>
+                <div class="calc-row"><span>Resting Metabolic Rate (RMR)</span><span><span id="rmr">0</span> kcal</span></div>
+                <div class="calc-row"><span>Total Daily Energy Expenditure (TDEE)</span><span><span id="tdee">0</span> kcal</span></div>
+                <div class="calc-row"><span>Protein</span><span><span id="protein">0</span> g · <span id="proteinKcal">0</span> kcal</span></div>
+                <div class="calc-row"><span>Fat</span><span><span id="fat">0</span> g · <span id="fatKcal">0</span> kcal</span></div>
+                <div class="calc-row"><span>Carbs</span><span><span id="carbs">0</span> g · <span id="carbsKcal">0</span> kcal</span></div>
+                <div class="calc-row"><span>Water Intake</span><span><span id="waterIntake">0</span> mL/day</span></div>
+                <div class="calc-row"><span>Fiber Intake</span><span><span id="fiberIntake">0</span> g/day</span></div>
+              </div>
+              <div class="macro-chart" id="macro-chart">
+                <canvas id="macroChart" width="280" height="280"></canvas>
+                <div class="macro-chart-labels" id="macro-chart-labels">
+                  <div class="macro-chip macro-chip--protein">
+                    <span class="macro-chip-dot" aria-hidden="true"></span>
+                    <div class="macro-chip-text">
+                      <span class="macro-chip-label">Protein</span>
+                      <span class="macro-chip-value" id="macro-protein-label">0 g · 0 kcal</span>
+                    </div>
+                  </div>
+                  <div class="macro-chip macro-chip--carbs">
+                    <span class="macro-chip-dot" aria-hidden="true"></span>
+                    <div class="macro-chip-text">
+                      <span class="macro-chip-label">Carbs</span>
+                      <span class="macro-chip-value" id="macro-carbs-label">0 g · 0 kcal</span>
+                    </div>
+                  </div>
+                  <div class="macro-chip macro-chip--fat">
+                    <span class="macro-chip-dot" aria-hidden="true"></span>
+                    <div class="macro-chip-text">
+                      <span class="macro-chip-label">Fat</span>
+                      <span class="macro-chip-value" id="macro-fat-label">0 g · 0 kcal</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="muted" style="text-align:center;">Bring these numbers to your next coaching check-in—we’ll fine-tune them together.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+    </footer>
+
+    <div id="access-overlay" class="access-overlay" hidden>
+      <div class="access-card">
+        <h2>Nutrition Toolkit Access</h2>
+        <p>Enter your Starter Pack order number (e.g., START-001) to unlock your personalized toolkit.</p>
+        <form id="access-form">
+          <label for="order-input">Order number</label>
+          <input id="order-input" name="order" type="text" inputmode="text" autocomplete="off" required placeholder="START-001">
+          <button class="btn btn-primary btn-large" type="submit">Unlock Toolkit</button>
+          <div id="access-error" hidden>Please enter a valid order number starting with START-</div>
+        </form>
+        <p class="muted" style="font-size:.85rem;">Can’t find it? Check your receipt email or contact <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      let macroChart;
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const orderParamRaw = params.get('order');
+      const storedOrder = sessionStorage.getItem('pf_toolkit_order');
+      const personalGreeting = document.getElementById('personal-greeting');
+      const orderChip = document.getElementById('order-chip');
+      const orderNumberEl = document.getElementById('order-number');
+      const overlay = document.getElementById('access-overlay');
+      const overlayForm = document.getElementById('access-form');
+      const overlayError = document.getElementById('access-error');
+
+      const formatOrder = (value) => value ? value.trim().toUpperCase() : '';
+      const orderPattern = /^START-\d{3,}$/i;
+
+      function personalize(orderValue) {
+        if (orderValue && orderNumberEl) {
+          orderNumberEl.textContent = orderValue;
+          orderChip?.removeAttribute('hidden');
+        }
+        if (nameParam && personalGreeting) {
+          const decodedName = decodeURIComponent(nameParam).trim();
+          if (decodedName) {
+            personalGreeting.innerHTML = `Hey <strong>${decodedName}</strong> — here’s everything you unlocked to stay on track.`;
+          }
+        }
+      }
+
+      function unlock(orderValue) {
+        sessionStorage.setItem('pf_toolkit_order', orderValue);
+        overlay?.setAttribute('hidden', '');
+        document.body.classList.remove('locked');
+        personalize(orderValue);
+      }
+
+      const initialOrderValue = formatOrder(orderParamRaw || storedOrder || '');
+      if (initialOrderValue && orderPattern.test(initialOrderValue)) {
+        unlock(initialOrderValue);
+      } else {
+        document.body.classList.add('locked');
+        overlay?.removeAttribute('hidden');
+      }
+
+      overlayForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const value = formatOrder(document.getElementById('order-input')?.value || '');
+        if (orderPattern.test(value)) {
+          overlayError?.setAttribute('hidden', '');
+          unlock(value);
+        } else {
+          overlayError?.removeAttribute('hidden');
+        }
+      });
+
+      function calculate(){
+        const validation = document.getElementById('validation-error');
+        if(validation) validation.textContent = '';
+        const weightLbs = parseFloat(document.getElementById('weight').value);
+        const heightFeet = parseFloat(document.getElementById('height').value);
+        const age = parseInt(document.getElementById('age').value, 10);
+        const gender = document.getElementById('gender').value;
+        const activityMultiplier = parseFloat(document.getElementById('activity').value);
+        const goal = document.getElementById('goal').value;
+        const bodyFat = parseFloat(document.getElementById('bodyFat').value);
+        if(!Number.isFinite(weightLbs) || !Number.isFinite(heightFeet) || !Number.isFinite(age) || !gender || !Number.isFinite(activityMultiplier) || !goal){
+          if(validation) validation.textContent = 'Please complete all required fields to calculate your targets.';
+          return;
+        }
+        const weightKg = weightLbs * 0.453592;
+        const heightCm = heightFeet * 30.48;
+        const bodyFatFraction = Number.isFinite(bodyFat) ? bodyFat / 100 : null;
+        let rmr;
+        if(bodyFatFraction){
+          const leanMassKg = weightKg * (1 - bodyFatFraction);
+          rmr = 370 + (21.6 * leanMassKg);
+        } else {
+          rmr = gender === 'male'
+            ? (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5
+            : (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
+        }
+        let bmr;
+        if(gender === 'male'){
+          bmr = 88.362 + (13.397 * weightKg) + (4.799 * heightCm) - (5.677 * age);
+        } else {
+          bmr = 447.593 + (9.247 * weightKg) + (3.098 * heightCm) - (4.330 * age);
+        }
+        const tdee = rmr * activityMultiplier;
+        let proteinPct, carbPct, fatPct;
+        if(goal === 'lose'){
+          proteinPct = 0.35; carbPct = 0.40; fatPct = 0.25;
+        } else if(goal === 'maintain'){
+          proteinPct = 0.30; carbPct = 0.45; fatPct = 0.25;
+        } else {
+          proteinPct = 0.35; carbPct = 0.45; fatPct = 0.20;
+        }
+        const proteinKcal = tdee * proteinPct;
+        const fatKcal = tdee * fatPct;
+        const carbsKcal = tdee * carbPct;
+        const protein = proteinKcal / 4;
+        const fat = fatKcal / 9;
+        const carbs = carbsKcal / 4;
+        const waterIntake = (weightKg * 30) + (activityMultiplier > 1.2 ? 355 : 0);
+        const fiberIntake = (tdee / 1000) * 14;
+        document.getElementById('rmr').textContent = Math.round(rmr);
+        document.getElementById('bmr').textContent = Math.round(bmr);
+        document.getElementById('tdee').textContent = Math.round(tdee);
+        document.getElementById('protein').textContent = Math.round(protein);
+        document.getElementById('fat').textContent = Math.round(fat);
+        document.getElementById('carbs').textContent = Math.round(carbs);
+        document.getElementById('proteinKcal').textContent = Math.round(proteinKcal);
+        document.getElementById('fatKcal').textContent = Math.round(fatKcal);
+        document.getElementById('carbsKcal').textContent = Math.round(carbsKcal);
+        document.getElementById('waterIntake').textContent = Math.round(waterIntake);
+        document.getElementById('fiberIntake').textContent = Math.round(fiberIntake);
+        const proteinLabel = document.getElementById('macro-protein-label');
+        const carbsLabel = document.getElementById('macro-carbs-label');
+        const fatLabel = document.getElementById('macro-fat-label');
+        if (proteinLabel) {
+          proteinLabel.textContent = `${Math.round(protein)} g · ${Math.round(proteinKcal)} kcal`;
+        }
+        if (carbsLabel) {
+          carbsLabel.textContent = `${Math.round(carbs)} g · ${Math.round(carbsKcal)} kcal`;
+        }
+        if (fatLabel) {
+          fatLabel.textContent = `${Math.round(fat)} g · ${Math.round(fatKcal)} kcal`;
+        }
+        document.getElementById('results').classList.add('show');
+        const macroData = [proteinKcal, carbsKcal, fatKcal];
+        if(macroChart){
+          macroChart.data.datasets[0].data = macroData;
+          macroChart.update();
+        } else {
+          const ctx = document.getElementById('macroChart').getContext('2d');
+          macroChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: ['Protein', 'Carbs', 'Fat'],
+              datasets: [{
+                data: macroData,
+                backgroundColor: ['#5AD67A', '#FFCE56', '#FF6384'],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+              },
+              layout: {
+                padding: 12
+              }
+            }
+          });
+        }
+      }
+      document.querySelectorAll('#calculator-form input, #calculator-form select').forEach((input)=>{
+        input.addEventListener('input', calculate);
+        input.addEventListener('change', calculate);
+      });
+    </script>
+  </body>
+</html>

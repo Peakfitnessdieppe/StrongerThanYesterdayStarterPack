@@ -56,6 +56,26 @@
   force = true
 
 [[redirects]]
+  from = "/toolkit"
+  to = "/toolkit/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/toolkit/*"
+  to = "/toolkit/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/buddy-pass"
+  to = "/buddy-pass/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/buddy-pass/*"
+  to = "/buddy-pass/index.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

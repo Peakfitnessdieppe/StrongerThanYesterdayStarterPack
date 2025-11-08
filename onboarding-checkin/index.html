@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://starter.peakfitnessdieppe.ca/onboarding-checkin">
+    <title>Onboarding Check-In (30 seconds)</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{min-height:100vh;background:linear-gradient(180deg,var(--ink-0),var(--ink-2));display:flex;flex-direction:column;}
+      .page-shell{flex:1;display:flex;flex-direction:column;padding:56px 0 72px;background:radial-gradient(circle at top left,rgba(90,214,122,.12),transparent 45%),linear-gradient(180deg,rgba(10,15,12,.96),rgba(9,13,11,.92));}
+      .form-container{width:min(760px,92vw);margin:0 auto;display:grid;gap:32px;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:36px 32px;box-shadow:0 28px 70px rgba(0,0,0,.45);}
+      .form-intro{display:grid;gap:18px;text-align:left;}
+      .form-intro h1{margin:0;font-size:clamp(30px,6vw,40px);font-weight:820;letter-spacing:-.01em;color:#F4FFF6;}
+      .form-intro p{margin:0;color:rgba(211,238,222,.86);font-size:1.02rem;line-height:1.7;}
+      form{display:grid;gap:28px;}
+      fieldset{margin:0;padding:0;border:0;display:grid;gap:16px;}
+      legend{font-weight:780;color:#E8FBEF;font-size:1.05rem;letter-spacing:.01em;}
+      .option-list{display:grid;gap:10px;}
+      .option{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:rgba(15,24,18,.88);border:1px solid rgba(90,214,122,.22);transition:border .2s ease,box-shadow .2s ease;}
+      .option input{appearance:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(90,214,122,.55);background:transparent;display:grid;place-items:center;position:relative;cursor:pointer;}
+      .option input:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.35);}
+      .option input:checked{border-color:#5AD67A;background:#5AD67A;}
+      .option label{flex:1;font-size:1rem;font-weight:650;color:#F2FFF6;cursor:pointer;display:flex;align-items:center;gap:10px;}
+      .option input::after{content:"";width:8px;height:8px;border-radius:50%;background:#0F1512;display:block;opacity:0;transition:opacity .2s ease;}
+      .option input:checked::after{opacity:1;}
+      textarea{min-height:140px;background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.25);border-radius:18px;padding:16px;color:#F6FFF7;font-size:1rem;line-height:1.6;resize:vertical;}
+      textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      .submit-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+      .btn-primary{font-size:1.05rem;padding:14px 24px;border-radius:18px;font-weight:780;}
+      .inline-error{color:#FF9C8A;font-weight:700;font-size:.92rem;display:block;}
+      .inline-error[hidden]{display:none;}
+      @media(max-width:640px){
+        .page-shell{padding:40px 0 60px;}
+        .form-container{padding:28px 22px;border-radius:24px;gap:24px;}
+        .option{align-items:flex-start;}
+        .option label{line-height:1.45;}
+      }
+    </style>
+  </head>
+  <body data-audience="women" data-lang="en">
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main id="main" class="page-shell">
+      <div class="form-container" role="region" aria-labelledby="checkin-heading">
+        <section class="form-intro">
+          <h1 id="checkin-heading">Onboarding Check-In (30 seconds)</h1>
+          <p>Quick pulse on your 1-on-1 so we can keep improving.</p>
+        </section>
+
+        <form name="onboarding-checkin" method="POST" action="/thank-you-onboarding" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="onboarding-checkin">
+          <p class="sr-only">
+            <label for="bot-field">Do not fill this out if you are human</label>
+            <input id="bot-field" name="bot-field" type="text">
+          </p>
+
+          <input type="hidden" id="checkin-email" name="email">
+          <input type="hidden" id="checkin-name" name="name">
+          <input type="hidden" id="checkin-mc" name="mc_id">
+          <input type="hidden" id="checkin-lang" name="lang">
+          <input type="hidden" id="checkin-source" name="source" value="starter_women_d0">
+          <input type="hidden" id="checkin-order" name="order">
+          <input type="hidden" id="checkin-submitted" name="submitted_at_local">
+
+          <fieldset>
+            <legend>How helpful was your 1-on-1 onboarding?<span aria-hidden="true"> *</span></legend>
+            <div class="inline-error" id="error-q1" hidden></div>
+            <div class="option-list">
+              <label class="option" for="q1-5">
+                <input type="radio" id="q1-5" name="q1_helpful" value="5 - Extremely helpful" required>
+                <span>5 - Extremely helpful</span>
+              </label>
+              <label class="option" for="q1-4">
+                <input type="radio" id="q1-4" name="q1_helpful" value="4 - Helpful" required>
+                <span>4 - Helpful</span>
+              </label>
+              <label class="option" for="q1-3">
+                <input type="radio" id="q1-3" name="q1_helpful" value="3 - Neutral" required>
+                <span>3 - Neutral</span>
+              </label>
+              <label class="option" for="q1-2">
+                <input type="radio" id="q1-2" name="q1_helpful" value="2 - Needs improvement" required>
+                <span>2 - Needs improvement</span>
+              </label>
+              <label class="option" for="q1-1">
+                <input type="radio" id="q1-1" name="q1_helpful" value="1 - Not helpful" required>
+                <span>1 - Not helpful</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>After that session, how ready do you feel for your first week at Peak?<span aria-hidden="true"> *</span></legend>
+            <div class="inline-error" id="error-q2" hidden></div>
+            <div class="option-list">
+              <label class="option" for="q2-5">
+                <input type="radio" id="q2-5" name="q2_ready" value="5 - Totally ready" required>
+                <span>5 - Totally ready</span>
+              </label>
+              <label class="option" for="q2-4">
+                <input type="radio" id="q2-4" name="q2_ready" value="4 - Mostly ready" required>
+                <span>4 - Mostly ready</span>
+              </label>
+              <label class="option" for="q2-3">
+                <input type="radio" id="q2-3" name="q2_ready" value="3 - Somewhat ready" required>
+                <span>3 - Somewhat ready</span>
+              </label>
+              <label class="option" for="q2-2">
+                <input type="radio" id="q2-2" name="q2_ready" value="2 - A bit unsure" required>
+                <span>2 - A bit unsure</span>
+              </label>
+              <label class="option" for="q2-1">
+                <input type="radio" id="q2-1" name="q2_ready" value="1 - Not ready yet" required>
+                <span>1 - Not ready yet</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>What could we do better in the 1-on-1 onboarding itself?<span aria-hidden="true"> *</span></legend>
+            <div class="inline-error" id="error-q3" hidden></div>
+            <div class="option-list">
+              <label class="option" for="q3-plan">
+                <input type="radio" id="q3-plan" name="q3_better" value="Clearer Week-1 plan" required>
+                <span>Clearer Week-1 plan</span>
+              </label>
+              <label class="option" for="q3-flow">
+                <input type="radio" id="q3-flow" name="q3_better" value="Explain class flow more clearly" required>
+                <span>Explain class flow more clearly</span>
+              </label>
+              <label class="option" for="q3-demos">
+                <input type="radio" id="q3-demos" name="q3_better" value="Clearer exercise demos/cues" required>
+                <span>Clearer exercise demos/cues</span>
+              </label>
+              <label class="option" for="q3-scaling">
+                <input type="radio" id="q3-scaling" name="q3_better" value="More time on scaling/modifications" required>
+                <span>More time on scaling/modifications</span>
+              </label>
+              <label class="option" for="q3-glofox">
+                <input type="radio" id="q3-glofox" name="q3_better" value="Step-by-step Glofox setup" required>
+                <span>Step-by-step Glofox setup</span>
+              </label>
+              <label class="option" for="q3-nothing">
+                <input type="radio" id="q3-nothing" name="q3_better" value="Nothing — it worked well" required>
+                <span>Nothing — it worked well</span>
+              </label>
+              <label class="option" for="q3-other">
+                <input type="radio" id="q3-other" name="q3_better" value="Other" required>
+                <span>Other</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label for="checkin-note">If you picked “Other” or want to add context, jot it here. (Optional)</label>
+          <textarea id="checkin-note" name="note" placeholder="Let us know anything else we should know."></textarea>
+
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary" data-analytics="onboarding-checkin-submit">Send to Rick</button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;">
+      <div class="container">
+        Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+      </div>
+    </footer>
+
+    <script>
+      const STORAGE_ORDER_KEY = 'pf_checkin_order';
+      const STORAGE_NAME_KEY = 'pf_checkin_name';
+
+      // Prefill hidden inputs from query params
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const assign = (id, value) => {
+          const node = document.getElementById(id);
+          if (node && value) node.value = value;
+        };
+        assign('checkin-email', params.get('email'));
+        assign('checkin-name', params.get('name'));
+        assign('checkin-mc', params.get('mc'));
+        assign('checkin-lang', params.get('lang'));
+        const source = params.get('source');
+        const sourceNode = document.getElementById('checkin-source');
+        if (sourceNode && source) sourceNode.value = source;
+        assign('checkin-order', params.get('order'));
+      })();
+
+      // Timestamp capture — local YYYY-MM-DD HH:mm:ss
+      function setLocalTimestamp() {
+        const tsNode = document.getElementById('checkin-submitted');
+        if (!tsNode) return;
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        const formatted = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        tsNode.value = formatted;
+      }
+      setLocalTimestamp();
+
+      // Basic validation message handling
+      (function() {
+        const form = document.forms['onboarding-checkin'];
+        if (!form) return;
+        const fieldsets = [
+          { name: 'q1_helpful', errorId: 'error-q1' },
+          { name: 'q2_ready', errorId: 'error-q2' },
+          { name: 'q3_better', errorId: 'error-q3' }
+        ];
+
+        const clearError = (id) => {
+          const node = document.getElementById(id);
+          if (node) {
+            node.hidden = true;
+            node.textContent = '';
+            node.removeAttribute('aria-live');
+          }
+        };
+
+        fieldsets.forEach(({ name, errorId }) => {
+          form.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
+            input.addEventListener('change', () => clearError(errorId));
+          });
+        });
+
+        form.addEventListener('submit', (event) => {
+          setLocalTimestamp();
+          let hasError = false;
+          fieldsets.forEach(({ name, errorId }) => {
+            const checked = form.querySelector(`input[name="${name}"]:checked`);
+            const errorNode = document.getElementById(errorId);
+            if (!checked && errorNode) {
+              errorNode.textContent = 'Required field. Choose an option before sending.';
+              errorNode.setAttribute('aria-live', 'polite');
+              errorNode.hidden = false;
+              hasError = true;
+            }
+          });
+
+          if (hasError) {
+            if (typeof form.reportValidity === 'function') {
+              form.reportValidity();
+            }
+            event.preventDefault();
+            return;
+          }
+
+          try {
+            const orderValue = document.getElementById('checkin-order')?.value?.trim();
+            const nameValue = document.getElementById('checkin-name')?.value?.trim();
+            if (orderValue) sessionStorage.setItem(STORAGE_ORDER_KEY, orderValue);
+            if (nameValue) sessionStorage.setItem(STORAGE_NAME_KEY, nameValue);
+          } catch (_) {
+            // sessionStorage might be unavailable; ignore
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

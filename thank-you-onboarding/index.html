@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://starter.peakfitnessdieppe.ca/thank-you-onboarding">
+    <title>Thanks for the check-in</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{min-height:100vh;background:linear-gradient(180deg,var(--ink-0),var(--ink-2));display:flex;flex-direction:column;}
+      .page-shell{flex:1;display:flex;flex-direction:column;padding:72px 0 96px;background:radial-gradient(circle at top left,rgba(90,214,122,.12),transparent 45%),linear-gradient(180deg,rgba(10,15,12,.96),rgba(9,13,11,.92));}
+      .thankyou-card{width:min(720px,92vw);margin:0 auto;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:32px;padding:44px 36px;box-shadow:0 32px 80px rgba(0,0,0,.45);display:grid;gap:28px;text-align:left;}
+      .thankyou-card h1{margin:0;font-size:clamp(32px,6vw,44px);font-weight:820;color:#F4FFF6;letter-spacing:-.01em;}
+      .thankyou-card p{margin:0;color:rgba(214,241,225,.86);font-size:1.06rem;line-height:1.7;}
+      .thankyou-actions{display:flex;flex-wrap:wrap;gap:16px;align-items:center;}
+      .btn-primary{font-size:1.05rem;padding:14px 26px;border-radius:18px;font-weight:780;}
+      @media(max-width:640px){
+        .page-shell{padding:56px 0 80px;}
+        .thankyou-card{padding:32px 24px;border-radius:28px;gap:22px;}
+      }
+    </style>
+  </head>
+  <body data-audience="women" data-lang="en">
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main id="main" class="page-shell">
+      <section class="thankyou-card" role="status" aria-live="polite">
+        <h1>Thanks for the check-in</h1>
+        <p>Your feedback goes straight to Rick and the coaching team so we can dial in the next onboarding sessions.</p>
+        <p>Keep leaning on your coach, bring any questions to class, and watch your strength climb week after week.</p>
+        <div class="thankyou-actions">
+          <a class="btn btn-primary" id="thankyou-classes-link" href="https://starter.peakfitnessdieppe.ca/classes" data-analytics="return-to-classes">Browse class schedule</a>
+          <a class="btn" id="thankyou-toolkit-link" href="https://starter.peakfitnessdieppe.ca/toolkit" data-analytics="visit-toolkit">Open the Nutrition Toolkit</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" style="padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;">
+      <div class="container">
+        Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+      </div>
+    </footer>
+
+    <script>
+      const STORAGE_ORDER_KEY = 'pf_checkin_order';
+      const STORAGE_NAME_KEY = 'pf_checkin_name';
+
+      (function personalizeThankYou(){
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const getValue = (key, storageKey) => {
+            const paramValue = params.get(key);
+            if (paramValue) return decodeURIComponent(paramValue);
+            return sessionStorage.getItem(storageKey) || '';
+          };
+
+          const orderValue = getValue('order', STORAGE_ORDER_KEY);
+          const nameValue = getValue('name', STORAGE_NAME_KEY);
+
+          const toolkitLink = document.getElementById('thankyou-toolkit-link');
+          if (toolkitLink && orderValue) {
+            const url = new URL('https://starter.peakfitnessdieppe.ca/toolkit');
+            url.searchParams.set('order', orderValue);
+            if (nameValue) url.searchParams.set('name', nameValue);
+            toolkitLink.href = url.toString();
+          }
+        } catch (_) {
+          // Ignore personalization errors
+        }
+      })();
+    </script>
+  </body>
+</html>

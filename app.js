@@ -344,7 +344,10 @@ function resetCheckoutForm() {
 function getPayLabel() {
   const locale = state.lang === "fr" ? "fr-CA" : "en-CA";
   const verb = state.lang === "fr" ? "Payer" : "Pay";
-  return `${verb} ${toMoney(PRICE_CENTS, CURRENCY, locale)}`;
+  const subtotalCents = PRICE_CENTS || 0;
+  const taxCents = Math.round(subtotalCents * getTaxRate());
+  const totalCents = subtotalCents + taxCents;
+  return `${verb} ${toMoney(totalCents, CURRENCY, locale)}`;
 }
 
 // --- Summary totals (NB HST 15%) ---
@@ -650,7 +653,8 @@ const copy = {
         includes: [
           "1-on-1 welcome session to kick off with confidence",
           "Coach-led Glutes & Abs, Muscle Building, and recovery yoga",
-          "2 Buddy Class Passes — bring a friend for motivation"
+          "2 Buddy Class Passes — bring a friend for motivation",
+          "$75 Foundational Stack from Shop Santé + 10% anytime discount"
         ],
         primaryCTA: "<span class=\"hero-cta-line hero-cta-line--primary\">Start Today</span><span class=\"hero-cta-line hero-cta-line--secondary\">Become Stronger Than Yesterday</span>",
         secondaryCTA: "Chat with Rick"

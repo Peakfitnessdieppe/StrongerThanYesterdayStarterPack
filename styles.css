@@ -1,6 +1,50 @@
 body[data-audience="women"][data-lang="en"] .guarantee-copy .muted,
 body[data-audience="women"][data-lang="fr"] .guarantee-copy .muted{max-width:34ch}
 
+/* Shop Santé hero section */
+.shop-sante-hero{--sante:#91D3AE;position:relative;background:linear-gradient(180deg,var(--ink-1),var(--ink-2));border:0;overflow:hidden}
+.shop-sante-hero::before,
+.shop-sante-hero::after{content:none}
+.shop-sante-hero-grid{display:grid;gap:22px;align-items:center;grid-template-columns:1fr;grid-template-areas:
+  "heading"
+  "media"
+  "subhead"
+  "copy";
+}
+.shop-sante-hero-heading-wrap{grid-area:heading;text-align:center}
+.shop-sante-hero-copy{grid-area:copy;display:grid;gap:14px}
+.shop-sante-hero-heading{margin:0;font-size:clamp(30px,5vw,52px);line-height:1.05;font-weight:860;letter-spacing:-0.015em;color:var(--sante)}
+.shop-sante-hero-heading-primary{color:#FFFFFF}
+.shop-sante-hero-subhead{grid-area:subhead;margin:-6px auto 0;color:rgba(226,255,240,.82);font-size:clamp(18px,2.2vw,22px);font-weight:700;letter-spacing:.015em;text-transform:uppercase;text-align:center}
+.shop-sante-hero-intro{margin:0;color:#E6FFF5;max-width:70ch}
+.shop-sante-hero-benefits{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:8px}
+.shop-sante-hero-benefits li{display:flex;gap:10px;align-items:flex-start;color:#E9FFF4}
+.shop-sante-hero-benefits li::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--sante);box-shadow:0 0 0 3px rgba(145,211,174,.18);margin-top:8px;flex:0 0 9px}
+.shop-sante-hero-note{margin:4px 0 0;color:#BEEAD3;font-size:.92rem}
+.shop-sante-hero-media{grid-area:media;position:relative;display:flex;justify-content:center;align-items:center;margin:0 auto;max-width:clamp(220px,32vw,420px);width:100%}
+.shop-sante-hero-media::before{content:none}
+.shop-sante-hero-media img{position:relative;z-index:1;display:block;width:100%;height:auto;filter:drop-shadow(0 28px 64px rgba(0,0,0,.55))}
+
+@media(min-width:960px){
+  .shop-sante-hero{background:linear-gradient(180deg,rgba(16,32,21,.92),rgba(15,24,17,.92)),url("assets/sante2.png");background-size:cover;background-position:center;background-repeat:no-repeat}
+  .shop-sante-hero-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr);grid-template-areas:
+    "heading media"
+    "subhead media"
+    "copy media";
+    gap:28px;
+    text-align:left;
+  }
+  .shop-sante-hero-heading-wrap{text-align:left}
+  .shop-sante-hero-subhead{margin:0;color:rgba(226,255,240,.78);text-align:left}
+  .shop-sante-hero-copy{gap:16px}
+  .shop-sante-hero-media{margin-left:auto;max-width:clamp(280px,28vw,480px)}
+}
+
+@media(max-width:860px){
+  .shop-sante-hero-media{max-width:280px}
+  .shop-sante-hero-heading{font-size:clamp(26px,7vw,36px)}
+}
+
 .value-section{display:grid;gap:32px;justify-items:center;text-align:center}
 .value-section .problem-quote{text-align:left}
 .value-section .value-grid{width:100%}
@@ -108,12 +152,14 @@ body[data-audience="women"] .lang-toggle{display:none}
 .media-frame::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 600px at 90% 10%,rgba(63,174,82,.2),transparent)}
 
 .tile-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.problem-quote{background:linear-gradient(180deg,#0F2716,#0B1C11);border-radius:28px;border:1px solid rgba(140,242,162,.24);padding:26px;font-size:1.35rem;line-height:1.55;font-weight:780;color:#F2FFF5;display:grid;gap:16px}
+.problem-quote{background:linear-gradient(180deg,#0F2716,#0B1C11);border-radius:28px;border:1px solid rgba(140,242,162,.24);padding:26px;font-size:1.35rem;line-height:1.55;font-weight:780;color:#F2FFF5;display:grid;gap:16px;margin-bottom:28px}
 @media(min-width:740px){.tile-grid{grid-template-columns:repeat(2,1fr)}}
 
-.value-grid{display:grid;gap:16px;align-items:start;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.value-grid{display:grid;gap:16px;align-items:start;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:32px}
 .value-grid .deal-bubble{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .deal-bubble .bubble{background:rgba(63,174,82,.2);border:1px solid rgba(63,174,82,.5);color:#DFF5E4;padding:8px 12px;border-radius:999px;font-weight:800}
+
+.shop-sante-copy{margin:0;color:#C9F1DD;line-height:1.55}
 
 .guarantee-grid{position:relative;display:grid;gap:32px;align-items:center;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
 .guarantee-grid::after{content:"";position:absolute;inset:-12% -4% -12% 0;background-repeat:no-repeat;background-position:calc(100% - min(4vw,36px)) center;background-size:clamp(340px,58vw,780px);background-image:var(--guarantee-image, none);opacity:1;pointer-events:none;transition:background-image .3s ease,background-size .3s ease,transform .3s ease}
@@ -328,25 +374,38 @@ body[data-audience="youth"] #guarantee .guarantee-grid::after{
 @media(max-width:860px){
   body[data-audience="women"][data-lang="en"] #problem-conclusion-text .problem-quote-rick-caption,
   body[data-audience="women"][data-lang="fr"] #problem-conclusion-text .problem-quote-rick-caption{
-    display:flex;
+    display:flex !important;
+    position:absolute;
+    right:-22px;
+    top:calc(100% + 42px);
+    width:140px;
     flex-direction:column;
     align-items:center;
-    gap:4px;
-    margin-top:10px;
+    gap:0;
     text-align:center;
+    font-size:.82rem;
+    color:#F4FFF7;
+    text-shadow:0 3px 8px rgba(0,0,0,.45);
+    pointer-events:none;
   }
   body[data-audience="women"][data-lang="en"] #problem-conclusion-text .problem-quote-rick-caption::before,
   body[data-audience="women"][data-lang="fr"] #problem-conclusion-text .problem-quote-rick-caption::before{
-    content:"";
-    display:block;
-    width:92px;
-    height:92px;
-    border-radius:50%;
-    background:#0A1410 url('assets/rick.png') center/cover no-repeat;
-    border:3px solid rgba(90,214,122,.6);
-    box-shadow:0 10px 26px rgba(0,0,0,.4);
+    content:none;
+  }
+  body[data-audience="women"][data-lang="en"] #problem-conclusion-text .problem-quote-rick-name,
+  body[data-audience="women"][data-lang="fr"] #problem-conclusion-text .problem-quote-rick-name{
+    font-size:.9rem;
+    letter-spacing:.01em;
+    line-height:1.05;
+  }
+  body[data-audience="women"][data-lang="en"] #problem-conclusion-text .problem-quote-rick-title,
+  body[data-audience="women"][data-lang="fr"] #problem-conclusion-text .problem-quote-rick-title{
+    font-size:.78rem;
+    opacity:.85;
+    line-height:1.05;
   }
 }
+
 .testimonials-image{display:none}
 .testimonials-image img{display:block;width:100%;height:auto;border-radius:24px;border:1px solid rgba(154,230,173,.22);box-shadow:0 22px 54px rgba(0,0,0,.45)}
 @media(min-width:1024px){
@@ -659,7 +718,9 @@ body[data-audience="women"][data-lang="fr"] #social-proof .h2{color:#5AD67A;font
 .secure-icon{font-size:15px}
 .summary{display:grid;gap:10px}
 .summary-row{display:flex;align-items:center;justify-content:space-between}
-.summary-row.small{font-size:14px;color:#5a5a64}
+.summary-row.small{font-size:14px;color:#000}
+.summary-row.small .summary-item{color:#000}
+.summary-row.small .summary-price{color:#000}
 .summary-row.total{padding-top:8px;border-top:1px solid rgba(10,10,14,.08);font-weight:800;color:#111}
 .summary-item{font-weight:600}
 .summary-price,.summary-total-amount{font-variant-numeric:tabular-nums}

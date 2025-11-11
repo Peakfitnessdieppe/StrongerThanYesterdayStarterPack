@@ -71,12 +71,12 @@
   status = 200
 
 [[redirects]]
-  from = "/thank-you-onboarding/*"
+  from = "/thank-you-onboarding/"
   to = "/thank-you-onboarding/index.html"
   status = 200
 
 [[redirects]]
-  from = "/thank-you-onboarding/"
+  from = "/thank-you-onboarding/*"
   to = "/thank-you-onboarding/index.html"
   status = 200
 
@@ -86,12 +86,12 @@
   status = 200
 
 [[redirects]]
-  from = "/wins-capture/*"
+  from = "/wins-capture/"
   to = "/wins-capture/index.html"
   status = 200
 
 [[redirects]]
-  from = "/wins-capture/"
+  from = "/wins-capture/*"
   to = "/wins-capture/index.html"
   status = 200
 

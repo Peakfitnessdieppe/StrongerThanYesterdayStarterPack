@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const squareModule = require('square');
+import squareModule from 'square';
 
 const SquareClient =
   squareModule?.SquareClient ??

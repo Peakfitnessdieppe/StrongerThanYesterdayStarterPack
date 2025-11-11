@@ -67,22 +67,32 @@
 
 [[redirects]]
   from = "/thank-you-onboarding"
-  to = "/thank-you-onboarding/index.html"
+  to = "/strongerthanyesterday/thank-you-onboarding/index.html"
   status = 200
 
 [[redirects]]
   from = "/thank-you-onboarding/*"
-  to = "/thank-you-onboarding/index.html"
+  to = "/strongerthanyesterday/thank-you-onboarding/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/thank-you-onboarding/"
+  to = "/strongerthanyesterday/thank-you-onboarding/index.html"
   status = 200
 
 [[redirects]]
   from = "/wins-capture"
-  to = "/wins-capture/index.html"
+  to = "/strongerthanyesterday/wins-capture/index.html"
   status = 200
 
 [[redirects]]
   from = "/wins-capture/*"
-  to = "/wins-capture/index.html"
+  to = "/strongerthanyesterday/wins-capture/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/wins-capture/"
+  to = "/strongerthanyesterday/wins-capture/index.html"
   status = 200
 
 [[redirects]]

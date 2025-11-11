@@ -59,8 +59,9 @@
           <p>Tell us what already feels better so we can celebrate with you, tailor coaching, and keep a running highlight reel of your momentum.</p>
         </section>
 
-        <form name="wins-capture" method="POST" action="/thank-you-onboarding" data-netlify="true" netlify-honeypot="bot-field">
+        <form name="wins-capture" method="POST" action="/.netlify/functions/submit-wins-capture" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="wins-capture">
+          <input type="hidden" name="redirect" value="/thank-you-onboarding/">
           <p class="sr-only">
             <label for="bot-field">Do not fill this out if you are human</label>
             <input id="bot-field" name="bot-field" type="text">

@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://starter.peakfitnessdieppe.ca/wins-capture">
+    <title>Wins Capture (2 minutes)</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{min-height:100vh;background:linear-gradient(180deg,var(--ink-0),var(--ink-2));display:flex;flex-direction:column;}
+      .page-shell{flex:1;display:flex;flex-direction:column;padding:56px 0 72px;background:radial-gradient(circle at top left,rgba(90,214,122,.12),transparent 45%),linear-gradient(180deg,rgba(10,15,12,.96),rgba(9,13,11,.92));}
+      .form-container{width:min(760px,92vw);margin:0 auto;display:grid;gap:32px;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:36px 32px;box-shadow:0 28px 70px rgba(0,0,0,.45);}
+      .form-intro{display:grid;gap:18px;text-align:left;}
+      .form-intro h1{margin:0;font-size:clamp(30px,6vw,40px);font-weight:820;letter-spacing:-.01em;color:#F4FFF6;}
+      .form-intro p{margin:0;color:rgba(211,238,222,.86);font-size:1.02rem;line-height:1.7;}
+      form{display:grid;gap:28px;}
+      fieldset{margin:0;padding:0;border:0;display:grid;gap:16px;}
+      legend{font-weight:780;color:#E8FBEF;font-size:1.05rem;letter-spacing:.01em;}
+      .option-list{display:grid;gap:10px;}
+      .option{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:rgba(15,24,18,.88);border:1px solid rgba(90,214,122,.22);transition:border .2s ease,box-shadow .2s ease;}
+      .option input{appearance:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(90,214,122,.55);background:transparent;display:grid;place-items:center;position:relative;cursor:pointer;}
+      .option input:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.35);}
+      .option input:checked{border-color:#5AD67A;background:#5AD67A;}
+      .option label{flex:1;font-size:1rem;font-weight:650;color:#F2FFF6;cursor:pointer;display:flex;align-items:center;gap:10px;}
+      .option input::after{content:"";width:8px;height:8px;border-radius:50%;background:#0F1512;display:block;opacity:0;transition:opacity .2s ease;}
+      .option input:checked::after{opacity:1;}
+      textarea{min-height:140px;background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.25);border-radius:18px;padding:16px;color:#F6FFF7;font-size:1rem;line-height:1.6;resize:vertical;}
+      textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      input[type="url"]{background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.25);border-radius:14px;padding:14px 16px;color:#F6FFF7;font-size:1rem;}
+      input[type="url"]:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      .helper{margin:0;color:rgba(197,233,208,.76);font-size:.95rem;line-height:1.55;}
+      .inline-error{color:#FF9C8A;font-weight:700;font-size:.92rem;display:block;}
+      .inline-error[hidden]{display:none;}
+      .submit-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+      .btn-primary{font-size:1.05rem;padding:14px 24px;border-radius:18px;font-weight:780;}
+      @media(max-width:640px){
+        .page-shell{padding:40px 0 60px;}
+        .form-container{padding:28px 22px;border-radius:24px;gap:24px;}
+        .option{align-items:flex-start;}
+        .option label{line-height:1.45;}
+      }
+    </style>
+  </head>
+  <body data-audience="women" data-lang="en">
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main id="main" class="page-shell">
+      <div class="form-container" role="region" aria-labelledby="wins-heading">
+        <section class="form-intro">
+          <h1 id="wins-heading">Wins Capture (2 minutes)</h1>
+          <p>Tell us what already feels better so we can celebrate with you, tailor coaching, and keep a running highlight reel of your momentum.</p>
+        </section>
+
+        <form name="wins-capture" method="POST" action="/thank-you-onboarding" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="wins-capture">
+          <p class="sr-only">
+            <label for="bot-field">Do not fill this out if you are human</label>
+            <input id="bot-field" name="bot-field" type="text">
+          </p>
+
+          <input type="hidden" id="wins-email" name="email">
+          <input type="hidden" id="wins-first" name="first_name">
+          <input type="hidden" id="wins-last" name="last_name">
+          <input type="hidden" id="wins-name" name="name">
+          <input type="hidden" id="wins-mc" name="mc_id">
+          <input type="hidden" id="wins-lang" name="lang">
+          <input type="hidden" id="wins-source" name="source" value="starter_women_d15">
+          <input type="hidden" id="wins-submitted" name="submitted_at_local">
+
+          <fieldset>
+            <legend>Choose the wins you&apos;re feeling right now<span aria-hidden="true"> *</span></legend>
+            <p class="helper">Pick 1&ndash;3 that fit best. We&apos;ll keep showcasing these back to you.</p>
+            <div class="inline-error" id="error-tags" hidden></div>
+            <div class="option-list">
+              <label class="option" for="win-sleep">
+                <input type="checkbox" id="win-sleep" name="wins_tags" value="Sleep is deeper or more restful">
+                <span>Sleep is deeper or more restful</span>
+              </label>
+              <label class="option" for="win-stairs">
+                <input type="checkbox" id="win-stairs" name="wins_tags" value="Stairs, groceries, or daily effort feel easier">
+                <span>Stairs, groceries, or daily effort feel easier</span>
+              </label>
+              <label class="option" for="win-clothes">
+                <input type="checkbox" id="win-clothes" name="wins_tags" value="Clothes are fitting easier or looking sharper">
+                <span>Clothes are fitting easier or looking sharper</span>
+              </label>
+              <label class="option" for="win-energy">
+                <input type="checkbox" id="win-energy" name="wins_tags" value="Energy or mood is steadier through the day">
+                <span>Energy or mood is steadier through the day</span>
+              </label>
+              <label class="option" for="win-strength">
+                <input type="checkbox" id="win-strength" name="wins_tags" value="Lifts, tempo, or technique feel stronger">
+                <span>Lifts, tempo, or technique feel stronger</span>
+              </label>
+              <label class="option" for="win-recovery">
+                <input type="checkbox" id="win-recovery" name="wins_tags" value="Recovery habits (protein, water, sleep) are consistent">
+                <span>Recovery habits (protein, water, sleep) are consistent</span>
+              </label>
+              <label class="option" for="win-confidence">
+                <input type="checkbox" id="win-confidence" name="wins_tags" value="Confidence and self-talk are noticeably better">
+                <span>Confidence and self-talk are noticeably better</span>
+              </label>
+              <label class="option" for="win-other">
+                <input type="checkbox" id="win-other" name="wins_tags" value="Other">
+                <span>Other (share below)</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label for="wins-story">Tell us the story behind one win<span aria-hidden="true"> *</span></label>
+          <textarea id="wins-story" name="win_story" placeholder="Example: &quot;Climbing office stairs doesn&apos;t spike my heart rate anymore. I walked in today feeling steady and confident.&quot;" required></textarea>
+
+          <label for="wins-next">What win are you chasing next? (Optional)</label>
+          <textarea id="wins-next" name="next_win" placeholder="Example: &quot;Stick to three weekday classes and finish each with a post-class protein shake.&quot;"></textarea>
+
+          <label for="wins-media-file">Upload a photo we can celebrate (Optional)</label>
+          <p class="helper">Images only, max 8&nbsp;MB. We’ll upload it securely and keep the link with your wins.</p>
+          <input type="file" id="wins-media-file" accept="image/*">
+          <input type="hidden" id="wins-media" name="media_url">
+          <p class="helper" id="wins-upload-status" hidden></p>
+
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary" data-analytics="wins-capture-submit">Send to Rick</button>
+            <p class="helper" style="margin:0;">We&apos;ll log it so future you can see just how far you&apos;ve come.</p>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;">
+      <div class="container">
+        Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+      </div>
+    </footer>
+
+    <script>
+      const STORAGE_WINS_EMAIL_KEY = 'pf_wins_email';
+      const STORAGE_WINS_NAME_KEY = 'pf_wins_name';
+
+      (function() {
+        const params = new URLSearchParams(window.location.search);
+        const assign = (id, value) => {
+          const node = document.getElementById(id);
+          if (node && value) node.value = value;
+        };
+        const email = params.get('email');
+        const first = params.get('first') || params.get('firstname');
+        const last = params.get('last') || params.get('lastname');
+        const fallbackName = params.get('name');
+
+        assign('wins-email', email);
+        assign('wins-first', first);
+        assign('wins-last', last);
+        const composedName = [first, last].filter(Boolean).join(' ') || fallbackName;
+        assign('wins-name', composedName);
+        assign('wins-mc', params.get('mc'));
+        assign('wins-lang', params.get('lang'));
+        const source = params.get('source');
+        const sourceNode = document.getElementById('wins-source');
+        if (sourceNode && source) sourceNode.value = source;
+      })();
+
+      function setLocalTimestamp() {
+        const tsNode = document.getElementById('wins-submitted');
+        if (!tsNode) return;
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        const formatted = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        tsNode.value = formatted;
+      }
+      setLocalTimestamp();
+
+      (function setupMediaUpload() {
+        const fileInput = document.getElementById('wins-media-file');
+        const hiddenUrlInput = document.getElementById('wins-media');
+        const statusNode = document.getElementById('wins-upload-status');
+        const form = document.forms['wins-capture'];
+        if (!fileInput || !hiddenUrlInput || !statusNode || !form) return;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const MAX_FILE_BYTES = 8 * 1024 * 1024;
+
+        const showStatus = (message, { isError = false, hidden = false } = {}) => {
+          statusNode.textContent = message;
+          statusNode.hidden = hidden || !message;
+          statusNode.style.color = isError ? '#FF9C8A' : 'rgba(197,233,208,.86)';
+        };
+
+        const setUploading = (flag) => {
+          form.dataset.uploading = flag ? 'true' : 'false';
+          if (submitButton) submitButton.disabled = flag;
+        };
+
+        const resetFileState = () => {
+          hiddenUrlInput.value = '';
+          showStatus('', { hidden: true });
+          setUploading(false);
+        };
+
+        const extractValue = (id) => document.getElementById(id)?.value?.trim() || '';
+
+        const uploadFile = async (file) => {
+          const email = extractValue('wins-email');
+          const firstName = extractValue('wins-first');
+          const lastName = extractValue('wins-last');
+          const memberName = extractValue('wins-name');
+
+          const requestPayload = {
+            filename: file.name,
+            contentType: file.type || 'application/octet-stream',
+            email,
+            firstName,
+            lastName,
+            memberName
+          };
+
+          const response = await fetch('/.netlify/functions/generate-win-upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestPayload)
+          });
+
+          if (!response.ok) {
+            const errorJson = await response.json().catch(() => ({}));
+            throw new Error(errorJson.error || 'Upload preparation failed');
+          }
+
+          const uploadData = await response.json();
+
+          const uploadResponse = await fetch(uploadData.uploadUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': requestPayload.contentType,
+              'Authorization': `Bearer ${uploadData.token}`
+            },
+            body: file
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('Uploading to storage failed. Try again.');
+          }
+
+          return uploadData;
+        };
+
+        fileInput.addEventListener('change', async (event) => {
+          const file = event.target.files && event.target.files[0];
+          if (!file) {
+            resetFileState();
+            return;
+          }
+
+          if (!file.type.startsWith('image/')) {
+            showStatus('Only image files are allowed.', { isError: true });
+            fileInput.value = '';
+            hiddenUrlInput.value = '';
+            return;
+          }
+
+          if (file.size > MAX_FILE_BYTES) {
+            showStatus('File is too large. Please choose an image under 8 MB.', { isError: true });
+            fileInput.value = '';
+            hiddenUrlInput.value = '';
+            return;
+          }
+
+          try {
+            setUploading(true);
+            showStatus('Uploading photo…', { hidden: false });
+            const uploadResult = await uploadFile(file);
+            hiddenUrlInput.value = uploadResult.publicUrl || `supabase://${uploadResult.path}`;
+            showStatus('Photo uploaded — thank you!', { isError: false });
+          } catch (error) {
+            console.error('wins upload error', error);
+            showStatus(error.message || 'Upload failed. Please try again.', { isError: true });
+            hiddenUrlInput.value = '';
+            fileInput.value = '';
+          } finally {
+            setUploading(false);
+          }
+        });
+      })();
+
+      (function() {
+        const form = document.forms['wins-capture'];
+        if (!form) return;
+        const tagsError = document.getElementById('error-tags');
+
+        const clearError = (node) => {
+          if (!node) return;
+          node.hidden = true;
+          node.textContent = '';
+          node.removeAttribute('aria-live');
+        };
+
+        form.querySelectorAll('input[name="wins_tags"]').forEach((input) => {
+          input.addEventListener('change', () => clearError(tagsError));
+        });
+
+        form.addEventListener('submit', (event) => {
+          setLocalTimestamp();
+          let hasError = false;
+          if (form.dataset.uploading === 'true') {
+            hasError = true;
+            alert('Photo upload in progress. Please wait a moment and submit again.');
+          }
+          const anyTagChecked = form.querySelector('input[name="wins_tags"]:checked');
+          if (!anyTagChecked && tagsError) {
+            tagsError.textContent = 'Pick at least one win so we can tag it for you.';
+            tagsError.setAttribute('aria-live', 'polite');
+            tagsError.hidden = false;
+            hasError = true;
+          }
+
+          const storyNode = document.getElementById('wins-story');
+          if (storyNode && !storyNode.value.trim()) {
+            storyNode.setCustomValidity('Tell us about one win before sending.');
+            hasError = true;
+          } else if (storyNode) {
+            storyNode.setCustomValidity('');
+          }
+
+          if (hasError) {
+            if (typeof form.reportValidity === 'function') {
+              form.reportValidity();
+            }
+            event.preventDefault();
+            return;
+          }
+
+          try {
+            const emailValue = document.getElementById('wins-email')?.value?.trim();
+            const nameValue = document.getElementById('wins-name')?.value?.trim();
+            if (emailValue) sessionStorage.setItem(STORAGE_WINS_EMAIL_KEY, emailValue);
+            if (nameValue) sessionStorage.setItem(STORAGE_WINS_NAME_KEY, nameValue);
+          } catch (_) {}
+        });
+      })();
+    </script>
+  </body>
+</html>

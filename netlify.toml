@@ -66,6 +66,26 @@
   status = 200
 
 [[redirects]]
+  from = "/thank-you-onboarding"
+  to = "/thank-you-onboarding/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/thank-you-onboarding/*"
+  to = "/thank-you-onboarding/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/wins-capture"
+  to = "/wins-capture/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/wins-capture/*"
+  to = "/wins-capture/index.html"
+  status = 200
+
+[[redirects]]
   from = "/buddy-pass"
   to = "/buddy-pass/index.html"
   status = 200

@@ -4,6 +4,7 @@ import { getSupabaseClient } from './_utils/supabase.js';
 
 const DEFAULT_PRICE_CENTS = Number.parseInt(process.env.STARTER_PACK_PRICE_CENTS || '13999', 10);
 const DEFAULT_CURRENCY = process.env.STARTER_PACK_CURRENCY || 'CAD';
+const NB_HST_RATE = Number.parseFloat(process.env.NB_HST_RATE || '0.15');
 
 const BASE_HEADERS = {
   'Content-Type': 'application/json',
@@ -74,8 +75,7 @@ export default async function handler(eventOrRequest) {
       buyerPhone,
       audience,
       language,
-      utm,
-      amountCents
+      utm
     } = payload;
 
     if (!leadId) {
@@ -86,10 +86,13 @@ export default async function handler(eventOrRequest) {
       return jsonResponse(400, { error: 'sourceId is required' });
     }
 
-    const priceCents = Number.isFinite(amountCents) ? amountCents : DEFAULT_PRICE_CENTS;
-    if (!priceCents || priceCents <= 0) {
+    const taxRate = Number.isFinite(NB_HST_RATE) ? NB_HST_RATE : 0;
+    const subtotalCents = DEFAULT_PRICE_CENTS;
+    if (!subtotalCents || subtotalCents <= 0) {
       return jsonResponse(400, { error: 'Invalid amount' });
     }
+    const taxCents = Math.round(subtotalCents * taxRate);
+    const priceCents = subtotalCents + taxCents;
 
     const square = getSquareClient();
     const { locationId } = getSquareConfig();

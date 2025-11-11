@@ -5,7 +5,8 @@ export default async function handler() {
     calendlyUrl: process.env.CALENDLY_URL || null,
     squareEnvironment: (process.env.SQUARE_ENVIRONMENT || '').toLowerCase() || null,
     priceCents: Number.parseInt(process.env.STARTER_PACK_PRICE_CENTS || '13999', 10),
-    currency: process.env.STARTER_PACK_CURRENCY || 'CAD'
+    currency: process.env.STARTER_PACK_CURRENCY || 'CAD',
+    taxRate: Number.parseFloat(process.env.NB_HST_RATE || '0.15')
   };
 
   return new Response(JSON.stringify(payload), {

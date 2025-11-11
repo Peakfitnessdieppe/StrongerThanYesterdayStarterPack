@@ -11,6 +11,7 @@ const GA_MEASUREMENT_ID   = "G-REPLACE";                            // TODO GA4 
 const OFFER_SLUG          = "offer-139-one-time";
 let CURRENCY              = "CAD";
 let PRICE_CENTS           = 13999;
+let TAX_RATE              = 0.15;
 const API_BASE = '/.netlify/functions';
 
 // Promo popup configuration
@@ -350,9 +351,9 @@ function getPayLabel() {
   return `${verb} ${toMoney(totalCents, CURRENCY, locale)}`;
 }
 
-// --- Summary totals (NB HST 15%) ---
+// --- Summary totals ---
 function getTaxRate() {
-  return 0.15; // NB HST 15%
+  return typeof TAX_RATE === 'number' && Number.isFinite(TAX_RATE) ? TAX_RATE : 0;
 }
 
 function updateSummaryTotals() {
@@ -396,6 +397,7 @@ async function loadRemoteConfig() {
           if (json.squareEnvironment) SQUARE_ENVIRONMENT = json.squareEnvironment;
           if (Number.isFinite(json.priceCents)) PRICE_CENTS = json.priceCents;
           if (json.currency) CURRENCY = json.currency;
+          if (!Number.isNaN(json.taxRate)) TAX_RATE = Number(json.taxRate);
         } else {
           console.warn("get-config failed", response.status);
         }
@@ -509,8 +511,7 @@ async function submitPayment(values, leadId, sourceId) {
     buyerPhone: values.phone,
     audience: state.audience,
     language: state.lang,
-    utm: state.utm,
-    amountCents: PRICE_CENTS
+    utm: state.utm
   };
 
   const response = await fetch(`${API_BASE}/create-payment`, {

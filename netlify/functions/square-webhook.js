@@ -3,6 +3,22 @@ import { getSupabaseClient } from './_utils/supabase.js';
 
 const SIGNATURE_KEY = process.env.SQUARE_WEBHOOK_SIGNATURE_KEY;
 
+const BASE_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST'
+};
+
+function response(status, body = '', extraHeaders = {}) {
+  return new Response(body, {
+    status,
+    headers: {
+      ...BASE_HEADERS,
+      ...extraHeaders
+    }
+  });
+}
+
 function verifySignature(signature, body, notificationUrl) {
   if (!SIGNATURE_KEY) return true; // optionally skip verification in dev
   if (!signature) return false;
@@ -33,7 +49,7 @@ async function notifyZapier(eventName, payload) {
 
 export default async function handler(event) {
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers: { Allow: 'POST' }, body: 'Method Not Allowed' };
+    return textResponse(405, 'Method Not Allowed', { Allow: 'POST' });
   }
 
   const signature = event.headers['x-square-hmacsha256-signature'] || event.headers['x-square-signature'];
@@ -41,7 +57,7 @@ export default async function handler(event) {
 
   if (!verifySignature(signature, event.body || '', notificationUrl)) {
     console.warn('Square signature verification failed');
-    return { statusCode: 400, body: 'Invalid signature' };
+    return textResponse(400, 'Invalid signature');
   }
 
   try {
@@ -82,9 +98,9 @@ export default async function handler(event) {
       }
     }
 
-    return { statusCode: 200, body: 'OK' };
+    return textResponse(200, 'OK');
   } catch (error) {
     console.error('square-webhook error', error);
-    return { statusCode: 500, body: 'Internal Error' };
+    return textResponse(500, 'Internal Error');
   }
 }

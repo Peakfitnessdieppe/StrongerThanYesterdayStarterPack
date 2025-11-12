@@ -49,7 +49,7 @@ async function notifyZapier(eventName, payload) {
 
 export default async function handler(event) {
   if (event.httpMethod !== 'POST') {
-    return textResponse(405, 'Method Not Allowed', { Allow: 'POST' });
+    return response(405, 'Method Not Allowed', { Allow: 'POST' });
   }
 
   const signature = event.headers['x-square-hmacsha256-signature'] || event.headers['x-square-signature'];
@@ -57,7 +57,7 @@ export default async function handler(event) {
 
   if (!verifySignature(signature, event.body || '', notificationUrl)) {
     console.warn('Square signature verification failed');
-    return textResponse(400, 'Invalid signature');
+    return response(400, 'Invalid signature');
   }
 
   try {
@@ -98,9 +98,9 @@ export default async function handler(event) {
       }
     }
 
-    return textResponse(200, 'OK');
+    return response(200, 'OK');
   } catch (error) {
     console.error('square-webhook error', error);
-    return textResponse(500, 'Internal Error');
+    return response(500, 'Internal Error');
   }
 }

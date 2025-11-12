@@ -74,6 +74,34 @@ function getMethod(event) {
   return '';
 }
 
+function getHeaderValue(headers, name) {
+  if (!headers) return '';
+  if (typeof headers.get === 'function') {
+    return headers.get(name) || headers.get(name.toLowerCase()) || headers.get(name.toUpperCase()) || '';
+  }
+  const lower = name.toLowerCase();
+  return headers[name] || headers[lower] || headers[name.toUpperCase?.()] || '';
+}
+
+function resolveNotificationUrl(event) {
+  const rawUrl = typeof event?.rawUrl === 'string' && event.rawUrl.length
+    ? event.rawUrl
+    : typeof event?.url === 'string' && event.url.length
+      ? event.url
+      : typeof event?.request?.url === 'string'
+        ? event.request.url
+        : '';
+
+  if (rawUrl) return rawUrl;
+
+  const host = getHeaderValue(event?.headers, 'host');
+  const path = event?.rawPath || event?.path || '';
+  if (host) {
+    return `https://${host}${path}`;
+  }
+  return path;
+}
+
 export default async function handler(event) {
   const method = getMethod(event);
 
@@ -89,10 +117,10 @@ export default async function handler(event) {
     return response(405, 'Method Not Allowed', { Allow: 'POST' });
   }
 
-  const signature = event.headers['x-square-hmacsha256-signature'] || event.headers['x-square-signature'];
-  const notificationUrl = `https://${event.headers.host}${event.rawUrl?.split(event.headers.host)[1] || event.path}`;
+  const signature = getHeaderValue(event.headers, 'x-square-hmacsha256-signature') || getHeaderValue(event.headers, 'x-square-signature');
+  const notificationUrl = resolveNotificationUrl(event);
 
-  const rawBody = event.body || '';
+  const rawBody = event.body || event.rawBody || '';
   const expectedSignature = createHmac('sha256', SIGNATURE_KEY)
     .update(notificationUrl + rawBody)
     .digest('base64');

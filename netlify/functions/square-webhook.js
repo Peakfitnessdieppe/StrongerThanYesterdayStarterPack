@@ -47,8 +47,19 @@ async function notifyZapier(eventName, payload) {
   }
 }
 
+function getMethod(event) {
+  if (typeof event?.httpMethod === 'string') return event.httpMethod.toUpperCase();
+  if (typeof event?.method === 'string') return event.method.toUpperCase();
+  if (typeof event?.request?.method === 'string') return event.request.method.toUpperCase();
+  if (typeof event === 'object' && typeof event?.text === 'function' && typeof event?.headers?.get === 'function') {
+    // Native Request instance
+    return event.method?.toUpperCase?.() || '';
+  }
+  return '';
+}
+
 export default async function handler(event) {
-  const method = event.httpMethod ? event.httpMethod.toUpperCase() : '';
+  const method = getMethod(event);
 
   if (method === 'OPTIONS') {
     return response(200, 'OK');

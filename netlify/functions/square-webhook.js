@@ -19,18 +19,34 @@ function response(status, body = '', extraHeaders = {}) {
   });
 }
 
+function safeCompareBase64(expectedBase64, receivedBase64) {
+  try {
+    const expected = Buffer.from(expectedBase64, 'base64');
+    const received = Buffer.from(receivedBase64, 'base64');
+    if (expected.length !== received.length) return false;
+    return timingSafeEqual(expected, received);
+  } catch (_) {
+    return false;
+  }
+}
+
 function verifySignature(signature, body, notificationUrl) {
   if (!SIGNATURE_KEY) return true; // optionally skip verification in dev
   if (!signature) return false;
 
   const payload = notificationUrl + body;
-  const hmac = createHmac('sha1', SIGNATURE_KEY);
-  hmac.update(payload);
-  const expected = Buffer.from(hmac.digest('hex'));
-  const received = Buffer.from(signature);
 
-  if (expected.length !== received.length) return false;
-  return timingSafeEqual(expected, received);
+  // Primary: Square Webhooks v2 (HMAC-SHA256)
+  const hmac256 = createHmac('sha256', SIGNATURE_KEY);
+  hmac256.update(payload);
+  if (safeCompareBase64(hmac256.digest('base64'), signature)) {
+    return true;
+  }
+
+  // Fallback: legacy Connect webhooks (HMAC-SHA1)
+  const hmac1 = createHmac('sha1', SIGNATURE_KEY);
+  hmac1.update(payload);
+  return safeCompareBase64(hmac1.digest('base64'), signature);
 }
 
 async function notifyZapier(eventName, payload) {

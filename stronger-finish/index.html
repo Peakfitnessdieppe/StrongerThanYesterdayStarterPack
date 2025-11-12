@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://starter.peakfitnessdieppe.ca/stronger-finish">
+    <title>Final Feedback — Stronger Than Yesterday</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{min-height:100vh;background:linear-gradient(180deg,var(--ink-0),var(--ink-2));display:flex;flex-direction:column;}
+      .page-shell{flex:1;display:flex;flex-direction:column;padding:56px 0 72px;background:radial-gradient(circle at top left,rgba(90,214,122,.12),transparent 45%),linear-gradient(180deg,rgba(10,15,12,.96),rgba(9,13,11,.92));}
+      .form-container{width:min(780px,92vw);margin:0 auto;display:grid;gap:32px;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:36px 32px;box-shadow:0 28px 70px rgba(0,0,0,.45);}
+      .form-intro{display:grid;gap:18px;text-align:left;}
+      .form-intro h1{margin:0;font-size:clamp(30px,6vw,40px);font-weight:820;letter-spacing:-.01em;color:#F4FFF6;}
+      .form-intro p{margin:0;color:rgba(211,238,222,.86);font-size:1.02rem;line-height:1.7;}
+      form{display:grid;gap:28px;}
+      fieldset{margin:0;padding:0;border:0;display:grid;gap:16px;}
+      legend{font-weight:780;color:#E8FBEF;font-size:1.05rem;letter-spacing:.01em;}
+      .option-list{display:grid;gap:10px;}
+      .option{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:rgba(15,24,18,.88);border:1px solid rgba(90,214,122,.22);transition:border .2s ease,box-shadow .2s ease;}
+      .option input[type="radio"],.option input[type="checkbox"]{appearance:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(90,214,122,.55);background:transparent;display:grid;place-items:center;position:relative;cursor:pointer;}
+      .option input[type="checkbox"]{border-radius:6px;}
+      .option input:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.35);}
+      .option input:checked{border-color:#5AD67A;background:#5AD67A;}
+      .option input::after{content:"";width:8px;height:8px;border-radius:50%;background:#0F1512;display:block;opacity:0;transition:opacity .2s ease;}
+      .option input[type="checkbox"]::after{border-radius:2px;}
+      .option input:checked::after{opacity:1;}
+      .option label{flex:1;font-size:1rem;font-weight:650;color:#F2FFF6;cursor:pointer;display:flex;align-items:center;gap:10px;}
+      textarea{min-height:140px;background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.25);border-radius:18px;padding:16px;color:#F6FFF7;font-size:1rem;line-height:1.6;resize:vertical;}
+      textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      select{background:rgba(15,24,18,.9);border:1px solid rgba(90,214,122,.25);border-radius:14px;padding:14px 16px;color:#F6FFF7;font-size:1rem;}
+      select:focus{outline:none;box-shadow:0 0 0 3px rgba(90,214,122,.32);border-color:rgba(90,214,122,.65);}
+      .inline-error{color:#FF9C8A;font-weight:700;font-size:.92rem;display:block;}
+      .inline-error[hidden]{display:none;}
+      .submit-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+      .btn-primary{font-size:1.05rem;padding:14px 24px;border-radius:18px;font-weight:780;}
+      @media(max-width:640px){
+        .page-shell{padding:40px 0 60px;}
+        .form-container{padding:28px 22px;border-radius:24px;gap:24px;}
+        .option{align-items:flex-start;}
+        .option label{line-height:1.45;}
+      }
+    </style>
+  </head>
+  <body data-audience="women" data-lang="en">
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main id="main" class="page-shell">
+      <div class="form-container" role="region" aria-labelledby="finish-heading">
+        <section class="form-intro">
+          <h1 id="finish-heading">Stronger Finish — Final Feedback</h1>
+          <p>Thirty days down. Help us tighten onboarding, coaching, and the follow-up experiences for the next group. This takes about 3 minutes.</p>
+        </section>
+
+        <form name="stronger-finish" method="POST" action="/.netlify/functions/submit-stronger-finish" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="stronger-finish">
+          <input type="hidden" name="redirect" value="/thank-you-onboarding/">
+          <p class="sr-only">
+            <label for="bot-field">Do not fill this out if you are human</label>
+            <input id="bot-field" name="bot-field" type="text">
+          </p>
+
+          <input type="hidden" id="finish-email" name="email">
+          <input type="hidden" id="finish-first" name="first_name">
+          <input type="hidden" id="finish-last" name="last_name">
+          <input type="hidden" id="finish-name" name="member_name">
+          <input type="hidden" id="finish-order" name="order_number">
+          <input type="hidden" id="finish-source" name="source" value="starter_women_d30">
+          <input type="hidden" id="finish-mc" name="mc_id">
+          <input type="hidden" id="finish-lang" name="lang">
+          <input type="hidden" id="finish-submitted" name="submitted_at_local">
+
+          <fieldset>
+            <legend>Overall, how satisfied are you with the 30-day Starter Pack? <span aria-hidden="true">*</span></legend>
+            <div class="inline-error" id="error-overall" hidden></div>
+            <div class="option-list">
+              <label class="option" for="overall-5">
+                <input type="radio" id="overall-5" name="q1_overall" value="5 - Thrilled" required>
+                <label for="overall-5">5 - Thrilled</label>
+              </label>
+              <label class="option" for="overall-4">
+                <input type="radio" id="overall-4" name="q1_overall" value="4 - Very happy" required>
+                <label for="overall-4">4 - Very happy</label>
+              </label>
+              <label class="option" for="overall-3">
+                <input type="radio" id="overall-3" name="q1_overall" value="3 - Solid" required>
+                <label for="overall-3">3 - Solid</label>
+              </label>
+              <label class="option" for="overall-2">
+                <input type="radio" id="overall-2" name="q1_overall" value="2 - Needs work" required>
+                <label for="overall-2">2 - Needs work</label>
+              </label>
+              <label class="option" for="overall-1">
+                <input type="radio" id="overall-1" name="q1_overall" value="1 - Not satisfied" required>
+                <label for="overall-1">1 - Not satisfied</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <label for="finish-win">What felt like the biggest win from these 30 days? <span aria-hidden="true">*</span></label>
+          <textarea id="finish-win" name="q2_biggest_win" required placeholder="Tell us the result, habit, or moment you&apos;re proud of."></textarea>
+
+          <fieldset>
+            <legend>How supported did you feel by coaches during classes? <span aria-hidden="true">*</span></legend>
+            <div class="option-list">
+              <label class="option" for="support-5">
+                <input type="radio" id="support-5" name="q3_coach_support" value="5 - Always supported" required>
+                <label for="support-5">5 - Always supported</label>
+              </label>
+              <label class="option" for="support-4">
+                <input type="radio" id="support-4" name="q3_coach_support" value="4 - Mostly supported" required>
+                <label for="support-4">4 - Mostly supported</label>
+              </label>
+              <label class="option" for="support-3">
+                <input type="radio" id="support-3" name="q3_coach_support" value="3 - Sometimes" required>
+                <label for="support-3">3 - Sometimes</label>
+              </label>
+              <label class="option" for="support-2">
+                <input type="radio" id="support-2" name="q3_coach_support" value="2 - Rarely" required>
+                <label for="support-2">2 - Rarely</label>
+              </label>
+              <label class="option" for="support-1">
+                <input type="radio" id="support-1" name="q3_coach_support" value="1 - Not at all" required>
+                <label for="support-1">1 - Not at all</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Which class formats did you enjoy most? (Select all that apply)</legend>
+            <div class="option-list">
+              <label class="option" for="format-barbell">
+                <input type="checkbox" id="format-barbell" name="q4_favourite_formats" value="Barbell Strength">
+                <label for="format-barbell">Barbell Strength</label>
+              </label>
+              <label class="option" for="format-bootcamp">
+                <input type="checkbox" id="format-bootcamp" name="q4_favourite_formats" value="Bootcamp">
+                <label for="format-bootcamp">Bootcamp</label>
+              </label>
+              <label class="option" for="format-team">
+                <input type="checkbox" id="format-team" name="q4_favourite_formats" value="Team Sweat">
+                <label for="format-team">Team Sweat</label>
+              </label>
+              <label class="option" for="format-peakrox">
+                <input type="checkbox" id="format-peakrox" name="q4_favourite_formats" value="PeakRox">
+                <label for="format-peakrox">PeakRox</label>
+              </label>
+              <label class="option" for="format-recovery">
+                <input type="checkbox" id="format-recovery" name="q4_favourite_formats" value="Recovery / Mobility">
+                <label for="format-recovery">Recovery / Mobility</label>
+              </label>
+              <label class="option" for="format-other">
+                <input type="checkbox" id="format-other" name="q4_favourite_formats" value="Other">
+                <label for="format-other">Other</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <label for="finish-schedule">Anything missing from the schedule or class options you wish we offered?</label>
+          <textarea id="finish-schedule" name="q5_schedule_gap" placeholder="Class times, formats, or support you&apos;d love to see next."></textarea>
+
+          <fieldset>
+            <legend>How helpful were the nutrition + education emails? <span aria-hidden="true">*</span></legend>
+            <div class="option-list">
+              <label class="option" for="emails-5">
+                <input type="radio" id="emails-5" name="q6_email_helpful" value="5 - Huge help" required>
+                <label for="emails-5">5 - Huge help</label>
+              </label>
+              <label class="option" for="emails-4">
+                <input type="radio" id="emails-4" name="q6_email_helpful" value="4 - Helpful" required>
+                <label for="emails-4">4 - Helpful</label>
+              </label>
+              <label class="option" for="emails-3">
+                <input type="radio" id="emails-3" name="q6_email_helpful" value="3 - Mixed" required>
+                <label for="emails-3">3 - Mixed</label>
+              </label>
+              <label class="option" for="emails-2">
+                <input type="radio" id="emails-2" name="q6_email_helpful" value="2 - Not much" required>
+                <label for="emails-2">2 - Not much</label>
+              </label>
+              <label class="option" for="emails-1">
+                <input type="radio" id="emails-1" name="q6_email_helpful" value="1 - Not helpful" required>
+                <label for="emails-1">1 - Not helpful</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Which emails or guides were most valuable? (Select all that apply)</legend>
+            <div class="option-list">
+              <label class="option" for="resource-tracking">
+                <input type="checkbox" id="resource-tracking" name="q7_top_resources" value="Let’s Get Trackin’ guide">
+                <label for="resource-tracking">Let’s Get Trackin’ guide</label>
+              </label>
+              <label class="option" for="resource-mfp">
+                <input type="checkbox" id="resource-mfp" name="q7_top_resources" value="Beginner’s Guide to MyFitnessPal">
+                <label for="resource-mfp">Beginner’s Guide to MyFitnessPal</label>
+              </label>
+              <label class="option" for="resource-bootcamp">
+                <input type="checkbox" id="resource-bootcamp" name="q7_top_resources" value="Class spotlights (Bootcamp/Team Sweat/PeakRox)">
+                <label for="resource-bootcamp">Class spotlights (Bootcamp/Team Sweat/PeakRox)</label>
+              </label>
+              <label class="option" for="resource-checkins">
+                <input type="checkbox" id="resource-checkins" name="q7_top_resources" value="Weekly check-in prompts">
+                <label for="resource-checkins">Weekly check-in prompts</label>
+              </label>
+              <label class="option" for="resource-none">
+                <input type="checkbox" id="resource-none" name="q7_top_resources" value="None">
+                <label for="resource-none">None</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>How confident are you about continuing after Day 30? <span aria-hidden="true">*</span></legend>
+            <div class="option-list">
+              <label class="option" for="confidence-5">
+                <input type="radio" id="confidence-5" name="q8_confidence" value="5 - Locked in" required>
+                <label for="confidence-5">5 - Locked in</label>
+              </label>
+              <label class="option" for="confidence-4">
+                <input type="radio" id="confidence-4" name="q8_confidence" value="4 - Very likely" required>
+                <label for="confidence-4">4 - Very likely</label>
+              </label>
+              <label class="option" for="confidence-3">
+                <input type="radio" id="confidence-3" name="q8_confidence" value="3 - Still deciding" required>
+                <label for="confidence-3">3 - Still deciding</label>
+              </label>
+              <label class="option" for="confidence-2">
+                <input type="radio" id="confidence-2" name="q8_confidence" value="2 - Unsure" required>
+                <label for="confidence-2">2 - Unsure</label>
+              </label>
+              <label class="option" for="confidence-1">
+                <input type="radio" id="confidence-1" name="q8_confidence" value="1 - Not continuing" required>
+                <label for="confidence-1">1 - Not continuing</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Would you recommend Peak Fitness to a friend? <span aria-hidden="true">*</span></legend>
+            <div class="option-list">
+              <label class="option" for="referral-yes">
+                <input type="radio" id="referral-yes" name="q9_refer" value="Yes" required>
+                <label for="referral-yes">Yes</label>
+              </label>
+              <label class="option" for="referral-maybe">
+                <input type="radio" id="referral-maybe" name="q9_refer" value="Maybe" required>
+                <label for="referral-maybe">Maybe</label>
+              </label>
+              <label class="option" for="referral-no">
+                <input type="radio" id="referral-no" name="q9_refer" value="Not yet" required>
+                <label for="referral-no">Not yet</label>
+              </label>
+            </div>
+          </fieldset>
+
+          <label for="finish-notes">Anything else we should know (shout-outs, frustrations, or ideas)?</label>
+          <textarea id="finish-notes" name="q10_notes" placeholder="Lay it on us — we read every word."></textarea>
+
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary" data-analytics="stronger-finish-submit">Submit feedback</button>
+            <p class="helper" style="margin:0;color:rgba(197,233,208,.82);">Thank you for helping us refine the Starter experience.</p>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;">
+      <div class="container">
+        Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+      </div>
+    </footer>
+
+    <script>
+      (function prefills(){
+        const params = new URLSearchParams(window.location.search);
+        const assign = (id, value) => {
+          const node = document.getElementById(id);
+          if (node && value) node.value = value;
+        };
+        const email = params.get('email');
+        const first = params.get('first') || params.get('firstname');
+        const last = params.get('last') || params.get('lastname');
+        const name = params.get('name') || [first, last].filter(Boolean).join(' ');
+        assign('finish-email', email);
+        assign('finish-first', first);
+        assign('finish-last', last);
+        assign('finish-name', name);
+        assign('finish-order', params.get('order'));
+        assign('finish-mc', params.get('mc'));
+        assign('finish-lang', params.get('lang'));
+        const source = params.get('source');
+        const sourceNode = document.getElementById('finish-source');
+        if (sourceNode && source) sourceNode.value = source;
+      })();
+
+      (function timestamp(){
+        const node = document.getElementById('finish-submitted');
+        if (!node) return;
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        const formatted = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        node.value = formatted;
+      })();
+    </script>
+  </body>
+</html>

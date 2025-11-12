@@ -48,7 +48,17 @@ async function notifyZapier(eventName, payload) {
 }
 
 export default async function handler(event) {
-  if (event.httpMethod !== 'POST') {
+  const method = event.httpMethod ? event.httpMethod.toUpperCase() : '';
+
+  if (method === 'OPTIONS') {
+    return response(200, 'OK');
+  }
+
+  if (method === 'GET' || method === 'HEAD') {
+    return response(200, 'Square webhook up');
+  }
+
+  if (method !== 'POST') {
     return response(405, 'Method Not Allowed', { Allow: 'POST' });
   }
 

@@ -92,6 +92,18 @@ export default async function handler(event) {
   const signature = event.headers['x-square-hmacsha256-signature'] || event.headers['x-square-signature'];
   const notificationUrl = `https://${event.headers.host}${event.rawUrl?.split(event.headers.host)[1] || event.path}`;
 
+  const rawBody = event.body || '';
+  const expectedSignature = createHmac('sha256', SIGNATURE_KEY)
+    .update(notificationUrl + rawBody)
+    .digest('base64');
+
+  console.log('square signature debug', {
+    signature,
+    expectedSignature,
+    bodyLength: rawBody.length,
+    notificationUrl
+  });
+
   if (!verifySignature(signature, event.body || '', notificationUrl)) {
     console.warn('Square signature verification failed');
     return response(400, 'Invalid signature');

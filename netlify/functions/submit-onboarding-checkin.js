@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { getSupabaseClient } from './_utils/supabase.js';
 
 const TABLE_SCHEMA = process.env.ONBOARDING_CHECKINS_SCHEMA || 'peak';
@@ -7,41 +8,70 @@ const ZAPIER_WEBHOOK = process.env.ZAPIER_CHECKIN_WEBHOOK_URL;
 const REQUIRED_FIELDS = ['q1_helpful', 'q2_ready', 'q3_better'];
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
+const BASE_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
 
-function jsonResponse(statusCode, payload) {
-  return {
-    statusCode,
-    headers: JSON_HEADERS,
-    body: JSON.stringify(payload)
-  };
+function jsonResponse(statusCode, payload, extraHeaders = {}) {
+  return new Response(JSON.stringify(payload), {
+    status: statusCode,
+    headers: {
+      ...BASE_HEADERS,
+      ...JSON_HEADERS,
+      ...extraHeaders
+    }
+  });
 }
 
 function redirectResponse(location) {
-  return {
-    statusCode: 303,
+  return new Response('', {
+    status: 303,
     headers: {
+      ...BASE_HEADERS,
       Location: location,
       'Cache-Control': 'no-store'
-    },
-    body: ''
-  };
+    }
+  });
 }
 
 function isLikelyFormUrlEncoded(headers = {}) {
-  const contentType = headers['content-type'] || headers['Content-Type'] || '';
-  return contentType.includes('application/x-www-form-urlencoded');
+  const getHeader = (key) => {
+    if (!headers) return '';
+    if (typeof headers?.get === 'function') return headers.get(key) || headers.get(key.toLowerCase()) || '';
+    return headers[key] || headers[key?.toLowerCase?.()] || '';
+  };
+  const contentType = getHeader('Content-Type');
+  return typeof contentType === 'string' && contentType.includes('application/x-www-form-urlencoded');
 }
 
-function parseBody(event) {
-  if (!event.body) return {};
+async function parseBody(event) {
+  if (!event) return {};
+
+  // Request object support
+  if (typeof event.text === 'function' && typeof event.headers?.get === 'function') {
+    const raw = await event.text();
+    if (!raw) return {};
+    if (isLikelyFormUrlEncoded(event.headers)) {
+      return Object.fromEntries(new URLSearchParams(raw).entries());
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (_) {
+      return {};
+    }
+  }
+
+  const bodyText = event.body || event.rawBody || '';
+  if (!bodyText) return {};
 
   if (isLikelyFormUrlEncoded(event.headers)) {
-    const params = new URLSearchParams(event.body);
-    return Object.fromEntries(params.entries());
+    return Object.fromEntries(new URLSearchParams(bodyText).entries());
   }
 
   try {
-    return JSON.parse(event.body);
+    return JSON.parse(bodyText);
   } catch (_) {
     return {};
   }
@@ -53,11 +83,12 @@ function normalizeValue(value) {
   return trimmed.length ? trimmed : null;
 }
 
-async function persistSubmission(payload) {
+async function persistSubmission(payload, submissionUuid) {
   const supabase = getSupabaseClient();
   const db = TABLE_SCHEMA ? supabase.schema(TABLE_SCHEMA) : supabase;
 
   const insertPayload = {
+    submission_uuid: normalizeValue(submissionUuid),
     email: normalizeValue(payload.email),
     member_name: normalizeValue(payload.name),
     order_number: normalizeValue(payload.order),
@@ -94,16 +125,28 @@ async function notifyZapier(payload) {
   }
 }
 
+function getMethod(event) {
+  if (typeof event?.httpMethod === 'string') return event.httpMethod.toUpperCase();
+  if (typeof event?.method === 'string') return event.method.toUpperCase();
+  if (typeof event?.request?.method === 'string') return event.request.method.toUpperCase();
+  return '';
+}
+
 export default async function handler(event) {
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers: { Allow: 'POST', ...JSON_HEADERS },
-      body: JSON.stringify({ error: 'Method Not Allowed' })
-    };
+  const method = getMethod(event);
+
+  if (method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: BASE_HEADERS
+    });
   }
 
-  const payload = parseBody(event);
+  if (method !== 'POST') {
+    return jsonResponse(405, { error: 'Method Not Allowed' }, { Allow: 'POST' });
+  }
+
+  const payload = await parseBody(event);
   const botField = normalizeValue(payload['bot-field']);
   if (botField) {
     return jsonResponse(200, { success: true });
@@ -116,7 +159,10 @@ export default async function handler(event) {
   }
 
   try {
-    await persistSubmission(payload);
+    const submissionUuid = payload.submission_uuid || randomUUID();
+    payload.submission_uuid = submissionUuid;
+
+    await persistSubmission(payload, submissionUuid);
     await notifyZapier(payload);
   } catch (error) {
     console.error('submit-onboarding-checkin: unexpected error', error);

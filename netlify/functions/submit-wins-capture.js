@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { getSupabaseClient } from './_utils/supabase.js';
 
 const TABLE_SCHEMA = process.env.WINS_CAPTURE_SCHEMA || 'peak';
@@ -5,38 +6,78 @@ const TABLE_NAME = process.env.WINS_CAPTURE_TABLE || 'wins_capture';
 const ZAPIER_WEBHOOK = process.env.ZAPIER_WINS_WEBHOOK_URL;
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
+const BASE_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
+const SUPPORTS_WEB_RESPONSE = typeof Response === 'function';
+
+function buildResponse(status, body = '', extraHeaders = {}) {
+  const headers = { ...BASE_HEADERS, ...extraHeaders };
+  if (SUPPORTS_WEB_RESPONSE) {
+    return new Response(body, { status, headers });
+  }
+  return {
+    statusCode: status,
+    headers,
+    body
+  };
+}
 
 const REQUIRED_FIELDS = ['email', 'name', 'win_story'];
 
-function jsonResponse(statusCode, payload) {
-  return {
-    statusCode,
-    headers: JSON_HEADERS,
-    body: JSON.stringify(payload)
-  };
+function jsonResponse(statusCode, payload, extraHeaders = {}) {
+  return buildResponse(statusCode, JSON.stringify(payload), {
+    ...JSON_HEADERS,
+    ...extraHeaders
+  });
 }
 
 function redirectResponse(location) {
-  return {
-    statusCode: 303,
-    headers: {
-      Location: location,
-      'Cache-Control': 'no-store'
-    },
-    body: ''
-  };
+  return buildResponse(303, '', {
+    Location: location,
+    'Cache-Control': 'no-store'
+  });
 }
 
 function isUrlEncoded(headers = {}) {
-  const contentType = headers['content-type'] || headers['Content-Type'] || '';
-  return contentType.includes('application/x-www-form-urlencoded');
+  const getHeader = (key) => {
+    if (!headers) return '';
+    if (typeof headers?.get === 'function') {
+      return headers.get(key) || headers.get(key.toLowerCase()) || '';
+    }
+    return headers[key] || headers[key?.toLowerCase?.()] || '';
+  };
+  const contentType = getHeader('Content-Type');
+  return typeof contentType === 'string' && contentType.includes('application/x-www-form-urlencoded');
 }
 
-function parseBody(event) {
-  if (!event.body) return {};
+async function parseBody(event) {
+  if (!event) return {};
+
+  if (typeof event.text === 'function' && typeof event.headers?.get === 'function') {
+    const raw = await event.text();
+    if (!raw) return {};
+    if (isUrlEncoded(event.headers)) {
+      const params = new URLSearchParams(raw);
+      const base = Object.fromEntries(params.entries());
+      const tags = params.getAll('wins_tags');
+      if (tags.length) base.wins_tags = tags;
+      return base;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (_) {
+      return {};
+    }
+  }
+
+  const bodyText = event.body || event.rawBody || '';
+  if (!bodyText) return {};
 
   if (isUrlEncoded(event.headers)) {
-    const params = new URLSearchParams(event.body);
+    const params = new URLSearchParams(bodyText);
     const base = Object.fromEntries(params.entries());
     const tags = params.getAll('wins_tags');
     if (tags.length) base.wins_tags = tags;
@@ -44,7 +85,7 @@ function parseBody(event) {
   }
 
   try {
-    return JSON.parse(event.body);
+    return JSON.parse(bodyText);
   } catch (_) {
     return {};
   }
@@ -66,13 +107,14 @@ function normalizeTags(value) {
   return single ? [single] : [];
 }
 
-async function persistSubmission(payload) {
+async function persistSubmission(payload, submissionUuid) {
   const supabase = getSupabaseClient();
   const db = TABLE_SCHEMA ? supabase.schema(TABLE_SCHEMA) : supabase;
 
   const winsTags = normalizeTags(payload.wins_tags || payload['wins_tags[]']);
 
   const insertPayload = {
+    submission_uuid: normalizeValue(submissionUuid),
     email: normalizeValue(payload.email),
     first_name: normalizeValue(payload.first_name),
     last_name: normalizeValue(payload.last_name),
@@ -96,32 +138,52 @@ async function persistSubmission(payload) {
     throw new Error('Unable to save submission');
   }
 
-  return { insertPayload, winsTags };
+  return { insertPayload: { ...insertPayload, wins_tags: winsTags.length ? winsTags : null }, winsTags };
 }
 
 async function notifyZapier(payload) {
-  if (!ZAPIER_WEBHOOK) return;
+  if (!ZAPIER_WEBHOOK) {
+    console.warn('submit-wins-capture: Zapier webhook URL is not configured');
+    return;
+  }
   try {
-    await fetch(ZAPIER_WEBHOOK, {
+    const response = await fetch(ZAPIER_WEBHOOK, {
       method: 'POST',
       headers: JSON_HEADERS,
       body: JSON.stringify(payload)
     });
+    if (!response.ok) {
+      const text = await response.text().catch(() => '<unable to read body>');
+      console.warn('submit-wins-capture: Zapier responded with non-200', {
+        status: response.status,
+        statusText: response.statusText,
+        bodyPreview: text.slice(0, 200)
+      });
+    }
   } catch (error) {
     console.warn('submit-wins-capture: Zapier webhook failed', error);
   }
 }
 
+function getMethod(event) {
+  if (typeof event?.httpMethod === 'string') return event.httpMethod.toUpperCase();
+  if (typeof event?.method === 'string') return event.method.toUpperCase();
+  if (typeof event?.request?.method === 'string') return event.request.method.toUpperCase();
+  return '';
+}
+
 export default async function handler(event) {
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers: { Allow: 'POST', ...JSON_HEADERS },
-      body: JSON.stringify({ error: 'Method Not Allowed' })
-    };
+  const method = getMethod(event);
+
+  if (method === 'OPTIONS') {
+    return buildResponse(204);
   }
 
-  const payload = parseBody(event);
+  if (method !== 'POST') {
+    return jsonResponse(405, { error: 'Method Not Allowed' }, { Allow: 'POST' });
+  }
+
+  const payload = await parseBody(event);
   const botField = normalizeValue(payload['bot-field']);
   if (botField) {
     return jsonResponse(200, { success: true });
@@ -140,7 +202,10 @@ export default async function handler(event) {
   }
 
   try {
-    const { insertPayload } = await persistSubmission({ ...payload, wins_tags: tags });
+    const submissionUuid = payload.submission_uuid || randomUUID();
+    payload.submission_uuid = submissionUuid;
+
+    const { insertPayload } = await persistSubmission({ ...payload, wins_tags: tags }, submissionUuid);
     await notifyZapier({
       ...insertPayload,
       wins_tags: tags

@@ -9,6 +9,8 @@ const BASE_HEADERS = {
   'Access-Control-Allow-Methods': 'POST'
 };
 
+const RAW_BODY_SYMBOL = Symbol('squareRawBody');
+
 function response(status, body = '', extraHeaders = {}) {
   return new Response(body, {
     status,
@@ -102,6 +104,36 @@ function resolveNotificationUrl(event) {
   return path;
 }
 
+async function getRawBody(event) {
+  if (!event) return '';
+
+  if (event[RAW_BODY_SYMBOL]) return event[RAW_BODY_SYMBOL];
+
+  if (typeof event.body === 'string') {
+    event[RAW_BODY_SYMBOL] = event.body;
+    return event.body;
+  }
+
+  if (typeof event.rawBody === 'string') {
+    event[RAW_BODY_SYMBOL] = event.rawBody;
+    return event.rawBody;
+  }
+
+  if (typeof event.text === 'function') {
+    const text = await event.text();
+    event[RAW_BODY_SYMBOL] = text;
+    return text;
+  }
+
+  if (event.request && typeof event.request.text === 'function') {
+    const text = await event.request.text();
+    event[RAW_BODY_SYMBOL] = text;
+    return text;
+  }
+
+  return '';
+}
+
 export default async function handler(event) {
   const method = getMethod(event);
 
@@ -120,7 +152,7 @@ export default async function handler(event) {
   const signature = getHeaderValue(event.headers, 'x-square-hmacsha256-signature') || getHeaderValue(event.headers, 'x-square-signature');
   const notificationUrl = resolveNotificationUrl(event);
 
-  const rawBody = event.body || event.rawBody || '';
+  const rawBody = await getRawBody(event);
   const expectedSignature = createHmac('sha256', SIGNATURE_KEY)
     .update(notificationUrl + rawBody)
     .digest('base64');
@@ -128,17 +160,17 @@ export default async function handler(event) {
   console.log('square signature debug', {
     signature,
     expectedSignature,
-    bodyLength: rawBody.length,
+    bodyLength: rawBody?.length,
     notificationUrl
   });
 
-  if (!verifySignature(signature, event.body || '', notificationUrl)) {
+  if (!verifySignature(signature, rawBody, notificationUrl)) {
     console.warn('Square signature verification failed');
     return response(400, 'Invalid signature');
   }
 
   try {
-    const payload = JSON.parse(event.body || '{}');
+    const payload = rawBody ? JSON.parse(rawBody) : {};
     const { type, data } = payload;
 
     const supabase = getSupabaseClient();

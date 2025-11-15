@@ -200,6 +200,8 @@ export default async function handler(event) {
     return jsonResponse(200, { success: true });
   }
 
+  payload.submitted_at_utc = new Date().toISOString();
+
   for (const field of REQUIRED_FIELDS) {
     if (!normalizeValue(payload[field])) {
       return jsonResponse(400, { error: `${field} is required` });
@@ -211,7 +213,11 @@ export default async function handler(event) {
     payload.submission_uuid = submissionUuid;
 
     const insertPayload = await persistSubmission(payload, submissionUuid);
-    await notifyZapier({ ...insertPayload, submission_uuid: submissionUuid });
+    await notifyZapier({
+      ...insertPayload,
+      submission_uuid: submissionUuid,
+      submitted_at_utc: payload.submitted_at_utc
+    });
   } catch (error) {
     console.error('submit-strong-finish: unexpected error', error);
     return jsonResponse(500, { error: 'Submission failed. Please try again later.' });

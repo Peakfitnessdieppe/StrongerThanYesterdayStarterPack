@@ -203,7 +203,13 @@
 
         const toggleUploading = (flag) => {
           form.dataset.uploading = flag ? 'true' : 'false';
-          if (flag) submitBtn.disabled = true;
+          if (flag) {
+            submitBtn.disabled = true;
+            submitBtn.setAttribute('disabled', 'disabled');
+          } else if (form.dataset.submitting !== 'true') {
+            submitBtn.disabled = false;
+            submitBtn.removeAttribute('disabled');
+          }
         };
 
         const resetUploadState = () => {

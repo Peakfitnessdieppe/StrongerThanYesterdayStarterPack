@@ -33,9 +33,9 @@
 
     <main id="main" class="page-shell">
       <section class="thankyou-card" role="status" aria-live="polite">
-        <h1>Thanks for the check-in</h1>
-        <p>Your feedback goes straight to Rick and the coaching team so we can dial in the next onboarding sessions.</p>
-        <p>Keep leaning on your coach, bring any questions to class, and watch your strength climb week after week.</p>
+        <h1 id="thankyou-heading">Thanks for the check-in</h1>
+        <p id="thankyou-lead">Your feedback goes straight to Rick and the coaching team so we can dial in the next onboarding sessions.</p>
+        <p id="thankyou-secondary">Keep leaning on your coach, bring any questions to class, and watch your strength climb week after week.</p>
         <div class="thankyou-actions">
           <a class="btn btn-primary" id="thankyou-classes-link" href="https://www.peakfitnessdieppe.ca/classes" data-analytics="return-to-classes">Browse class schedule</a>
           <a class="btn" id="thankyou-toolkit-link" href="https://starter.peakfitnessdieppe.ca/toolkit" data-analytics="visit-toolkit">Open the Nutrition Toolkit</a>
@@ -52,6 +52,10 @@
     <script>
       const STORAGE_ORDER_KEY = 'pf_checkin_order';
       const STORAGE_NAME_KEY = 'pf_checkin_name';
+      const STORAGE_MILESTONE_NAME = 'pf_milestone_name';
+      const STORAGE_MILESTONE_EMAIL = 'pf_milestone_email';
+      const STORAGE_MILESTONE_CODE = 'pf_milestone_code';
+      const STORAGE_MILESTONE_SHARE = 'pf_milestone_share';
 
       (function personalizeThankYou(){
         try {
@@ -64,6 +68,22 @@
 
           const orderValue = getValue('order', STORAGE_ORDER_KEY);
           const nameValue = getValue('name', STORAGE_NAME_KEY);
+          const milestoneCode = getValue('milestone', STORAGE_MILESTONE_CODE);
+          const sharePermission = getValue('share_permission', STORAGE_MILESTONE_SHARE);
+          const emailValue = getValue('email', STORAGE_MILESTONE_EMAIL);
+
+          if (params.get('milestone')) {
+            sessionStorage.setItem(STORAGE_MILESTONE_CODE, params.get('milestone'));
+          }
+          if (params.get('share_permission')) {
+            sessionStorage.setItem(STORAGE_MILESTONE_SHARE, params.get('share_permission'));
+          }
+          if (params.get('name')) {
+            sessionStorage.setItem(STORAGE_MILESTONE_NAME, params.get('name'));
+          }
+          if (params.get('email')) {
+            sessionStorage.setItem(STORAGE_MILESTONE_EMAIL, params.get('email'));
+          }
 
           const toolkitLink = document.getElementById('thankyou-toolkit-link');
           if (toolkitLink && orderValue) {
@@ -71,6 +91,36 @@
             url.searchParams.set('order', orderValue);
             if (nameValue) url.searchParams.set('name', nameValue);
             toolkitLink.href = url.toString();
+          }
+
+          if (milestoneCode) {
+            const headingNode = document.getElementById('thankyou-heading');
+            const leadNode = document.getElementById('thankyou-lead');
+            const secondaryNode = document.getElementById('thankyou-secondary');
+
+            if (headingNode) headingNode.textContent = 'Thanks for sharing your wall photo!';
+            if (leadNode) {
+              const nameSnippet = nameValue ? `${nameValue}, ` : '';
+              leadNode.textContent = `${nameSnippet}we just saved your Wall of Achievements photo to your member story.`;
+            }
+            if (secondaryNode) {
+              if (sharePermission === 'yes') {
+                secondaryNode.textContent = 'We’ll loop you in before we spotlight it on socials—thanks for inspiring the next member to keep showing up!';
+              } else {
+                secondaryNode.textContent = 'We’ll keep this one just for your story, ready to replay whenever you want a reminder of how far you’ve come.';
+              }
+            }
+
+            if (!orderValue && !nameValue) {
+              try {
+                const classesLink = document.getElementById('thankyou-classes-link');
+                if (classesLink && emailValue) {
+                  const url = new URL(classesLink.href);
+                  url.searchParams.set('email', emailValue);
+                  classesLink.href = url.toString();
+                }
+              } catch (_) {}
+            }
           }
         } catch (_) {
           // Ignore personalization errors

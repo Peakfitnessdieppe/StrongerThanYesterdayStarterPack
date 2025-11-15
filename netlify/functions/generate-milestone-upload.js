@@ -7,13 +7,9 @@ const BASE_HEADERS = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
-const DEFAULT_BUCKET = 'member-wins';
-const ALLOWED_BUCKETS = (process.env.WIN_UPLOAD_ALLOWED_BUCKETS || 'member-wins,member-milestones')
-  .split(',')
-  .map((item) => item.trim())
-  .filter(Boolean);
-const MAX_UPLOAD_BYTES = Number.parseInt(process.env.WIN_UPLOAD_MAX_BYTES || '8388608', 10); // 8 MB default
-const SIGNED_URL_EXPIRY_SECONDS = 90;
+const DEFAULT_BUCKET = 'member-milestones';
+const MAX_UPLOAD_BYTES = Number.parseInt(process.env.MILESTONE_UPLOAD_MAX_BYTES || '8388608', 10); // 8 MB default
+const SIGNED_URL_EXPIRY_SECONDS = Number.parseInt(process.env.MILESTONE_UPLOAD_URL_EXPIRY || '120', 10);
 
 const jsonResponse = (status, payload, extraHeaders = {}) => new Response(
   JSON.stringify(payload),
@@ -47,7 +43,13 @@ const sanitizeFilename = (value) => {
   return safeExt ? `${name}.${safeExt}` : name;
 };
 
-const buildObjectPath = ({ email, firstName, lastName, memberName, filename }) => {
+const buildObjectPath = ({
+  email,
+  firstName,
+  lastName,
+  memberName,
+  filename
+}) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const safeFilename = sanitizeFilename(filename);
 
@@ -99,12 +101,15 @@ export default async function handler(eventOrRequest) {
       email,
       firstName,
       lastName,
-      memberName
+      memberName,
+      bucket
     } = payload || {};
 
     if (!rawFilename) {
       return jsonResponse(400, { error: 'filename is required' });
     }
+
+    const targetBucket = sanitizeSegment(bucket, DEFAULT_BUCKET);
 
     const objectPath = buildObjectPath({
       email,
@@ -114,26 +119,17 @@ export default async function handler(eventOrRequest) {
       filename: rawFilename
     });
 
-    const targetBucket = sanitizeSegment(payload.bucket, DEFAULT_BUCKET);
-
-    if (!ALLOWED_BUCKETS.includes(targetBucket)) {
-      return jsonResponse(400, { error: 'Unsupported bucket requested' });
-    }
-
-    const fileSize = Number.parseInt(payload.fileSize, 10);
-    if (Number.isFinite(fileSize) && fileSize > MAX_UPLOAD_BYTES) {
-      return jsonResponse(400, { error: 'File exceeds maximum allowed size' });
-    }
-
     const supabase = getSupabaseClient();
 
     const { data: signedData, error: signedError } = await supabase
       .storage
       .from(targetBucket)
-      .createSignedUploadUrl(objectPath, SIGNED_URL_EXPIRY_SECONDS);
+      .createSignedUploadUrl(objectPath, SIGNED_URL_EXPIRY_SECONDS, {
+        upsert: false
+      });
 
     if (signedError || !signedData?.signedUrl || !signedData?.token) {
-      console.error('createSignedUploadUrl error', signedError);
+      console.error('generate-milestone-upload: createSignedUploadUrl error', signedError);
       return jsonResponse(500, { error: 'Unable to create upload URL' });
     }
 
@@ -152,7 +148,7 @@ export default async function handler(eventOrRequest) {
       contentType: contentType || 'application/octet-stream'
     });
   } catch (error) {
-    console.error('generate-win-upload error', error);
+    console.error('generate-milestone-upload error', error);
     return jsonResponse(500, { error: 'Failed to prepare upload' });
   }
 }

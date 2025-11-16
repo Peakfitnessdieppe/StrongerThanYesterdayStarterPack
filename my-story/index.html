@@ -28,6 +28,10 @@
       .tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#EAFBF0;border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:.72rem;padding:4px 8px}
       .card{border:1px solid rgba(90,214,122,.2);background:rgba(15,24,18,.9);border-radius:16px;padding:14px 14px;display:grid;gap:8px}
       .card h3{margin:0;font-size:1rem;color:#EFFFF6}
+      .metric-card{cursor:pointer;transition:transform .18s ease, border-color .2s ease;outline:none;position:relative;min-height:110px}
+      .metric-card:focus-visible{outline:3px solid rgba(90,214,122,.7);outline-offset:3px}
+      .metric-card:hover{border-color:rgba(90,214,122,.5);transform:translateY(-2px)}
+      .metric-card:active{transform:scale(.99)}
       .small{text-transform:uppercase;letter-spacing:.06em;font-size:.78rem;color:#C5E9D0}
       .actions{display:flex;flex-wrap:wrap;gap:10px}
       .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:16px;border:1px solid rgba(90,214,122,.4);font-weight:760;cursor:pointer;color:#06120b;background:#5ad67a;text-decoration:none}
@@ -35,6 +39,23 @@
       .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));height:14px;border-radius:8px;animation:pulse 1.2s infinite}
       @keyframes pulse {0%{background-position:-200px 0}100%{background-position:200px 0}}
       .error{color:#FF9C8A;font-weight:760}
+      .metric-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:32px;z-index:900}
+      .metric-modal[hidden]{display:none}
+      .metric-modal__overlay{position:absolute;inset:0;background:rgba(5,10,7,.78);backdrop-filter:blur(4px)}
+      .metric-modal__dialog{position:relative;z-index:1;background:rgba(12,20,15,.96);border:1px solid rgba(90,214,122,.35);border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.6);width:min(560px,92vw);max-height:85vh;padding:28px 28px 32px;display:grid;gap:18px;overflow:hidden}
+      .metric-modal__header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+      .metric-modal__title{margin:0;font-size:1.4rem;font-weight:780;color:#F3FFF7}
+      .metric-modal__close{background:rgba(90,214,122,.14);border:1px solid rgba(90,214,122,.35);color:#DFF5E4;border-radius:999px;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;cursor:pointer;transition:background .2s ease}
+      .metric-modal__close:hover{background:rgba(90,214,122,.28)}
+      .metric-modal__body{overflow:auto;padding-right:8px}
+      .metric-history-chart{background:rgba(16,26,19,.88);border:1px solid rgba(90,214,122,.22);border-radius:18px;padding:18px 20px;display:grid;gap:10px;position:relative}
+      .metric-history-chart svg{width:100%;height:auto;display:block}
+      .metric-history-chart__labels{display:flex;justify-content:space-between;font-size:.8rem;color:rgba(202,232,211,.78)}
+      .metric-history-chart__labels span{white-space:nowrap}
+      .metric-history-chart__title{font-size:.92rem;color:#DFF5E4;font-weight:680;margin:0}
+      .metric-history-tooltip{position:absolute;pointer-events:none;background:rgba(8,14,10,.94);border:1px solid rgba(90,214,122,.4);color:#E9FCF0;padding:10px 12px;border-radius:12px;font-size:.82rem;box-shadow:0 12px 30px rgba(0,0,0,.45);transform:translate(-50%,-120%);opacity:0;transition:opacity .12s ease;white-space:nowrap;z-index:5}
+      .metric-history-tooltip[data-visible="true"]{opacity:1}
+      body.metric-modal-open{overflow:hidden}
     </style>
   </head>
   <body>
@@ -76,20 +97,20 @@
         <section class="section" id="section-inbody">
           <h2>InBody highlights</h2>
           <div id="inbody-wrap" class="grid metrics">
-            <div class="card"><div class="small">Latest Scan</div><h3 id="scan-latest">No scans yet</h3></div>
-            <div class="card"><div class="small">Body Fat %</div><h3 id="scan-bf">—</h3></div>
-            <div class="card"><div class="small">Weight</div><h3 id="scan-weight">—</h3></div>
-            <div class="card"><div class="small">Skeletal Muscle</div><h3 id="scan-sm">—</h3></div>
-            <div class="card"><div class="small">Lean Body Mass</div><h3 id="scan-lbm">—</h3></div>
-            <div class="card"><div class="small">Body Fat Mass</div><h3 id="scan-bfm">—</h3></div>
-            <div class="card"><div class="small">Total Body Water</div><h3 id="scan-tbw">—</h3></div>
-            <div class="card"><div class="small">Dry Lean Mass</div><h3 id="scan-dlm">—</h3></div>
-            <div class="card"><div class="small">BMI</div><h3 id="scan-bmi">—</h3></div>
-            <div class="card"><div class="small">BMR</div><h3 id="scan-bmr">—</h3></div>
-            <div class="card"><div class="small">BF Control</div><h3 id="scan-bfc">—</h3></div>
-            <div class="card"><div class="small">LBM Control</div><h3 id="scan-lbc">—</h3></div>
-            <div class="card"><div class="small">Height</div><h3 id="scan-height">—</h3></div>
-            <div class="card"><div class="small">Age</div><h3 id="scan-age">—</h3></div>
+            <div class="card metric-card" data-metric-key="scan_date" role="button" tabindex="0" aria-label="View scan history"><div class="small">Latest Scan</div><h3 id="scan-latest">No scans yet</h3></div>
+            <div class="card metric-card" data-metric-key="pbf" role="button" tabindex="0" aria-label="View Body Fat % history"><div class="small">Body Fat %</div><h3 id="scan-bf">—</h3></div>
+            <div class="card metric-card" data-metric-key="weight_lb" role="button" tabindex="0" aria-label="View weight history"><div class="small">Weight</div><h3 id="scan-weight">—</h3></div>
+            <div class="card metric-card" data-metric-key="smm_lb" role="button" tabindex="0" aria-label="View skeletal muscle history"><div class="small">Skeletal Muscle</div><h3 id="scan-sm">—</h3></div>
+            <div class="card metric-card" data-metric-key="lbm_lb" role="button" tabindex="0" aria-label="View lean body mass history"><div class="small">Lean Body Mass</div><h3 id="scan-lbm">—</h3></div>
+            <div class="card metric-card" data-metric-key="bfm_lb" role="button" tabindex="0" aria-label="View body fat mass history"><div class="small">Body Fat Mass</div><h3 id="scan-bfm">—</h3></div>
+            <div class="card metric-card" data-metric-key="tbw_lb" role="button" tabindex="0" aria-label="View total body water history"><div class="small">Total Body Water</div><h3 id="scan-tbw">—</h3></div>
+            <div class="card metric-card" data-metric-key="dlm_lb" role="button" tabindex="0" aria-label="View dry lean mass history"><div class="small">Dry Lean Mass</div><h3 id="scan-dlm">—</h3></div>
+            <div class="card metric-card" data-metric-key="bmi" role="button" tabindex="0" aria-label="View BMI history"><div class="small">BMI</div><h3 id="scan-bmi">—</h3></div>
+            <div class="card metric-card" data-metric-key="bmr_kcal" role="button" tabindex="0" aria-label="View BMR history"><div class="small">BMR</div><h3 id="scan-bmr">—</h3></div>
+            <div class="card metric-card" data-metric-key="bfm_control_lb" role="button" tabindex="0" aria-label="View body fat control history"><div class="small">BF Control</div><h3 id="scan-bfc">—</h3></div>
+            <div class="card metric-card" data-metric-key="lbm_control_lb" role="button" tabindex="0" aria-label="View lean body mass control history"><div class="small">LBM Control</div><h3 id="scan-lbc">—</h3></div>
+            <div class="card metric-card" data-metric-key="height" role="button" tabindex="0" aria-label="View height history"><div class="small">Height</div><h3 id="scan-height">—</h3></div>
+            <div class="card metric-card" data-metric-key="age" role="button" tabindex="0" aria-label="View age history"><div class="small">Age</div><h3 id="scan-age">—</h3></div>
           </div>
           <div class="muted" id="inbody-note">No scan on file yet. Book your next InBody at the front desk.</div>
         </section>
@@ -112,6 +133,18 @@
         <p class="error" id="story-error" hidden></p>
       </div>
     </main>
+
+    <div id="metric-history-modal" class="metric-modal" hidden>
+      <div class="metric-modal__overlay" data-metric-close></div>
+      <div class="metric-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="metric-history-title">
+        <div class="metric-modal__header">
+          <h3 id="metric-history-title" class="metric-modal__title">Metric history</h3>
+          <button type="button" id="metric-history-close" class="metric-modal__close" aria-label="Close metric history">×</button>
+        </div>
+        <p class="muted" id="metric-history-subtitle" style="margin:0"></p>
+        <div id="metric-history-body" class="metric-modal__body"></div>
+      </div>
+    </div>
 
     <footer class="site-footer" style="padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;">
       <div class="container">
@@ -202,8 +235,138 @@
         const totalInches = cm / 2.54;
         const feet = Math.floor(totalInches / 12);
         const inches = Math.round(totalInches % 12);
-        return `${feet}' ${inches}\" (${cm.toFixed(1)} cm)`;
+        return `${feet}' ${inches}" (${cm.toFixed(1)} cm)`;
       }
+
+      const METRIC_CONFIG = {
+        scan_date: {
+          label: 'Scan history',
+          description: 'Every recorded scan date for your profile.',
+          getValue: (entry) => entry.scan_date || entry.created_at,
+          formatter: (value) => formatDate(value),
+          chartType: 'timeline'
+        },
+        pbf: {
+          label: 'Body Fat %',
+          description: 'Percent body fat across your recorded scans.',
+          getValue: (entry) => entry.pbf,
+          formatter: (value) => formatPercent(value),
+          chartType: 'line',
+          numeric: true
+        },
+        weight_lb: {
+          label: 'Weight',
+          description: 'Body weight measured in pounds.',
+          getValue: (entry) => entry.weight_lb,
+          formatter: (value) => formatPounds(value),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        smm_lb: {
+          label: 'Skeletal Muscle Mass',
+          description: 'Skeletal muscle mass in pounds.',
+          getValue: (entry) => entry.smm_lb,
+          formatter: (value) => formatPounds(value),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        lbm_lb: {
+          label: 'Lean Body Mass',
+          description: 'Lean body mass over time.',
+          getValue: (entry) => entry.lbm_lb,
+          formatter: (value) => formatPounds(value),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        bfm_lb: {
+          label: 'Body Fat Mass',
+          description: 'Body fat mass readings in pounds.',
+          getValue: (entry) => entry.bfm_lb,
+          formatter: (value) => formatPounds(value),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        tbw_lb: {
+          label: 'Total Body Water',
+          description: 'Total body water in pounds.',
+          getValue: (entry) => entry.tbw_lb,
+          formatter: (value) => formatPounds(value),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        dlm_lb: {
+          label: 'Dry Lean Mass',
+          description: 'Dry lean mass readings in pounds.',
+          getValue: (entry) => entry.dlm_lb,
+          formatter: (value) => formatPounds(value),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        bmi: {
+          label: 'BMI',
+          description: 'Body Mass Index progression.',
+          getValue: (entry) => entry.bmi,
+          formatter: (value) => formatNumber(value, '', { decimals: 1 }),
+          chartType: 'line',
+          numeric: true
+        },
+        bmr_kcal: {
+          label: 'BMR',
+          description: 'Basal metabolic rate in calories.',
+          getValue: (entry) => entry.bmr_kcal,
+          formatter: (value) => formatNumber(value, ' kcal', { decimals: 0 }),
+          chartType: 'line',
+          numeric: true,
+          unit: 'kcal'
+        },
+        bfm_control_lb: {
+          label: 'Body Fat Control',
+          description: 'Body fat change suggested by your scan.',
+          getValue: (entry) => entry.bfm_control_lb,
+          formatter: (value) => formatPounds(value, { showSign: true }),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        lbm_control_lb: {
+          label: 'Lean Body Mass Control',
+          description: 'Lean body mass change suggested by your scan.',
+          getValue: (entry) => entry.lbm_control_lb,
+          formatter: (value) => formatPounds(value, { showSign: true }),
+          chartType: 'line',
+          numeric: true,
+          unit: 'lb'
+        },
+        height: {
+          label: 'Height',
+          description: 'Recorded height entries.',
+          getValue: (entry) => entry.height,
+          formatter: (value) => value || '—'
+        },
+        age: {
+          label: 'Age',
+          description: 'Recorded age at the time of each scan.',
+          getValue: (entry) => entry.age,
+          formatter: (value) => formatNumber(value, '', { decimals: 0 }),
+          chartType: 'line',
+          numeric: true
+        }
+      };
+
+      const metricHistoryState = {
+        history: [],
+        modal: null,
+        title: null,
+        subtitle: null,
+        body: null,
+        lastFocus: null
+      };
 
       function text(nodeId, value){
         const n = document.getElementById(nodeId); if (n) n.textContent = value;
@@ -217,6 +380,10 @@
 
       function renderStory(payload){
         const { member, milestones = [], wins = [], checkins = [], strong_finish = [], inbody = {} } = payload || {};
+
+        metricHistoryState.history = Array.isArray(inbody.history)
+          ? [...inbody.history].filter(Boolean)
+          : [];
 
         // Hero chips
         showChip('chip-milestones','chip-milestones-count', milestones.length);
@@ -332,6 +499,106 @@
         }
       }
 
+      function setupMetricModal(){
+        const modal = document.getElementById('metric-history-modal');
+        if (!modal) return;
+        metricHistoryState.modal = modal;
+        metricHistoryState.title = document.getElementById('metric-history-title');
+        metricHistoryState.subtitle = document.getElementById('metric-history-subtitle');
+        metricHistoryState.body = document.getElementById('metric-history-body');
+
+        const closeTargets = [document.getElementById('metric-history-close'), modal.querySelector('[data-metric-close]')].filter(Boolean);
+        closeTargets.forEach((node) => node.addEventListener('click', closeMetricModal));
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && !modal.hasAttribute('hidden')) {
+            closeMetricModal();
+          }
+        });
+
+        modal.addEventListener('click', (event) => {
+          if (event.target?.dataset?.metricClose !== undefined) {
+            closeMetricModal();
+          }
+        });
+
+        const cards = document.querySelectorAll('.metric-card');
+        cards.forEach((card) => {
+          card.addEventListener('click', () => openMetricModal(card.dataset.metricKey));
+          card.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openMetricModal(card.dataset.metricKey);
+            }
+          });
+        });
+      }
+
+      function openMetricModal(metricKey){
+        const modal = metricHistoryState.modal;
+        if (!modal) return;
+
+        const config = METRIC_CONFIG[metricKey];
+        if (!config) return;
+
+        const rawHistory = metricHistoryState.history || [];
+        const dataset = rawHistory
+          .map((entry) => {
+            const value = config.getValue ? config.getValue(entry) : entry?.[metricKey];
+            const date = entry?.scan_date || entry?.created_at || entry?.date;
+            return { value, date, entry };
+          })
+          .filter(({ value }) => value !== null && value !== undefined && value !== '');
+
+        dataset.sort((a, b) => {
+          const dateA = a.date ? new Date(a.date) : new Date(0);
+          const dateB = b.date ? new Date(b.date) : new Date(0);
+          return dateB - dateA;
+        });
+
+        if (metricHistoryState.title) metricHistoryState.title.textContent = config.label || 'Metric history';
+        if (metricHistoryState.subtitle) {
+          metricHistoryState.subtitle.textContent = config.description || '';
+          metricHistoryState.subtitle.style.display = config.description ? 'block' : 'none';
+        }
+
+        if (metricHistoryState.body) {
+          metricHistoryState.body.innerHTML = '';
+          if (!dataset.length) {
+            const empty = document.createElement('p');
+            empty.className = 'metric-history-empty';
+            empty.textContent = 'No history recorded yet for this metric.';
+            metricHistoryState.body.appendChild(empty);
+          } else {
+            const chartNode = renderMetricChart(config, dataset);
+            if (chartNode) {
+              metricHistoryState.body.appendChild(chartNode);
+            } else {
+              const fallback = document.createElement('p');
+              fallback.className = 'metric-history-empty';
+              fallback.textContent = 'History available, but this metric cannot be charted yet.';
+              metricHistoryState.body.appendChild(fallback);
+            }
+          }
+        }
+
+        metricHistoryState.lastFocus = document.activeElement;
+        modal.removeAttribute('hidden');
+        document.body.classList.add('metric-modal-open');
+        const closeButton = document.getElementById('metric-history-close');
+        if (closeButton) closeButton.focus();
+      }
+
+      function closeMetricModal(){
+        const modal = metricHistoryState.modal;
+        if (!modal || modal.hasAttribute('hidden')) return;
+        modal.setAttribute('hidden', '');
+        document.body.classList.remove('metric-modal-open');
+        if (metricHistoryState.lastFocus && typeof metricHistoryState.lastFocus.focus === 'function') {
+          metricHistoryState.lastFocus.focus();
+        }
+      }
+
       function escapeHtml(str){
         return String(str || '')
           .replaceAll('&','&amp;')
@@ -340,6 +607,162 @@
           .replaceAll('"','&quot;')
           .replaceAll("'",'&#39;');
       }
+
+      function parseNumeric(value) {
+        if (value == null || value === '') return null;
+        const num = Number(value);
+        if (Number.isFinite(num)) return num;
+        const cleaned = String(value).replace(/[^0-9.\-]/g, '');
+        const parsed = Number(cleaned);
+        return Number.isFinite(parsed) ? parsed : null;
+      }
+
+      function renderMetricChart(config, dataset) {
+        if (!Array.isArray(dataset) || !dataset.length) return null;
+
+        if (config.numeric) {
+          const points = dataset
+            .map(({ date, value }) => ({ date, value: parseNumeric(value), rawValue: value }))
+            .filter(({ value }) => value != null)
+            .reverse();
+          if (!points.length) return null;
+
+          const values = points.map((p) => p.value);
+          const min = Math.min(...values);
+          const max = Math.max(...values);
+          const padding = (max - min) * 0.08 || 1;
+          const chartMin = min - padding;
+          const chartMax = max + padding;
+          const height = 200;
+          const width = 520;
+          const stringifyPoint = (point, index) => {
+            const x = (index / Math.max(points.length - 1, 1)) * width;
+            const valueRange = chartMax - chartMin || 1;
+            const y = height - ((point.value - chartMin) / valueRange) * height;
+            return `${x.toFixed(2)},${y.toFixed(2)}`;
+          };
+          const polylinePoints = points.map(stringifyPoint).join(' ');
+
+          const svgNS = 'http://www.w3.org/2000/svg';
+          const svg = document.createElementNS(svgNS, 'svg');
+          svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+          svg.setAttribute('role', 'img');
+          svg.setAttribute('aria-label', `${config.label} trend`);
+
+          const gradientId = `metricGradient-${config.label.replace(/\s+/g, '')}`;
+          const defs = document.createElementNS(svgNS, 'defs');
+          const linearGradient = document.createElementNS(svgNS, 'linearGradient');
+          linearGradient.setAttribute('id', gradientId);
+          linearGradient.setAttribute('x1', '0%');
+          linearGradient.setAttribute('x2', '0%');
+          linearGradient.setAttribute('y1', '0%');
+          linearGradient.setAttribute('y2', '100%');
+
+          const stopTop = document.createElementNS(svgNS, 'stop');
+          stopTop.setAttribute('offset', '0%');
+          stopTop.setAttribute('stop-color', '#5AD67A');
+          stopTop.setAttribute('stop-opacity', '0.45');
+          const stopBottom = document.createElementNS(svgNS, 'stop');
+          stopBottom.setAttribute('offset', '100%');
+          stopBottom.setAttribute('stop-color', '#5AD67A');
+          stopBottom.setAttribute('stop-opacity', '0');
+          linearGradient.append(stopTop, stopBottom);
+          defs.appendChild(linearGradient);
+          svg.appendChild(defs);
+
+          const area = document.createElementNS(svgNS, 'polygon');
+          area.setAttribute('fill', `url(#${gradientId})`);
+          const areaPoints = `${polylinePoints} ${width},${height} 0,${height}`;
+          area.setAttribute('points', areaPoints);
+          svg.appendChild(area);
+
+          const polyline = document.createElementNS(svgNS, 'polyline');
+          polyline.setAttribute('fill', 'none');
+          polyline.setAttribute('stroke', '#5AD67A');
+          polyline.setAttribute('stroke-width', '3');
+          polyline.setAttribute('stroke-linecap', 'round');
+          polyline.setAttribute('stroke-linejoin', 'round');
+          polyline.setAttribute('points', polylinePoints);
+          svg.appendChild(polyline);
+
+          const wrapper = document.createElement('div');
+          wrapper.className = 'metric-history-chart';
+          const title = document.createElement('p');
+          title.className = 'metric-history-chart__title';
+          title.textContent = `${config.label} trend`; 
+          wrapper.appendChild(title);
+
+          const tooltip = document.createElement('div');
+          tooltip.className = 'metric-history-tooltip';
+          tooltip.setAttribute('data-visible', 'false');
+          wrapper.appendChild(tooltip);
+
+          const setTooltipPosition = (event) => {
+            const bounds = wrapper.getBoundingClientRect();
+            const offsetX = event.clientX - bounds.left;
+            const offsetY = event.clientY - bounds.top;
+            tooltip.style.left = `${offsetX}px`;
+            tooltip.style.top = `${offsetY}px`;
+          };
+
+          const showTooltip = (event, point, index) => {
+            setTooltipPosition(event);
+            const label = config.formatter ? config.formatter(point.rawValue ?? point.value) : point.value;
+            tooltip.innerHTML = `<strong>${formatDate(point.date)}</strong><div>${label}</div>`;
+            tooltip.setAttribute('data-visible', 'true');
+          };
+
+          const hideTooltip = () => {
+            tooltip.setAttribute('data-visible', 'false');
+          };
+
+          points.forEach((point, index) => {
+            const [xStr, yStr] = stringifyPoint(point, index).split(',');
+            const circle = document.createElementNS(svgNS, 'circle');
+            circle.setAttribute('cx', xStr);
+            circle.setAttribute('cy', yStr);
+            circle.setAttribute('r', '5');
+            circle.setAttribute('fill', '#5AD67A');
+            circle.setAttribute('tabindex', '0');
+            circle.setAttribute('role', 'presentation');
+            circle.addEventListener('mouseenter', (event) => showTooltip(event, point, index));
+            circle.addEventListener('mousemove', setTooltipPosition);
+            circle.addEventListener('mouseleave', hideTooltip);
+            circle.addEventListener('focus', (event) => showTooltip(event, point, index));
+            circle.addEventListener('blur', hideTooltip);
+            svg.appendChild(circle);
+          });
+
+          svg.addEventListener('mouseleave', hideTooltip);
+
+          wrapper.appendChild(svg);
+
+          const labels = document.createElement('div');
+          labels.className = 'metric-history-chart__labels';
+          labels.innerHTML = `<span>${formatDate(points[0].date || dataset[0].date)}</span><span>${formatDate(points[points.length - 1].date || dataset[dataset.length - 1].date)}</span>`;
+          wrapper.appendChild(labels);
+          return wrapper;
+        }
+
+        if (config.chartType === 'timeline') {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'metric-history-chart';
+          const title = document.createElement('p');
+          title.className = 'metric-history-chart__title';
+          title.textContent = `${config.label}`;
+          wrapper.appendChild(title);
+
+          const list = document.createElement('div');
+          list.className = 'metric-history-empty';
+          list.textContent = `${dataset.length} scans recorded.`;
+          wrapper.appendChild(list);
+          return wrapper;
+        }
+
+        return null;
+      }
+
+      setupMetricModal();
     </script>
   </body>
 </html>

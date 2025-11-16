@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://starter.peakfitnessdieppe.ca/my-story">
+    <title>My Story · Peak Fitness</title>
+    <link rel="preload" href="../styles.css" as="style">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body{min-height:100vh;background:linear-gradient(180deg,var(--ink-0),var(--ink-2));display:flex;flex-direction:column;}
+      .page-shell{flex:1;display:flex;flex-direction:column;padding:56px 0 72px;background:radial-gradient(circle at top left,rgba(90,214,122,.12),transparent 45%),linear-gradient(180deg,rgba(10,15,12,.96),rgba(9,13,11,.92));}
+      .story-container{width:min(1000px,94vw);margin:0 auto;display:grid;gap:26px;}
+      .hero{display:grid;gap:10px;text-align:left;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:26px 24px;box-shadow:0 22px 60px rgba(0,0,0,.42);}
+      .hero h1{margin:0;font-size:clamp(28px,5.6vw,38px);font-weight:820;letter-spacing:-.01em;color:#F4FFF6;}
+      .muted{color:rgba(211,238,222,.8)}
+      .chip-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+      .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(90,214,122,.14);border:1px solid rgba(90,214,122,.32);color:#DFF5E4;font-weight:720;font-size:.92rem}
+      .section{background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.22);border-radius:24px;padding:22px 22px;display:grid;gap:18px}
+      .section h2{margin:0;font-size:clamp(20px,4vw,26px);font-weight:800;color:#F2FFF6}
+      .grid{display:grid;gap:14px}
+      .grid.twocol{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+      .gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+      .photo{position:relative}
+      .photo img{width:100%;height:180px;object-fit:cover;border-radius:16px;border:1px solid rgba(90,214,122,.22);box-shadow:0 12px 28px rgba(0,0,0,.3)}
+      .tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#EAFBF0;border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:.72rem;padding:4px 8px}
+      .card{border:1px solid rgba(90,214,122,.2);background:rgba(15,24,18,.9);border-radius:16px;padding:14px 14px;display:grid;gap:8px}
+      .card h3{margin:0;font-size:1rem;color:#EFFFF6}
+      .small{text-transform:uppercase;letter-spacing:.06em;font-size:.78rem;color:#C5E9D0}
+      .actions{display:flex;flex-wrap:wrap;gap:10px}
+      .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:16px;border:1px solid rgba(90,214,122,.4);font-weight:760;cursor:pointer;color:#06120b;background:#5ad67a;text-decoration:none}
+      .btn.secondary{background:transparent;color:#E8FAF0;border-color:rgba(90,214,122,.3)}
+      .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.12),rgba(255,255,255,.06));height:14px;border-radius:8px;animation:pulse 1.2s infinite}
+      @keyframes pulse {0%{background-position:-200px 0}100%{background-position:200px 0}}
+      .error{color:#FF9C8A;font-weight:760}
+    </style>
+  </head>
+  <body>
+    <header class="site-header" style="position:static;background:rgba(15,15,16,.35);border-bottom:1px solid rgba(255,255,255,.04)">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="../assets/peak-logo.png" alt="Peak Fitness Dieppe" width="120" height="40">
+        </a>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="story-container">
+        <section class="hero">
+          <h1 id="member-heading">My Story</h1>
+          <div class="muted" id="member-sub">Loading your journey…</div>
+          <div class="chip-row" id="chip-row">
+            <span class="chip" id="chip-milestones" hidden>Milestones: <strong style="margin-left:6px" id="chip-milestones-count">0</strong></span>
+            <span class="chip" id="chip-wins" hidden>Wins: <strong style="margin-left:6px" id="chip-wins-count">0</strong></span>
+            <span class="chip" id="chip-checkins" hidden>Check-ins: <strong style="margin-left:6px" id="chip-checkins-count">0</strong></span>
+            <span class="chip" id="chip-scan" hidden>Last scan: <strong style="margin-left:6px" id="chip-scan-date">—</strong></span>
+          </div>
+          <div class="actions" id="hero-actions">
+            <a class="btn" id="cta-upload" href="#">Upload milestone photo</a>
+            <a class="btn secondary" id="cta-win" href="#">Capture a win</a>
+            <a class="btn secondary" id="cta-toolkit" href="https://starter.peakfitnessdieppe.ca/toolkit">Open Nutrition Toolkit</a>
+          </div>
+        </section>
+
+        <section class="section" id="section-gallery">
+          <h2>Milestone gallery</h2>
+          <div class="gallery" id="gallery">
+            <div class="skeleton" style="height:180px;border-radius:16px"></div>
+            <div class="skeleton" style="height:180px;border-radius:16px"></div>
+            <div class="skeleton" style="height:180px;border-radius:16px"></div>
+          </div>
+        </section>
+
+        <section class="section" id="section-inbody">
+          <h2>InBody highlights</h2>
+          <div id="inbody-wrap" class="grid twocol">
+            <div class="card"><div class="small">Latest Scan</div><h3 id="scan-latest">No scans yet</h3></div>
+            <div class="card"><div class="small">Body Fat %</div><h3 id="scan-bf">—</h3></div>
+            <div class="card"><div class="small">Weight</div><h3 id="scan-weight">—</h3></div>
+            <div class="card"><div class="small">Skeletal Muscle</div><h3 id="scan-sm">—</h3></div>
+          </div>
+          <div class="muted" id="inbody-note">No scan on file yet. Book your next InBody at the front desk.</div>
+        </section>
+
+        <section class="section" id="section-wins">
+          <h2>Wins & momentum</h2>
+          <div id="wins-list" class="grid twocol"></div>
+        </section>
+
+        <section class="section" id="section-checkins">
+          <h2>Onboarding check-ins</h2>
+          <div id="checkins-list" class="grid twocol"></div>
+        </section>
+
+        <section class="section" id="section-finish">
+          <h2>Day 30 · Strong Finish</h2>
+          <div id="finish-list" class="grid twocol"></div>
+        </section>
+
+        <p class="error" id="story-error" hidden></p>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="padding:32px 0;text-align:center;color:rgba(210,236,218,.78);font-size:.9rem;">
+      <div class="container">
+        Peak Fitness Dieppe · 688 Babin St · Dieppe, NB · <a href="mailto:info@peakfitnessdieppe.ca" style="color:#9BEAB5;">info@peakfitnessdieppe.ca</a>
+      </div>
+    </footer>
+
+    <script>
+      (function init(){
+        const params = new URLSearchParams(window.location.search);
+        const email = (params.get('email')||'').trim();
+        const first = (params.get('first')||params.get('firstname')||'').trim();
+        const last = (params.get('last')||params.get('lastname')||'').trim();
+        const nameParam = (params.get('name')||'').trim() || [first,last].filter(Boolean).join(' ');
+
+        const heading = document.getElementById('member-heading');
+        const sub = document.getElementById('member-sub');
+        if (heading) heading.textContent = nameParam ? `${nameParam} · My Story` : 'My Story';
+        if (sub) sub.textContent = email ? `Personalized journey for ${email}` : 'Personalized journey';
+
+        const link = (base, q) => {
+          const url = new URL(base, window.location.origin);
+          if (email) url.searchParams.set('email', email);
+          if (first) url.searchParams.set('first', first);
+          if (last) url.searchParams.set('last', last);
+          if (nameParam) url.searchParams.set('name', nameParam);
+          if (q) Object.entries(q).forEach(([k,v])=> url.searchParams.set(k,v));
+          return url.toString();
+        };
+
+        const uploadBtn = document.getElementById('cta-upload');
+        if (uploadBtn) uploadBtn.href = link('/milestone-photo/');
+        const winBtn = document.getElementById('cta-win');
+        if (winBtn) winBtn.href = link('/wins-capture/');
+        const toolkitBtn = document.getElementById('cta-toolkit');
+        if (toolkitBtn) toolkitBtn.href = link('https://starter.peakfitnessdieppe.ca/toolkit');
+
+        if (!email) {
+          const err = document.getElementById('story-error');
+          if (err) { err.hidden = false; err.textContent = 'Missing email in link. Please open your story from your Peak Fitness email.'; }
+          return;
+        }
+
+        fetch(`/.netlify/functions/fetch-member-story?email=${encodeURIComponent(email)}&limit=50`)
+          .then(r => r.ok ? r.json() : Promise.reject(new Error('Unable to load story')))
+          .then(data => renderStory(data))
+          .catch(e => {
+            console.error('story load error', e);
+            const err = document.getElementById('story-error');
+            if (err) { err.hidden = false; err.textContent = 'We couldn\'t load your story right now. Please try again shortly.'; }
+          });
+      })();
+
+      function formatDate(d){
+        if (!d) return '—';
+        try {
+          const date = d.includes('T') ? new Date(d) : new Date(d.replace(/-/g,'/'));
+          return date.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+        } catch(_) { return d; }
+      }
+
+      function text(nodeId, value){
+        const n = document.getElementById(nodeId); if (n) n.textContent = value;
+      }
+
+      function showChip(id, valueNodeId, value){
+        const chip = document.getElementById(id);
+        const val = document.getElementById(valueNodeId);
+        if (chip && val) { val.textContent = value; chip.hidden = false; }
+      }
+
+      function renderStory(payload){
+        const { member, milestones = [], wins = [], checkins = [], strong_finish = [], inbody = {} } = payload || {};
+
+        // Hero chips
+        showChip('chip-milestones','chip-milestones-count', milestones.length);
+        showChip('chip-wins','chip-wins-count', wins.length);
+        showChip('chip-checkins','chip-checkins-count', checkins.length);
+        if (inbody?.latest?.scan_date) {
+          showChip('chip-scan','chip-scan-date', formatDate(inbody.latest.scan_date));
+        }
+
+        // Gallery
+        const gallery = document.getElementById('gallery');
+        if (gallery) {
+          gallery.innerHTML = '';
+          if (!milestones.length) {
+            gallery.innerHTML = '<p class="muted">No milestone photos yet. Upload your first one after signing the Wall of Achievements.</p>';
+          } else {
+            milestones.forEach(m => {
+              const div = document.createElement('div');
+              div.className = 'photo';
+              div.innerHTML = `
+                <img src="${m.photo_url}" alt="Milestone photo" loading="lazy">
+                <span class="tag">${formatDate(m.uploaded_at_utc || m.submitted_at_local)}</span>
+                ${m.share_permission === 'no' ? '<span class="tag" style="right:8px;left:auto;background:rgba(255,156,138,.2);border-color:rgba(255,156,138,.5);color:#ffd6ce">Private</span>' : ''}
+              `;
+              gallery.appendChild(div);
+            });
+          }
+        }
+
+        // InBody
+        if (inbody?.latest) {
+          text('scan-latest', formatDate(inbody.latest.scan_date));
+          text('scan-bf', inbody.latest.body_fat_pct != null ? `${inbody.latest.body_fat_pct}%` : '—');
+          text('scan-weight', inbody.latest.weight_kg != null ? `${inbody.latest.weight_kg} kg` : '—');
+          text('scan-sm', inbody.latest.skeletal_muscle_kg != null ? `${inbody.latest.skeletal_muscle_kg} kg` : '—');
+          const note = document.getElementById('inbody-note'); if (note) note.textContent = 'Latest metrics shown. Ask a coach for your next scan.';
+        }
+
+        // Wins
+        const winsList = document.getElementById('wins-list');
+        if (winsList) {
+          winsList.innerHTML = '';
+          if (!wins.length) {
+            winsList.innerHTML = '<p class="muted">No wins logged yet. Use the Capture a Win button above to add your first one.</p>';
+          } else {
+            wins.forEach(w => {
+              const el = document.createElement('article');
+              el.className = 'card';
+              const tags = Array.isArray(w.wins_tags) ? w.wins_tags.join(' · ') : (w.wins_tags || '');
+              el.innerHTML = `
+                <div class="small">${formatDate(w.submitted_at_local)}</div>
+                <h3>${escapeHtml(w.win_story || '')}</h3>
+                ${tags ? `<div class="muted" style="font-size:.92rem">${escapeHtml(tags)}</div>` : ''}
+                ${w.media_url ? `<a class="btn secondary" href="${w.media_url}" target="_blank" rel="noopener">Open photo</a>` : ''}
+              `;
+              winsList.appendChild(el);
+            });
+          }
+        }
+
+        // Check-ins
+        const checkList = document.getElementById('checkins-list');
+        if (checkList) {
+          checkList.innerHTML = '';
+          if (!checkins.length) {
+            checkList.innerHTML = '<p class="muted">No onboarding check-ins on file.</p>';
+          } else {
+            checkins.forEach(c => {
+              const el = document.createElement('article');
+              el.className = 'card';
+              el.innerHTML = `
+                <div class="small">${formatDate(c.submitted_at_local)}</div>
+                <h3>How helpful so far: ${escapeHtml(c.q1_helpful || '—')}</h3>
+                <div class="muted">Ready for next sessions: ${escapeHtml(c.q2_ready || '—')}</div>
+                ${c.q3_better ? `<div class="muted">What feels better: ${escapeHtml(c.q3_better)}</div>` : ''}
+                ${c.note ? `<div class="muted">Note: ${escapeHtml(c.note)}</div>` : ''}
+              `;
+              checkList.appendChild(el);
+            });
+          }
+        }
+
+        // Strong Finish
+        const finishList = document.getElementById('finish-list');
+        if (finishList) {
+          finishList.innerHTML = '';
+          if (!strong_finish.length) {
+            finishList.innerHTML = '<p class="muted">No Day 30 Strong Finish response yet.</p>';
+          } else {
+            strong_finish.forEach(s => {
+              const el = document.createElement('article');
+              el.className = 'card';
+              el.innerHTML = `
+                <div class="small">${formatDate(s.submitted_at_local)}</div>
+                <h3>Overall: ${escapeHtml(s.q1_overall || '—')}</h3>
+                ${s.q2_biggest_win ? `<div class="muted">Biggest Win: ${escapeHtml(s.q2_biggest_win)}</div>` : ''}
+                ${s.q3_coach_support ? `<div class="muted">Coach Support: ${escapeHtml(s.q3_coach_support)}</div>` : ''}
+                ${s.q10_notes ? `<div class="muted">Notes: ${escapeHtml(s.q10_notes)}</div>` : ''}
+              `;
+              finishList.appendChild(el);
+            });
+          }
+        }
+      }
+
+      function escapeHtml(str){
+        return String(str || '')
+          .replaceAll('&','&amp;')
+          .replaceAll('<','&lt;')
+          .replaceAll('>','&gt;')
+          .replaceAll('"','&quot;')
+          .replaceAll("'",'&#39;');
+      }
+    </script>
+  </body>
+</html>

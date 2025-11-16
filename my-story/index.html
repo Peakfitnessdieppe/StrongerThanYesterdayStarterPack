@@ -21,6 +21,7 @@
       .section h2{margin:0;font-size:clamp(20px,4vw,26px);font-weight:800;color:#F2FFF6}
       .grid{display:grid;gap:14px}
       .grid.twocol{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+      .grid.metrics{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
       .gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
       .photo{position:relative}
       .photo img{width:100%;height:180px;object-fit:cover;border-radius:16px;border:1px solid rgba(90,214,122,.22);box-shadow:0 12px 28px rgba(0,0,0,.3)}
@@ -74,11 +75,21 @@
 
         <section class="section" id="section-inbody">
           <h2>InBody highlights</h2>
-          <div id="inbody-wrap" class="grid twocol">
+          <div id="inbody-wrap" class="grid metrics">
             <div class="card"><div class="small">Latest Scan</div><h3 id="scan-latest">No scans yet</h3></div>
             <div class="card"><div class="small">Body Fat %</div><h3 id="scan-bf">—</h3></div>
             <div class="card"><div class="small">Weight</div><h3 id="scan-weight">—</h3></div>
             <div class="card"><div class="small">Skeletal Muscle</div><h3 id="scan-sm">—</h3></div>
+            <div class="card"><div class="small">Lean Body Mass</div><h3 id="scan-lbm">—</h3></div>
+            <div class="card"><div class="small">Body Fat Mass</div><h3 id="scan-bfm">—</h3></div>
+            <div class="card"><div class="small">Total Body Water</div><h3 id="scan-tbw">—</h3></div>
+            <div class="card"><div class="small">Dry Lean Mass</div><h3 id="scan-dlm">—</h3></div>
+            <div class="card"><div class="small">BMI</div><h3 id="scan-bmi">—</h3></div>
+            <div class="card"><div class="small">BMR</div><h3 id="scan-bmr">—</h3></div>
+            <div class="card"><div class="small">BF Control</div><h3 id="scan-bfc">—</h3></div>
+            <div class="card"><div class="small">LBM Control</div><h3 id="scan-lbc">—</h3></div>
+            <div class="card"><div class="small">Height</div><h3 id="scan-height">—</h3></div>
+            <div class="card"><div class="small">Age</div><h3 id="scan-age">—</h3></div>
           </div>
           <div class="muted" id="inbody-note">No scan on file yet. Book your next InBody at the front desk.</div>
         </section>
@@ -162,6 +173,38 @@
         } catch(_) { return d; }
       }
 
+      function formatNumber(value, suffix = '', { decimals = 1 } = {}) {
+        const num = Number(value);
+        if (!Number.isFinite(num)) return '—';
+        const formatted = num.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        return `${formatted}${suffix}`.trim();
+      }
+
+      function formatPercent(value) {
+        if (value == null || value === '') return '—';
+        const num = Number(value);
+        if (!Number.isFinite(num)) return `${value}%`;
+        return `${num.toFixed(1)}%`;
+      }
+
+      function formatPounds(value, { showSign = false } = {}) {
+        if (value == null || value === '') return '—';
+        const num = Number(value);
+        if (!Number.isFinite(num)) return `${value} lb`;
+        const formatted = num.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        const prefix = showSign && num > 0 ? '+' : '';
+        return `${prefix}${formatted} lb`;
+      }
+
+      function formatHeight(heightCm) {
+        if (!Number.isFinite(Number(heightCm))) return '—';
+        const cm = Number(heightCm);
+        const totalInches = cm / 2.54;
+        const feet = Math.floor(totalInches / 12);
+        const inches = Math.round(totalInches % 12);
+        return `${feet}' ${inches}\" (${cm.toFixed(1)} cm)`;
+      }
+
       function text(nodeId, value){
         const n = document.getElementById(nodeId); if (n) n.textContent = value;
       }
@@ -206,9 +249,19 @@
         // InBody
         if (inbody?.latest) {
           text('scan-latest', formatDate(inbody.latest.scan_date));
-          text('scan-bf', inbody.latest.body_fat_pct != null ? `${inbody.latest.body_fat_pct}%` : '—');
-          text('scan-weight', inbody.latest.weight_kg != null ? `${inbody.latest.weight_kg} kg` : '—');
-          text('scan-sm', inbody.latest.skeletal_muscle_kg != null ? `${inbody.latest.skeletal_muscle_kg} kg` : '—');
+          text('scan-bf', formatPercent(inbody.latest.pbf));
+          text('scan-weight', formatPounds(inbody.latest.weight_lb));
+          text('scan-sm', formatPounds(inbody.latest.smm_lb));
+          text('scan-lbm', formatPounds(inbody.latest.lbm_lb));
+          text('scan-bfm', formatPounds(inbody.latest.bfm_lb));
+          text('scan-tbw', formatPounds(inbody.latest.tbw_lb));
+          text('scan-dlm', formatPounds(inbody.latest.dlm_lb));
+          text('scan-bmi', formatNumber(inbody.latest.bmi, '', { decimals: 1 }));
+          text('scan-bmr', formatNumber(inbody.latest.bmr_kcal, ' kcal', { decimals: 0 }));
+          text('scan-bfc', formatPounds(inbody.latest.bfm_control_lb, { showSign: true }));
+          text('scan-lbc', formatPounds(inbody.latest.lbm_control_lb, { showSign: true }));
+          text('scan-height', formatHeight(inbody.latest.height_cm));
+          text('scan-age', formatNumber(inbody.latest.age_years, '', { decimals: 0 }));
           const note = document.getElementById('inbody-note'); if (note) note.textContent = 'Latest metrics shown. Ask a coach for your next scan.';
         }
 

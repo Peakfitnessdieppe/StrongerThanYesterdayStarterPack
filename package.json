@@ -10,6 +10,20 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.43.1",
+    "csv-parse": "^6.1.0",
+    "node-fetch": "^3.3.2",
     "square": "^42.0.0"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peakfitnessdieppe/StrongerThanYesterdayStarterPack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Peakfitnessdieppe/StrongerThanYesterdayStarterPack/issues"
+  },
+  "homepage": "https://github.com/Peakfitnessdieppe/StrongerThanYesterdayStarterPack#readme"
 }

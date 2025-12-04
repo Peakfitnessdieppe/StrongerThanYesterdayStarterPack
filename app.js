@@ -688,20 +688,25 @@ const copy = {
       },
       valueSplit: {
         coreTitle: "Core Offer",
-        coreValue: "$407.94 Value",
+        coreValue: "$243 Value",
         core: [
-          "Unlimited access to 40+ coached classes/week",
+          "Unlimited access to 40+ coached classes/week <span class=\"value-tag\">$139.99 value</span>",
+          "1 Personal Training Onboarding (60 min) — dial in your plan fast <span class=\"value-tag\">$85 value</span>",
+          "1 InBody scan at onboarding — know your baseline <span class=\"value-tag\">$18 value</span>",
           "7 formats — Glutes & Abs, Muscle Building, Bootcamp, Yoga and more",
           "Purposeful 60-minute sessions — warm-up, strength, finisher, done",
           "No overcrowding — space to move, equipment always ready",
           "Kid Zone access — bring the kids, lose the excuse. We got free WiFi."
         ],
-        bonusTitle: "Bonuses (Included Free)",
+        bonusTitle: "Built-In Bonuses",
+        bonusValue: "$286 Value",
         bonuses: [
-          "1 Personal Training Onboarding (60 min) — perfect your form & create your plan",
-          "2 Buddy Class Passes — bring a friend for motivation",
-          "2 InBody scans — one at onboarding, another at Day 30",
-          "Nutrition Toolkit — Meal Guide, 27 macro recipes, 22p Calorie Guide + cheat sheet, 46p Eat Well Anywhere Guide."
+          "Coach Strategy Session — clarify goals & map your schedule",
+          "2 Buddy Class Passes — bring a friend for motivation <span class=\"value-tag\">$36 value</span>",
+          "1 InBody scan at Day 30 — measure the progress <span class=\"value-tag\">$18 value</span>",
+          "Nutrition Toolkit — 3 guides (75 pages) + 3 recipe bundles with 9 meals each <span class=\"value-tag\">$118 value</span>",
+          "Shop Santé $75 Foundational Stack — coach-approved fuel <span class=\"value-tag\">$75 value</span>",
+          "Shop Santé 10% member perk — anytime savings on fuel <span class=\"value-tag\">Est. $40 value</span>"
         ],
         dealBubble: "",
         dealCTA: ""

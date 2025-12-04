@@ -143,9 +143,18 @@ body[data-audience="women"] .lang-toggle{display:none}
 .card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius-16);box-shadow:var(--shadow);padding:18px}
 .card-head{border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:10px;margin-bottom:10px}
 .card-head .h3{margin:0;font-size:clamp(24px,2.6vw,34px);color:#5AD67A;font-weight:820;letter-spacing:-0.01em}
+.card-core{position:relative;overflow:hidden}
+.value-section .value-grid{position:relative}
+.value-badge{position:absolute;top:-34px;left:-26px;width:180px;max-width:48vw;filter:drop-shadow(0 8px 25px rgba(0,0,0,.45));transform:rotate(-5deg);display:block;z-index:2}
 .bullet-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .bullet-list li{display:flex;align-items:flex-start;gap:10px;text-align:left}
-.bullet-dot{width:8px;height:8px;border-radius:50%;background:var(--pf-green);margin-top:8px;flex:0 0 8px}
+
+#core-offer-list .bullet-dot{width:8px;height:8px;border-radius:50%;background:var(--pf-green);margin-top:8px;flex:0 0 8px}
+
+#bonus-list li{position:relative;padding-left:26px;gap:0}
+#bonus-list li::before{content:"🎁";position:absolute;left:0;top:0;font-size:1.1rem;line-height:1;color:#FCE06F}
+
+.value-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:#FFE45C;color:#0D0B06;font-size:0.78em;font-weight:780;letter-spacing:.02em;margin-left:6px}
 
 .media-frame{position:relative;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,#1A1A1A,#101010)}
 .media-frame img{width:100%;height:100%;object-fit:cover;opacity:.92}
@@ -157,6 +166,12 @@ body[data-audience="women"] .lang-toggle{display:none}
 
 .value-grid{display:grid;gap:16px;align-items:start;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:32px}
 .value-grid .deal-bubble{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+@media(max-width:640px){
+  .value-section .problem-quote{margin-bottom:48px}
+  .value-section .value-grid{margin-top:40px}
+  .value-badge{width:62vw;max-width:200px;top:-118px;left:-6px}
+}
 .deal-bubble .bubble{background:rgba(63,174,82,.2);border:1px solid rgba(63,174,82,.5);color:#DFF5E4;padding:8px 12px;border-radius:999px;font-weight:800}
 
 .shop-sante-copy{margin:0;color:#C9F1DD;line-height:1.55}

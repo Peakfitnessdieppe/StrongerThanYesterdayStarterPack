@@ -12,9 +12,18 @@
       body{min-height:100vh;background:linear-gradient(180deg,var(--ink-0),var(--ink-2));display:flex;flex-direction:column;}
       .page-shell{flex:1;display:flex;flex-direction:column;padding:56px 0 72px;background:radial-gradient(circle at top left,rgba(90,214,122,.12),transparent 45%),linear-gradient(180deg,rgba(10,15,12,.96),rgba(9,13,11,.92));}
       .story-container{width:min(1000px,94vw);margin:0 auto;display:grid;gap:26px;}
-      .hero{display:grid;gap:10px;text-align:left;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:26px 24px;box-shadow:0 22px 60px rgba(0,0,0,.42);}
-      .hero h1{margin:0;font-size:clamp(28px,5.6vw,38px);font-weight:820;letter-spacing:-.01em;color:#F4FFF6;}
+      .hero{display:grid;gap:16px;text-align:left;background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.25);border-radius:28px;padding:22px 22px;box-shadow:0 22px 60px rgba(0,0,0,.42);}
+      .hero-header{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+      .hero-avatar{width:144px;height:144px;border-radius:999px;overflow:hidden;border:2px solid rgba(90,214,122,.65);background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.15),transparent 60%),linear-gradient(135deg,#0b1b13,#122419)}
+      .hero-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+      .hero-heading-group{display:grid;gap:4px;min-width:0}
+      .hero h1{margin:0;font-size:clamp(26px,4.8vw,34px);font-weight:820;letter-spacing:-.01em;color:#F4FFF6;}
       .muted{color:rgba(211,238,222,.8)}
+      .hero-sub{font-size:.9rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:100%}
+      .hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:6px}
+      .hero-stat{padding:10px 12px;border-radius:14px;background:rgba(9,16,12,.96);border:1px solid rgba(90,214,122,.26);font-size:.86rem;color:#E8F9EE;display:flex;flex-direction:column;gap:2px}
+      .hero-stat-label{font-size:.76rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(206,235,216,.78)}
+      .hero-stat-value{font-weight:720}
       .chip-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
       .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(90,214,122,.14);border:1px solid rgba(90,214,122,.32);color:#DFF5E4;font-weight:720;font-size:.92rem}
       .section{background:rgba(13,20,16,.92);border:1px solid rgba(90,214,122,.22);border-radius:24px;padding:22px 22px;display:grid;gap:18px}
@@ -28,10 +37,6 @@
       .tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#EAFBF0;border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:.72rem;padding:4px 8px}
       .card{border:1px solid rgba(90,214,122,.2);background:rgba(15,24,18,.9);border-radius:16px;padding:14px 14px;display:grid;gap:8px}
       .card h3{margin:0;font-size:1rem;color:#EFFFF6}
-      .metric-card{cursor:pointer;transition:transform .18s ease, border-color .2s ease;outline:none;position:relative;min-height:110px}
-      .metric-card:focus-visible{outline:3px solid rgba(90,214,122,.7);outline-offset:3px}
-      .metric-card:hover{border-color:rgba(90,214,122,.5);transform:translateY(-2px)}
-      .metric-card:active{transform:scale(.99)}
       .small{text-transform:uppercase;letter-spacing:.06em;font-size:.78rem;color:#C5E9D0}
       .actions{display:flex;flex-wrap:wrap;gap:10px}
       .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:16px;border:1px solid rgba(90,214,122,.4);font-weight:760;cursor:pointer;color:#06120b;background:#5ad67a;text-decoration:none}
@@ -50,12 +55,19 @@
       .metric-modal__body{overflow:auto;padding-right:8px}
       .metric-history-chart{background:rgba(16,26,19,.88);border:1px solid rgba(90,214,122,.22);border-radius:18px;padding:18px 20px;display:grid;gap:10px;position:relative}
       .metric-history-chart svg{width:100%;height:auto;display:block}
+      .metric-history-chart text{font-size:10px;fill:rgba(223,245,228,.7);dominant-baseline:middle}
       .metric-history-chart__labels{display:flex;justify-content:space-between;font-size:.8rem;color:rgba(202,232,211,.78)}
       .metric-history-chart__labels span{white-space:nowrap}
       .metric-history-chart__title{font-size:.92rem;color:#DFF5E4;font-weight:680;margin:0}
       .metric-history-tooltip{position:absolute;pointer-events:none;background:rgba(8,14,10,.94);border:1px solid rgba(90,214,122,.4);color:#E9FCF0;padding:10px 12px;border-radius:12px;font-size:.82rem;box-shadow:0 12px 30px rgba(0,0,0,.45);transform:translate(-50%,-120%);opacity:0;transition:opacity .12s ease;white-space:nowrap;z-index:5}
       .metric-history-tooltip[data-visible="true"]{opacity:1}
       body.metric-modal-open{overflow:hidden}
+      .inbody-chart-shell{display:grid;gap:14px}
+      .inbody-filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+      .inbody-filter-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(90,214,122,.35);background:rgba(15,24,18,.85);font-size:.82rem;color:#DFF5E4;cursor:pointer;user-select:none}
+      .inbody-filter-pill input{margin:0}
+      .inbody-filter-pill[data-active="true"]{background:rgba(90,214,122,.18);border-color:rgba(90,214,122,.6)}
+      .inbody-filter-swatch{width:10px;height:10px;border-radius:999px}
     </style>
   </head>
   <body>
@@ -70,18 +82,44 @@
     <main class="page-shell">
       <div class="story-container">
         <section class="hero">
-          <h1 id="member-heading">My Story</h1>
-          <div class="muted" id="member-sub">Loading your journey…</div>
-          <div class="chip-row" id="chip-row">
-            <span class="chip" id="chip-milestones" hidden>Milestones: <strong style="margin-left:6px" id="chip-milestones-count">0</strong></span>
-            <span class="chip" id="chip-wins" hidden>Wins: <strong style="margin-left:6px" id="chip-wins-count">0</strong></span>
-            <span class="chip" id="chip-checkins" hidden>Check-ins: <strong style="margin-left:6px" id="chip-checkins-count">0</strong></span>
-            <span class="chip" id="chip-scan" hidden>Last scan: <strong style="margin-left:6px" id="chip-scan-date">—</strong></span>
+          <div class="hero-header">
+            <div class="hero-avatar">
+              <img id="hero-photo" src="../assets/profile-placeholder.png" alt="Member profile photo" loading="lazy">
+            </div>
+            <div class="hero-heading-group">
+              <h1 id="member-heading">My Story</h1>
+              <div class="muted hero-sub" id="member-sub">Loading your journey…</div>
+            </div>
           </div>
-          <div class="actions" id="hero-actions">
-            <a class="btn" id="cta-upload" href="#">Upload milestone photo</a>
-            <a class="btn secondary" id="cta-win" href="#">Capture a win</a>
-            <a class="btn secondary" id="cta-toolkit" href="https://starter.peakfitnessdieppe.ca/toolkit">Open Nutrition Toolkit</a>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-label">Age</div>
+              <div class="hero-stat-value" id="hero-age">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Height</div>
+              <div class="hero-stat-value" id="hero-height">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Current weight</div>
+              <div class="hero-stat-value" id="hero-weight">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Body Fat %</div>
+              <div class="hero-stat-value" id="hero-pbf">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Lean body mass</div>
+              <div class="hero-stat-value" id="hero-lbm">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Attendance</div>
+              <div class="hero-stat-value" id="hero-attendance">Coming soon</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Last InBody scan</div>
+              <div class="hero-stat-value" id="hero-last-scan">—</div>
+            </div>
           </div>
         </section>
 
@@ -95,23 +133,11 @@
         </section>
 
         <section class="section" id="section-inbody">
-          <h2>InBody highlights</h2>
-          <div id="inbody-wrap" class="grid metrics">
-            <div class="card metric-card" data-metric-key="scan_date" role="button" tabindex="0" aria-label="View scan history"><div class="small">Latest Scan</div><h3 id="scan-latest">No scans yet</h3></div>
-            <div class="card metric-card" data-metric-key="pbf" role="button" tabindex="0" aria-label="View Body Fat % history"><div class="small">Body Fat %</div><h3 id="scan-bf">—</h3></div>
-            <div class="card metric-card" data-metric-key="weight_lb" role="button" tabindex="0" aria-label="View weight history"><div class="small">Weight</div><h3 id="scan-weight">—</h3></div>
-            <div class="card metric-card" data-metric-key="smm_lb" role="button" tabindex="0" aria-label="View skeletal muscle history"><div class="small">Skeletal Muscle</div><h3 id="scan-sm">—</h3></div>
-            <div class="card metric-card" data-metric-key="lbm_lb" role="button" tabindex="0" aria-label="View lean body mass history"><div class="small">Lean Body Mass</div><h3 id="scan-lbm">—</h3></div>
-            <div class="card metric-card" data-metric-key="bfm_lb" role="button" tabindex="0" aria-label="View body fat mass history"><div class="small">Body Fat Mass</div><h3 id="scan-bfm">—</h3></div>
-            <div class="card metric-card" data-metric-key="tbw_lb" role="button" tabindex="0" aria-label="View total body water history"><div class="small">Total Body Water</div><h3 id="scan-tbw">—</h3></div>
-            <div class="card metric-card" data-metric-key="dlm_lb" role="button" tabindex="0" aria-label="View dry lean mass history"><div class="small">Dry Lean Mass</div><h3 id="scan-dlm">—</h3></div>
-            <div class="card metric-card" data-metric-key="bmi" role="button" tabindex="0" aria-label="View BMI history"><div class="small">BMI</div><h3 id="scan-bmi">—</h3></div>
-            <div class="card metric-card" data-metric-key="bmr_kcal" role="button" tabindex="0" aria-label="View BMR history"><div class="small">BMR</div><h3 id="scan-bmr">—</h3></div>
-            <div class="card metric-card" data-metric-key="bfm_control_lb" role="button" tabindex="0" aria-label="View body fat control history"><div class="small">BF Control</div><h3 id="scan-bfc">—</h3></div>
-            <div class="card metric-card" data-metric-key="lbm_control_lb" role="button" tabindex="0" aria-label="View lean body mass control history"><div class="small">LBM Control</div><h3 id="scan-lbc">—</h3></div>
-            <div class="card metric-card" data-metric-key="height" role="button" tabindex="0" aria-label="View height history"><div class="small">Height</div><h3 id="scan-height">—</h3></div>
-            <div class="card metric-card" data-metric-key="age" role="button" tabindex="0" aria-label="View age history"><div class="small">Age</div><h3 id="scan-age">—</h3></div>
+          <h2>InBody history</h2>
+          <div class="inbody-chart-shell" id="inbody-chart-shell">
+            <div class="skeleton" style="height:220px;border-radius:18px"></div>
           </div>
+          <div class="inbody-filter-row" id="inbody-filter-row"></div>
           <div class="muted" id="inbody-note">No scan on file yet. Book your next InBody at the front desk.</div>
         </section>
 
@@ -368,6 +394,410 @@
         lastFocus: null
       };
 
+      const INBODY_CHART_COLORS = {
+        weight_lb: '#5AD67A',
+        pbf: '#FFB86C',
+        tbw_lb: '#6ECFFF',
+        dlm_lb: '#FF6EC7',
+        smm_lb: '#B4FF9F',
+        lbm_lb: '#FFD1DC',
+        bfm_lb: '#FF8BA7',
+        bmi: '#F5F56E',
+        bmr_kcal: '#9AE6FF',
+        bfm_control_lb: '#FF9C8A',
+        lbm_control_lb: '#C3A6FF'
+      };
+
+      const INBODY_DEFAULT_ENABLED = ['weight_lb','pbf'];
+
+      const POSITIVE_UP_KEYS = new Set(['smm_lb','dlm_lb','lbm_lb','pbf']);
+      const POSITIVE_DOWN_KEYS = new Set(['bfm_lb']);
+      const NEUTRAL_KEYS = new Set(['weight_lb','tbw_lb']);
+
+      function getSortedScanHistory() {
+        const raw = metricHistoryState.history || [];
+        const withDates = raw
+          .map((entry) => {
+            const date = entry?.scan_date || entry?.created_at || entry?.date;
+            return { entry, date };
+          })
+          .filter(({ date }) => !!date);
+        withDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+        return withDates;
+      }
+
+      function ensureInbodyFiltersInitialized() {
+        const row = document.getElementById('inbody-filter-row');
+        if (!row) return;
+        if (row.dataset.ready === '1') return;
+
+        const metrics = [
+          'weight_lb',
+          'pbf'
+        ];
+
+        metrics.forEach((key) => {
+          const config = METRIC_CONFIG[key];
+          if (!config) return;
+          const pill = document.createElement('label');
+          pill.className = 'inbody-filter-pill';
+          const color = INBODY_CHART_COLORS[key] || '#5AD67A';
+          const id = `inbody-toggle-${key}`;
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.id = id;
+          input.checked = INBODY_DEFAULT_ENABLED.includes(key);
+          pill.dataset.metricKey = key;
+          pill.dataset.active = input.checked ? 'true' : 'false';
+
+          const swatch = document.createElement('span');
+          swatch.className = 'inbody-filter-swatch';
+          swatch.style.backgroundColor = color;
+
+          const labelText = document.createElement('span');
+          labelText.textContent = config.label;
+
+          input.addEventListener('change', () => {
+            pill.dataset.active = input.checked ? 'true' : 'false';
+            renderInbodyMultiChart();
+          });
+
+          pill.appendChild(input);
+          pill.appendChild(swatch);
+          pill.appendChild(labelText);
+          row.appendChild(pill);
+        });
+
+        row.dataset.ready = '1';
+      }
+
+      function getEnabledMetrics() {
+        const row = document.getElementById('inbody-filter-row');
+        if (!row) return [];
+        const enabled = [];
+        const inputs = row.querySelectorAll('input[type="checkbox"]');
+        inputs.forEach((input) => {
+          if (input.checked && input.id.startsWith('inbody-toggle-')) {
+            const key = input.id.replace('inbody-toggle-', '');
+            if (METRIC_CONFIG[key]?.numeric) enabled.push(key);
+          }
+        });
+        return enabled;
+      }
+
+      function renderInbodyMultiChart() {
+        const shell = document.getElementById('inbody-chart-shell');
+        if (!shell) return;
+
+        ensureInbodyFiltersInitialized();
+
+        const seriesKeys = getEnabledMetrics();
+        shell.innerHTML = '';
+
+        const scans = getSortedScanHistory();
+        if (!scans.length || !seriesKeys.length) {
+          const empty = document.createElement('p');
+          empty.className = 'muted';
+          empty.textContent = 'Turn on at least one metric to see your InBody history.';
+          shell.appendChild(empty);
+          return;
+        }
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const height = 240;
+        const width = 720;
+
+        const series = seriesKeys.map((key) => {
+          const config = METRIC_CONFIG[key];
+          const points = scans
+            .map(({ entry, date }, index) => {
+              const rawValue = config.getValue ? config.getValue(entry) : entry?.[key];
+              const value = parseNumeric(rawValue);
+              if (value == null) return null;
+              return { index, date, value, rawValue };
+            })
+            .filter(Boolean);
+          return { key, config, points };
+        }).filter((s) => s.points.length);
+
+        if (!series.length) {
+          const empty = document.createElement('p');
+          empty.className = 'muted';
+          empty.textContent = 'We found scans, but no numeric values to chart yet.';
+          shell.appendChild(empty);
+          return;
+        }
+
+        // Dual-axis: primary for pounds/kcal/BMI, secondary for percentages (pbf)
+        const secondaryKeys = new Set(['pbf']);
+        let primaryMin = Infinity;
+        let primaryMax = -Infinity;
+        let secondaryMin = Infinity;
+        let secondaryMax = -Infinity;
+
+        series.forEach((s) => {
+          s.points.forEach((p) => {
+            if (secondaryKeys.has(s.key)) {
+              if (p.value < secondaryMin) secondaryMin = p.value;
+              if (p.value > secondaryMax) secondaryMax = p.value;
+            } else {
+              if (p.value < primaryMin) primaryMin = p.value;
+              if (p.value > primaryMax) primaryMax = p.value;
+            }
+          });
+        });
+
+        const hasPrimary = Number.isFinite(primaryMin) && Number.isFinite(primaryMax);
+        const hasSecondary = Number.isFinite(secondaryMin) && Number.isFinite(secondaryMax);
+
+        if (!hasPrimary && !hasSecondary) {
+          const empty = document.createElement('p');
+          empty.className = 'muted';
+          empty.textContent = 'Unable to determine chart range for these metrics.';
+          shell.appendChild(empty);
+          return;
+        }
+        const primaryPadding = hasPrimary ? ((primaryMax - primaryMin) * 0.08 || 1) : 1;
+        const secondaryPadding = hasSecondary ? ((secondaryMax - secondaryMin) * 0.08 || 1) : 1;
+        const primaryMinAdj = hasPrimary ? primaryMin - primaryPadding : 0;
+        const primaryMaxAdj = hasPrimary ? primaryMax + primaryPadding : 1;
+        const secondaryMinAdj = hasSecondary ? secondaryMin - secondaryPadding : 0;
+        const secondaryMaxAdj = hasSecondary ? secondaryMax + secondaryPadding : 1;
+        const primaryRange = primaryMaxAdj - primaryMinAdj || 1;
+        const secondaryRange = secondaryMaxAdj - secondaryMinAdj || 1;
+
+        const chartWrapper = document.createElement('div');
+        chartWrapper.className = 'metric-history-chart';
+
+        const title = document.createElement('p');
+        title.className = 'metric-history-chart__title';
+        title.textContent = 'InBody metric trends';
+        chartWrapper.appendChild(title);
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'metric-history-tooltip';
+        tooltip.setAttribute('data-visible', 'false');
+        chartWrapper.appendChild(tooltip);
+
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', 'InBody metric trends over time');
+
+        const gridGroup = document.createElementNS(svgNS, 'g');
+        gridGroup.setAttribute('stroke', 'rgba(255,255,255,0.06)');
+        gridGroup.setAttribute('stroke-width', '1');
+
+        const GRID_LINES = 4;
+        const primaryTicks = [];
+        const secondaryTicks = [];
+        for (let i = 0; i <= GRID_LINES; i++) {
+          const t = i / GRID_LINES;
+          const y = height - t * height;
+          const line = document.createElementNS(svgNS, 'line');
+          line.setAttribute('x1', '24');
+          line.setAttribute('x2', String(width - 24));
+          line.setAttribute('y1', String(y));
+          line.setAttribute('y2', String(y));
+          gridGroup.appendChild(line);
+
+          if (hasPrimary) {
+            const v = primaryMinAdj + t * primaryRange;
+            primaryTicks.push({ y, v });
+          }
+          if (hasSecondary) {
+            const v = secondaryMinAdj + t * secondaryRange;
+            secondaryTicks.push({ y, v });
+          }
+        }
+
+        svg.appendChild(gridGroup);
+
+        const clampY = (y) => Math.min(height - 8, Math.max(8, y));
+
+        if (hasPrimary) {
+          primaryTicks.forEach(({ y, v }) => {
+            const label = document.createElementNS(svgNS, 'text');
+            label.setAttribute('x', '0');
+            label.setAttribute('y', String(clampY(y)));
+            label.textContent = `${Math.round(v)} lb`;
+            svg.appendChild(label);
+          });
+        }
+
+        if (hasSecondary) {
+          secondaryTicks.forEach(({ y, v }) => {
+            const label = document.createElementNS(svgNS, 'text');
+            label.setAttribute('x', String(width));
+            label.setAttribute('y', String(clampY(y)));
+            label.setAttribute('text-anchor', 'end');
+            label.textContent = `${v.toFixed(0)}%`;
+            svg.appendChild(label);
+          });
+        }
+
+        const setTooltipPosition = (event) => {
+          const bounds = chartWrapper.getBoundingClientRect();
+          const offsetX = event.clientX - bounds.left;
+          const offsetY = event.clientY - bounds.top;
+          tooltip.style.left = `${offsetX}px`;
+          tooltip.style.top = `${offsetY}px`;
+        };
+
+        const formatDelta = (key, delta) => {
+          if (!Number.isFinite(delta) || delta === 0) return '';
+          const sign = delta > 0 ? '+' : '';
+          const absVal = Math.abs(delta);
+          if (key.endsWith('_lb')) {
+            return `${sign}${absVal.toFixed(1)} lb`;
+          }
+          if (key === 'pbf') {
+            return `${sign}${absVal.toFixed(1)}%`;
+          }
+          return `${sign}${absVal.toFixed(1)}`;
+        };
+
+        const buildChangeBadge = (key, current, previous) => {
+          if (previous == null || current == null) return '';
+          const delta = current - previous;
+          if (!Number.isFinite(delta) || delta === 0) return '';
+
+          const direction = delta > 0 ? 'up' : 'down';
+          let color = 'rgba(223,245,228,0.8)';
+          let arrow = direction === 'up' ? '↑' : '↓';
+
+          if (POSITIVE_UP_KEYS.has(key)) {
+            color = delta > 0 ? '#5AD67A' : '#FF9C8A';
+          } else if (POSITIVE_DOWN_KEYS.has(key)) {
+            color = delta < 0 ? '#5AD67A' : '#FF9C8A';
+          } else if (NEUTRAL_KEYS.has(key)) {
+            color = 'rgba(223,245,228,0.7)';
+          }
+
+          const label = formatDelta(key, delta);
+          if (!label) return '';
+          return `<span style="margin-left:6px;color:${color};font-size:.8rem">${arrow} ${label}</span>`;
+        };
+
+        const showTooltip = (event, scanIndex, seriesKey, point) => {
+          setTooltipPosition(event);
+          const scan = scans[scanIndex];
+          if (!scan) return;
+          const seriesConfig = series.find((s) => s.key === seriesKey)?.config || METRIC_CONFIG[seriesKey];
+          const color = INBODY_CHART_COLORS[seriesKey] || '#5AD67A';
+          const labelValue = seriesConfig?.formatter
+            ? seriesConfig.formatter(point.rawValue ?? point.value)
+            : point.value;
+
+          let mainChangeHtml = '';
+          const mainSeries = series.find((s) => s.key === seriesKey);
+          if (mainSeries) {
+            const idx = mainSeries.points.findIndex((p) => p.index === scanIndex);
+            if (idx > 0) {
+              const prev = mainSeries.points[idx - 1];
+              mainChangeHtml = buildChangeBadge(seriesKey, point.value, prev.value);
+            }
+          }
+
+          const lines = [
+            `<strong>${formatDate(scan.date)}</strong>`,
+            `<div><span style="display:inline-block;width:10px;height:10px;border-radius:999px;background:${color};margin-right:6px"></span>${seriesConfig?.label || seriesKey}: ${labelValue}${mainChangeHtml}</div>`
+          ];
+
+          const extraKeys = ['tbw_lb','smm_lb','bfm_lb','dlm_lb','lbm_lb'];
+          extraKeys.forEach((key) => {
+            const cfg = METRIC_CONFIG[key];
+            if (!cfg) return;
+            const currentEntry = scan.entry || scan;
+            const rawVal = cfg.getValue ? cfg.getValue(currentEntry) : currentEntry?.[key];
+            const numVal = parseNumeric(rawVal);
+            if (numVal == null) return;
+            const formatted = cfg.formatter ? cfg.formatter(rawVal ?? numVal) : numVal;
+            let changeHtml = '';
+            if (scanIndex > 0) {
+              const prevEntry = scans[scanIndex - 1].entry || scans[scanIndex - 1];
+              const prevRaw = cfg.getValue ? cfg.getValue(prevEntry) : prevEntry?.[key];
+              const prevNum = parseNumeric(prevRaw);
+              if (prevNum != null) {
+                changeHtml = buildChangeBadge(key, numVal, prevNum);
+              }
+            }
+            const swatchColor = INBODY_CHART_COLORS[key] || 'rgba(223,245,228,0.85)';
+            lines.push(`<div><span style="display:inline-block;width:10px;height:10px;border-radius:999px;background:${swatchColor};margin-right:6px;opacity:.9"></span>${cfg.label}: ${formatted}${changeHtml}</div>`);
+          });
+          tooltip.innerHTML = lines.join('');
+          tooltip.setAttribute('data-visible', 'true');
+        };
+
+        const hideTooltip = () => {
+          tooltip.setAttribute('data-visible', 'false');
+        };
+
+        const maxIndex = scans.length - 1 || 1;
+
+        series.forEach(({ key, config, points }) => {
+          const color = INBODY_CHART_COLORS[key] || '#5AD67A';
+          const polyline = document.createElementNS(svgNS, 'polyline');
+          const coords = points.map((p) => {
+            const x = (p.index / Math.max(maxIndex, 1)) * width;
+            const useSecondary = secondaryKeys.has(key) && hasSecondary && !hasPrimary;
+            const useDualSecondary = secondaryKeys.has(key) && hasSecondary && hasPrimary;
+            let yNorm;
+            if (useDualSecondary || useSecondary) {
+              yNorm = (p.value - secondaryMinAdj) / secondaryRange;
+            } else {
+              yNorm = (p.value - primaryMinAdj) / primaryRange;
+            }
+            const y = height - yNorm * height;
+            return `${x.toFixed(2)},${y.toFixed(2)}`;
+          }).join(' ');
+          polyline.setAttribute('fill', 'none');
+          polyline.setAttribute('stroke', color);
+          polyline.setAttribute('stroke-width', '2.5');
+          polyline.setAttribute('stroke-linecap', 'round');
+          polyline.setAttribute('stroke-linejoin', 'round');
+          polyline.setAttribute('points', coords);
+          svg.appendChild(polyline);
+
+          points.forEach((p) => {
+            const x = (p.index / Math.max(maxIndex, 1)) * width;
+            const useSecondary = secondaryKeys.has(key) && hasSecondary && !hasPrimary;
+            const useDualSecondary = secondaryKeys.has(key) && hasSecondary && hasPrimary;
+            let yNorm;
+            if (useDualSecondary || useSecondary) {
+              yNorm = (p.value - secondaryMinAdj) / secondaryRange;
+            } else {
+              yNorm = (p.value - primaryMinAdj) / primaryRange;
+            }
+            const y = height - yNorm * height;
+            const circle = document.createElementNS(svgNS, 'circle');
+            circle.setAttribute('cx', x.toFixed(2));
+            circle.setAttribute('cy', y.toFixed(2));
+            circle.setAttribute('r', '4');
+            circle.setAttribute('fill', color);
+            circle.setAttribute('tabindex', '0');
+            circle.setAttribute('role', 'presentation');
+            circle.addEventListener('mouseenter', (event) => showTooltip(event, p.index, key, p));
+            circle.addEventListener('mousemove', setTooltipPosition);
+            circle.addEventListener('mouseleave', hideTooltip);
+            circle.addEventListener('focus', (event) => showTooltip(event, p.index, key, p));
+            circle.addEventListener('blur', hideTooltip);
+            svg.appendChild(circle);
+          });
+        });
+
+        svg.addEventListener('mouseleave', hideTooltip);
+
+        chartWrapper.appendChild(svg);
+
+        const labels = document.createElement('div');
+        labels.className = 'metric-history-chart__labels';
+        labels.innerHTML = `<span>${formatDate(scans[0].date)}</span><span>${formatDate(scans[scans.length - 1].date)}</span>`;
+        chartWrapper.appendChild(labels);
+
+        shell.appendChild(chartWrapper);
+      }
+
       function text(nodeId, value){
         const n = document.getElementById(nodeId); if (n) n.textContent = value;
       }
@@ -385,12 +815,21 @@
           ? [...inbody.history].filter(Boolean)
           : [];
 
-        // Hero chips
-        showChip('chip-milestones','chip-milestones-count', milestones.length);
-        showChip('chip-wins','chip-wins-count', wins.length);
-        showChip('chip-checkins','chip-checkins-count', checkins.length);
-        if (inbody?.latest?.scan_date) {
-          showChip('chip-scan','chip-scan-date', formatDate(inbody.latest.scan_date));
+        // Hero stats
+        if (inbody?.latest) {
+          const latest = inbody.latest;
+          const ageNode = document.getElementById('hero-age');
+          if (ageNode) ageNode.textContent = latest.age_years != null ? formatNumber(latest.age_years, '', { decimals: 0 }) : '—';
+          const heightNode = document.getElementById('hero-height');
+          if (heightNode) heightNode.textContent = latest.height_cm != null ? formatHeight(latest.height_cm) : '—';
+          const weightNode = document.getElementById('hero-weight');
+          if (weightNode) weightNode.textContent = latest.weight_lb != null ? formatPounds(latest.weight_lb) : '—';
+          const pbfNode = document.getElementById('hero-pbf');
+          if (pbfNode) pbfNode.textContent = latest.pbf != null ? formatPercent(latest.pbf) : '—';
+          const lbmNode = document.getElementById('hero-lbm');
+          if (lbmNode) lbmNode.textContent = latest.lbm_lb != null ? formatPounds(latest.lbm_lb) : '—';
+          const lastScanNode = document.getElementById('hero-last-scan');
+          if (lastScanNode) lastScanNode.textContent = latest.scan_date ? formatDate(latest.scan_date) : '—';
         }
 
         // Gallery
@@ -415,22 +854,10 @@
 
         // InBody
         if (inbody?.latest) {
-          text('scan-latest', formatDate(inbody.latest.scan_date));
-          text('scan-bf', formatPercent(inbody.latest.pbf));
-          text('scan-weight', formatPounds(inbody.latest.weight_lb));
-          text('scan-sm', formatPounds(inbody.latest.smm_lb));
-          text('scan-lbm', formatPounds(inbody.latest.lbm_lb));
-          text('scan-bfm', formatPounds(inbody.latest.bfm_lb));
-          text('scan-tbw', formatPounds(inbody.latest.tbw_lb));
-          text('scan-dlm', formatPounds(inbody.latest.dlm_lb));
-          text('scan-bmi', formatNumber(inbody.latest.bmi, '', { decimals: 1 }));
-          text('scan-bmr', formatNumber(inbody.latest.bmr_kcal, ' kcal', { decimals: 0 }));
-          text('scan-bfc', formatPounds(inbody.latest.bfm_control_lb, { showSign: true }));
-          text('scan-lbc', formatPounds(inbody.latest.lbm_control_lb, { showSign: true }));
-          text('scan-height', formatHeight(inbody.latest.height_cm));
-          text('scan-age', formatNumber(inbody.latest.age_years, '', { decimals: 0 }));
           const note = document.getElementById('inbody-note'); if (note) note.textContent = 'Latest metrics shown. Ask a coach for your next scan.';
         }
+
+        renderInbodyMultiChart();
 
         // Wins
         const winsList = document.getElementById('wins-list');

@@ -74,9 +74,11 @@ export default async function handler(eventOrRequest) {
       .from('leads')
       .select('*')
       .eq('email', email)
+      .order('id', { ascending: false })
+      .limit(1)
       .maybeSingle();
 
-    if (fetchError && fetchError.code !== 'PGRST116') {
+    if (fetchError) {
       throw fetchError;
     }
 

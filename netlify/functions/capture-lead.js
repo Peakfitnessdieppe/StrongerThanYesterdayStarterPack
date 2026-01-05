@@ -66,6 +66,14 @@ export default async function handler(eventOrRequest) {
       return jsonResponse(400, { error: 'Email is required' });
     }
 
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('capture-lead missing Supabase env', {
+        hasUrl: Boolean(process.env.SUPABASE_URL),
+        hasKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY)
+      });
+      return jsonResponse(500, { error: 'Server configuration error (database unavailable)' });
+    }
+
     const supabase = getSupabaseClient();
     const db = supabase.schema('peak');
 

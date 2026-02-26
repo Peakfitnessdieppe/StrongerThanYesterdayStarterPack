@@ -1,5 +1,8 @@
 import { getSupabaseClient } from './_utils/supabase.js';
 
+const TABLE_SCHEMA = process.env.LEADS_SCHEMA || process.env.SUPABASE_SCHEMA || 'peak';
+const TABLE_NAME = process.env.LEADS_TABLE || 'leads';
+
 const BASE_HEADERS = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -75,11 +78,11 @@ export default async function handler(eventOrRequest) {
     }
 
     const supabase = getSupabaseClient();
-    const db = supabase.schema('peak');
+    const db = TABLE_SCHEMA ? supabase.schema(TABLE_SCHEMA) : supabase;
 
     // upsert lead by email
     const { data: existingLead, error: fetchError } = await db
-      .from('leads')
+      .from(TABLE_NAME)
       .select('*')
       .eq('email', email)
       .order('id', { ascending: false })
@@ -106,7 +109,7 @@ export default async function handler(eventOrRequest) {
 
     if (existingLead) {
       const { data, error } = await db
-        .from('leads')
+        .from(TABLE_NAME)
         .update(payloadToSave)
         .eq('id', existingLead.id)
         .select('*')
@@ -116,7 +119,7 @@ export default async function handler(eventOrRequest) {
       leadId = data.id;
     } else {
       const { data, error } = await db
-        .from('leads')
+        .from(TABLE_NAME)
         .insert(payloadToSave)
         .select('*')
         .single();
@@ -127,7 +130,12 @@ export default async function handler(eventOrRequest) {
 
     return jsonResponse(200, { leadId });
   } catch (error) {
-    console.error('capture-lead error', error);
+    console.error('capture-lead error', {
+      message: error?.message,
+      code: error?.code,
+      details: error?.details,
+      hint: error?.hint
+    });
     return jsonResponse(500, { error: 'Failed to capture lead' });
   }
 }

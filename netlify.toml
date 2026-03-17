@@ -4,6 +4,10 @@
 [functions]
   node_bundler = "nft"
 
+[[scheduled_functions]]
+  name = "ping-supabase"
+  cron = "0 0 */5 * *"
+
 [dev]
   functions = "netlify/functions"
 

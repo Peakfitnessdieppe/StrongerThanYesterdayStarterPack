@@ -6,7 +6,7 @@
 
 [[scheduled_functions]]
   name = "ping-supabase"
-  cron = "0 0 */5 * *"
+  cron = "0 2 */3 * *"
 
 [dev]
   functions = "netlify/functions"

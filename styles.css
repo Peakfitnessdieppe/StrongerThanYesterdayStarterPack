@@ -107,13 +107,6 @@ img{max-width:100%;display:block}
 .header-actions{display:flex;align-items:center;gap:14px}
 .brand img{filter:drop-shadow(0 2px 0 rgba(0,0,0,.2))}
 
-body[data-audience="women"] .lang-toggle{display:none}
-
-.lang-toggle{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;background:rgba(255,255,255,.04)}
-.lang-btn{all:unset;cursor:pointer;padding:6px 8px;border-radius:10px;font-weight:700;color:var(--muted)}
-.lang-btn[aria-pressed="true"]{background:rgba(63,174,82,.14);color:#DFF5E4}
-.lang-sep{opacity:.4}
-
 .btn{--bg:var(--pf-green);--fg:#0E1B12;--bd:transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--fg);font-weight:800;text-decoration:none;cursor:pointer;transition:transform .15s ease,background .2s ease,border-color .2s ease}
 .btn:hover{transform:translateY(-1px)}
 .btn:focus-visible{outline:none;box-shadow:var(--focus)}
@@ -171,6 +164,28 @@ body[data-audience="women"] .lang-toggle{display:none}
   .value-section .problem-quote{margin-bottom:48px}
   .value-section .value-grid{margin-top:40px}
   .value-badge{width:62vw;max-width:200px;top:-118px;left:-6px}
+}
+
+@media(max-width:640px){
+  body[data-audience="women"][data-lang="fr"] .hero .h1{font-size:clamp(26px,9vw,42px);letter-spacing:-0.01em}
+  body[data-audience="women"][data-lang="fr"] .hero .subhead{font-size:1rem;line-height:1.45}
+  body[data-audience="women"][data-lang="fr"] .hero-proof li span:last-child{font-size:.96rem;line-height:1.45}
+  body[data-audience="women"][data-lang="fr"] .hero-cta-panel{width:100%;gap:12px}
+  body[data-audience="women"][data-lang="fr"] .hero-cta-main,
+  body[data-audience="women"][data-lang="fr"] .hero-cta-secondary{min-width:0;width:100%}
+  body[data-audience="women"][data-lang="fr"] .hero-review-badge{display:none}
+  body[data-audience="women"][data-lang="fr"] .shop-sante-hero-heading{font-size:clamp(24px,7vw,36px)}
+  body[data-audience="women"][data-lang="fr"] .shop-sante-hero-intro,
+  body[data-audience="women"][data-lang="fr"] .shop-sante-hero-benefits{font-size:.97rem}
+  body[data-audience="women"][data-lang="fr"] .shop-sante-hero-benefits li{flex-direction:column;align-items:flex-start;gap:4px}
+  body[data-audience="women"][data-lang="fr"] .shop-sante-hero-note{font-size:.85rem}
+  body[data-audience="women"][data-lang="fr"] .value-section .problem-quote{font-size:clamp(18px,5.4vw,26px);padding:28px 30px 26px 70px}
+  body[data-audience="women"][data-lang="fr"] .value-badge{left:auto;right:-8px;top:-110px;width:58vw;max-width:180px;transform:rotate(-3deg)}
+  body[data-audience="women"][data-lang="fr"] .value-section .bullet-list li{font-size:.96rem;line-height:1.45}
+  body[data-audience="women"][data-lang="fr"] #guarantee .muted{font-size:.95rem;line-height:1.5}
+  body[data-audience="women"][data-lang="fr"] .guarantee-ctas.cta-stack{align-items:stretch}
+  body[data-audience="women"][data-lang="fr"] .social-proof-toolkit .toolkit-subtext,
+  body[data-audience="women"][data-lang="fr"] .social-proof-toolkit .toolkit-list{font-size:.95rem}
 }
 .deal-bubble .bubble{background:rgba(63,174,82,.2);border:1px solid rgba(63,174,82,.5);color:#DFF5E4;padding:8px 12px;border-radius:999px;font-weight:800}
 

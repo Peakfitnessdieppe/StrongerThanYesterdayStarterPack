@@ -620,7 +620,21 @@ const uiCopy = {
       cardCvv: "CVV",
       priceCaption: "One-time payment, taxes where applicable.",
       secureCopy: "Payments processed securely via Square.",
-      cancel: "Cancel"
+      cancel: "Cancel",
+      nutritionToolkit: {
+        title: "Stronger Than Yesterday Nutrition Toolkit",
+        subhead: "A simple meal framework, quick plug-and-play recipes, and a personalized calorie guide. Learn how to eat for energy, fat loss, and strength without tracking every bite. Stay on track anywhere with our restaurant and takeout guide.",
+        listTitle: "Nutrition Toolkit (Digital Downloads)",
+        items: [
+          "Balanced Meal Guide (6 pages) — simple plate method + portion visuals",
+          "9 Protein-Based Recipes (ebook) — quick, high-protein staples",
+          "9 Carb-Based Recipes (ebook) — smart carbs for energy",
+          "9 Fat-Based Recipes (ebook) — satiating, macro-friendly options",
+          "How to Calculate Your Calorie Intake (22 pages) — step-by-step personalization + cheat sheet",
+          "Eat Well Anywhere: Guide to Eating Out (46 pages) — real-world strategies + 9 restaurant-style favorite recipes"
+        ],
+        note: "All ebooks are PDF downloads delivered after sign-up."
+      }
     },
     footer: { terms: "Terms", privacy: "Privacy" },
     noscript: "This site works best with JavaScript enabled for language and audience switching."
@@ -637,7 +651,21 @@ const uiCopy = {
       cardCvv: "CVV",
       priceCaption: "Paiement unique, taxes en sus.",
       secureCopy: "Paiements traités en toute sécurité via Square.",
-      cancel: "Annuler"
+      cancel: "Annuler",
+      nutritionToolkit: {
+        title: "Trousse nutrition Stronger Than Yesterday",
+        subhead: "Cadre repas simple, recettes plug-and-play et guide calorique personnalisé. Apprends à manger pour l’énergie, la perte de gras et la force sans tout peser. Reste sur la track peu importe où tu manges.",
+        listTitle: "Trousse nutrition (téléchargements PDF)",
+        items: [
+          "Guide d’assiette équilibrée (6 pages) — méthode visuelle simple + portions",
+          "9 recettes protéinées (ebook) — classiques rapides et riches en protéines",
+          "9 recettes glucides (ebook) — glucides futés pour l’énergie",
+          "9 recettes lipides (ebook) — options soutenantes et macro-friendly",
+          "Comment calculer tes calories (22 pages) — personnalisation étape par étape + aide-mémoire",
+          "Manger bien partout : guide restos & take-out (46 pages) — stratégies réelles + 9 recettes style resto"
+        ],
+        note: "Tous les ebooks sont livrés en PDF après ton inscription."
+      }
     },
     footer: { terms: "Conditions", privacy: "Confidentialité" },
     noscript: "Ce site fonctionne mieux avec JavaScript activé pour le changement de langue et d’audience."
@@ -685,6 +713,16 @@ const copy = {
         media: {
           mobileVideo: "assets/Sophie-Rogan.mp4"
         }
+      },
+      shopSante: {
+        heading: "<span class=\"shop-sante-hero-heading-primary\">Stronger Than Yesterday —</span> Fueled by Shop Santé",
+        subhead: "The Official Fuel Partner of Peak Fitness.",
+        intro: "Our Official Fuel Partner, Shop Santé, keeps things clear and coach-approved: simple guidance, curated picks, and real perks — $75 Foundational Stack for new Starters + 10% off anytime for members.",
+        benefits: [
+          "Start Today → get a $75 Foundational Stack from Shop Santé.",
+          "Keep Showing Up → 10% off anytime in-store."
+        ],
+        note: "*New members only for the Stronger Than Yesterday Starter. One per person. Visit Shop Santé for information on their products. Standard exclusions may apply."
       },
       valueSplit: {
         coreTitle: "Core Offer",
@@ -767,6 +805,20 @@ const copy = {
           { q: "When will I actually see results?", a: "Energy boost and better sleep within 14 days. Visible changes (clothes fitting better) by week 6. Friends asking ‘what are you doing differently?’ by week 8." },
           { q: "Where are you located?", a: "We are located at 688 Babin St, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Need directions?</a>" }
         ]
+      },
+      nutritionToolkit: {
+        title: "Stronger Than Yesterday Nutrition Toolkit",
+        subhead: "A simple meal framework, quick plug-and-play recipes, and a personalized calorie guide. Learn how to eat for energy, fat loss, and strength without tracking every bite. Stay on track anywhere with our restaurant and takeout guide.",
+        listTitle: "Nutrition Toolkit (Digital Downloads)",
+        items: [
+          "Balanced Meal Guide (6 pages) — simple plate method + portion visuals",
+          "9 Protein-Based Recipes (ebook) — quick, high-protein staples",
+          "9 Carb-Based Recipes (ebook) — smart carbs for energy",
+          "9 Fat-Based Recipes (ebook) — satiating, macro-friendly options",
+          "How to Calculate Your Calorie Intake (22 pages) — step-by-step personalization + cheat sheet",
+          "Eat Well Anywhere: Guide to Eating Out (46 pages) — real-world strategies + 9 restaurant-style favorite recipes"
+        ],
+        note: "All ebooks are PDF downloads delivered after sign-up."
       }
     },
     men: {
@@ -1076,11 +1128,12 @@ const copy = {
       meta: { offerName: "Starter Stronger Than Yesterday", heroImg: "assets/hero-women-stronger2.png" },
       hero: {
         headline: "<span class=\"hero-line-one\">Deviens <span class=\"hero-highlight\">plus en forme</span>, <span class=\"hero-highlight\">plus forte</span></span><br>et plus <span class=\"hero-highlight\">confiante</span><br><span class=\"hero-line-three\">En seulement <span class=\"hero-highlight\">60</span> minutes</span>",
-        subhead: "Inscris-toi aujourd’hui à des cours coachés dès le jour 1.\nSens-toi plus forte dès la quatrième semaine.\nGarantie de remboursement 100 %.",
+        subhead: "Inscris-toi aujourd’hui à des cours coachés dès le jour 1.\nSens-toi plus forte dès la quatrième semaine.\nGarantie de remboursement 100 %.",
         includes: [
           "Séance d’accueil 1:1 pour partir confiante",
           "Cours coachés Glutes & Abs, Musculation et yoga de récupération",
-          "2 laissez-passer Buddy — amène une amie pour la motivation"
+          "2 laissez-passer Buddy — amène une amie pour la motivation",
+          "$75 Foundational Stack chez Shop Santé + rabais 10 % en tout temps pour les membres"
         ],
         primaryCTA: "<span class=\"hero-cta-line hero-cta-line--primary\">Commencer aujourd’hui</span><span class=\"hero-cta-line hero-cta-line--secondary\">Deviens plus forte qu’hier</span>",
         secondaryCTA: "Jaser avec Rick"
@@ -1096,12 +1149,12 @@ const copy = {
         conclusion: "Le café part la journée. Le coaching garde l’élan. Prends les deux."
       },
       riskfreeSecondary: {
-        title: "Essaie-le complètement sans risque !",
-        lead: "Notre promesse pour toi. Si après…",
+        title: "Essaie-nous complètement sans risque!",
+        lead: "Notre promesse à toi. Si après…",
         list: [
-          "Avoir complété ta séance d’accueil personnalisée",
-          "Avoir assisté à 10 cours en 30 jours",
-          "Avoir pris 5 minutes pour jasette de sortie avec Rick"
+          "Terminer ta séance d’intégration personnelle",
+          "Assister à 10 cours en 30 jours",
+          "Un rapide chat de sortie de 5 minutes avec Rick"
         ],
         guarantee: "👉 …t’es pas 100 % satisfaite, on te rembourse chaque sou. Pas de tactiques plates. Pas de culpabilité. Juste des résultats — ou ton argent revient.",
         quote: "→ « On est tellement certaines que tu vas aimer ça qu’on prend tout le risque pour toi. »",
@@ -1111,22 +1164,37 @@ const copy = {
           mobileVideo: "assets/Sophie-Rogan.mp4"
         }
       },
+      shopSante: {
+        heading: "<span class=\"shop-sante-hero-heading-primary\">Stronger Than Yesterday —</span> Propulsé par Shop Santé",
+        subhead: "Le partenaire carburant officiel de Peak Fitness.",
+        intro: "Shop Santé garde ça simple et approuvé par nos coachs : conseils clairs, produits triés et vrais avantages — Stack de base de 75 $ pour les nouvelles membres + rabais 10 % en tout temps pour les membres.",
+        benefits: [
+          "Commence aujourd’hui → reçois un Stack fondamental de 75 $ chez Shop Santé.",
+          "Continue de montrer → 10 % de rabais en magasin, n’importe quand."
+        ],
+        note: "*Nouvelles membres seulement pour le Starter Stronger Than Yesterday. Une par personne. Visite Shop Santé pour les détails sur leurs produits. Exceptions standards applicables."
+      },
       valueSplit: {
         coreTitle: "Offre principale",
-        coreValue: "Valeur de 407,94 $",
+        coreValue: "Valeur de 243 $",
         core: [
-          "Accès illimité à 40+ cours coachés par semaine",
+          "Accès illimité à 40+ cours coachés/semaine <span class=\"value-tag\">Valeur de 139,99 $</span>",
+          "Séance privée d’intégration (60 min) — ton plan réglé vite <span class=\"value-tag\">Valeur de 85 $</span>",
+          "Analyse InBody à l’arrivée — connais ta ligne de départ <span class=\"value-tag\">Valeur de 18 $</span>",
           "7 formats — Glutes & Abs, Musculation, Bootcamp, Yoga et plus encore",
-          "Séances de 60 minutes bien structurées — warm-up, force, finisher, c’est réglé",
+          "Séances de 60 minutes bien structurées — warm-up, force, finisher, c’est fait",
           "Aucun encombrement — de l’espace pour bouger, équipement prêt quand t’arrives",
           "Zone Kid — amène les enfants, finis les excuses. Wi-Fi gratuit."
         ],
-        bonusTitle: "Bonus (inclus gratuits)",
+        bonusTitle: "Bonis intégrés",
+        bonusValue: "Valeur de 286 $",
         bonuses: [
-          "1 séance d’onboarding privée (60 min) — ajuste ta technique et bâtis ton plan",
-          "2 laissez-passer Buddy — amène une amie pour la motivation",
-          "2 analyses InBody — une à l’accueil, une au jour 30",
-          "Nutrition Toolkit — Guide repas, 27 recettes macro, guide calories 22 p + aide-mémoire, guide Manger bien partout 46 p."
+          "Session stratégie avec coach — clarifie tes objectifs & ton horaire",
+          "2 laissez-passer Buddy — amène une amie pour la motivation <span class=\"value-tag\">Valeur de 36 $</span>",
+          "Analyse InBody au jour 30 — mesure les progrès <span class=\"value-tag\">Valeur de 18 $</span>",
+          "Trousse nutrition — 3 guides (75 pages) + 3 bundles de recettes (9 repas chacun) <span class=\"value-tag\">Valeur de 118 $</span>",
+          "Stack de base Shop Santé 75 $ — carburant approuvé par les coachs <span class=\"value-tag\">Valeur de 75 $</span>",
+          "Perk membre Shop Santé 10 % — rabais en tout temps sur le fuel <span class=\"value-tag\">Valeur estimée 40 $</span>"
         ],
         dealBubble: "",
         dealCTA: ""
@@ -1187,6 +1255,20 @@ const copy = {
           { q: "Quand est-ce que je vais voir des résultats pour vrai?", a: "Boost d’énergie et meilleur sommeil en 14 jours. À la semaine 6, tes vêtements tombent mieux. À la semaine 8, le monde te demande ce que tu fais de différent." },
           { q: "Où êtes-vous situés?", a: "On est au 688 rue Babin, Dieppe. <a href=\"https://google.com/maps/place/Peak+Fitness+Dieppe/data=!4m2!3m1!1s0x0:0x4be37514b9988700?sa=X&ved=1t:2428&ictx=111\" target=\"_blank\" rel=\"noopener\">Besoin d’itinéraire?</a>" }
         ]
+      },
+      nutritionToolkit: {
+        title: "Trousse nutrition Stronger Than Yesterday",
+        subhead: "Cadre repas simple, recettes plug-and-play et guide calorique personnalisé. Apprends à manger pour l’énergie, la perte de gras et la force sans tout peser. Reste sur la track peu importe où tu manges.",
+        listTitle: "Trousse nutrition (téléchargements PDF)",
+        items: [
+          "Guide d’assiette équilibrée (6 pages) — méthode visuelle simple + portions",
+          "9 recettes protéinées (ebook) — classiques rapides et riches en protéines",
+          "9 recettes glucides (ebook) — glucides futés pour l’énergie",
+          "9 recettes lipides (ebook) — options soutenantes et macro-friendly",
+          "Comment calculer tes calories (22 pages) — personnalisation étape par étape + aide-mémoire",
+          "Manger bien partout : guide restos & take-out (46 pages) — stratégies réelles + 9 recettes style resto"
+        ],
+        note: "Tous les ebooks sont livrés en PDF après ton inscription."
       }
     },
     men: {
